@@ -16,9 +16,13 @@ $transition:    150ms ease;
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 .page {
-  padding: 24px 28px;
+  padding: 20px 16px;
   background: $bg;
   min-height: 100vh;
+
+  @media (min-width: 768px) {
+    padding: 24px 28px;
+  }
 }
 
 // ─── Hero Banner ──────────────────────────────────────────────────────────────
@@ -26,12 +30,17 @@ $transition:    150ms ease;
 .heroBanner {
   background: linear-gradient(135deg, $primary-dark 0%, $primary 100%);
   border-radius: 16px;
-  padding: 32px 40px;
+  padding: 24px;
   color: #fff;
-  margin-bottom: 28px;
+  margin-bottom: 24px;
   position: relative;
   overflow: hidden;
   box-shadow: 0 10px 30px rgba(45, 106, 79, 0.15);
+
+  @media (min-width: 768px) {
+    padding: 32px 40px;
+    margin-bottom: 28px;
+  }
 }
 
 .heroContent {
@@ -68,12 +77,16 @@ $transition:    150ms ease;
 
 .statsGrid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: 1fr;
   gap: 12px;
   margin-bottom: 16px;
 
-  @media (max-width: 768px) {
+  @media (min-width: 400px) {
     grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (min-width: 1024px) {
+    grid-template-columns: repeat(4, 1fr);
   }
 }
 

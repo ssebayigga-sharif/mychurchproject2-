@@ -130,16 +130,16 @@ export const Dashboard = () => {
 
   return (
     <div className={styles.page}>
-      {/* ── Hero Banner ── */}
+      {/* Top Banner*/}
       <div className={styles.heroBanner}>
         <div className={styles.heroContent}>
           <h1 className={styles.heroGreeting}>{getGreeting()}</h1>
-          <p className={styles.heroSub}> This week at Kabulengwa English SDA Church</p>
+          <p className={styles.heroSub}> Welcome To Kabulengwa English SDA Church Kampala !!!</p>
         </div>
         <div className={styles.heroDeco}></div>
       </div>
 
-      {/* ── Stat Cards ── */}
+      {/* these are the Stat Cards  */}
       <div className={styles.statsGrid}>
         <div className={`${styles.statCard} ${styles.accent}`}>
           <span className={styles.statLabel}>Total members</span>
@@ -163,9 +163,9 @@ export const Dashboard = () => {
         </div>
       </div>
 
-      {/* ── Grid Row 1: Programs & Departments ── */}
+      {/* these are the  Programs and  Departments */}
       <div className={styles.twoCol}>
-        {/* Recent Programs */}
+        {/* these are the Recent Programs */}
         <div className={styles.card}>
           <div className={styles.cardHead}>
             <h3>Recent programs</h3>
@@ -187,7 +187,7 @@ export const Dashboard = () => {
           </div>
         </div>
 
-        {/* Department Breakdown */}
+        {/* the Department Breakdown */}
         <div className={styles.card}>
           <div className={styles.cardHead}>
             <h3>Members by department</h3>
@@ -207,9 +207,9 @@ export const Dashboard = () => {
         </div>
       </div>
 
-      {/* ── Grid Row 2: Celebrations & Prayers ── */}
+      {/* here are the Celebrations & Prayers */}
       <div className={styles.twoCol}>
-        {/* Celebrations Widget */}
+        {/* here are  the Celebrations Widget */}
         <div className={styles.card}>
           <div className={styles.cardHead}>
             <h3>This Month's Birthdays</h3>
@@ -234,7 +234,7 @@ export const Dashboard = () => {
           </div>
         </div>
 
-        {/* Recent Prayers Widget */}
+        {/* here is the Recent Prayers Widget */}
         <div className={styles.card}>
           <div className={styles.cardHead}>
             <h3>Recent Prayer Requests</h3>
@@ -260,7 +260,7 @@ export const Dashboard = () => {
         </div>
       </div>
 
-      {/* ── Action Links ── */}
+      {/* here are the  Action Links  */}
       <div className={styles.actionCards}>
         {[
           { label: "Manage Members", to: "/members", color: "#d8f3dc", stroke: "#2d6a4f" },

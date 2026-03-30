@@ -1,6 +1,6 @@
 import { NavLink } from "react-router-dom";
 import styles from "./Sidebar.module.scss";
-import { NAV_ITEMS } from "../Navigation";
+import { useNavItems } from "../Navigation";
 
 type SidebarProps = {
   isOpen: boolean;
@@ -8,6 +8,8 @@ type SidebarProps = {
 };
 
 const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
+  const navItems = useNavItems();
+
   return (
     <aside className={`${styles.sidebar} ${isOpen ? styles.open : ""}`}>
       {/* Brand */}
@@ -22,7 +24,7 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
       {/* Nav */}
       <nav className={styles.nav}>
         <p className={styles.navLabel}>Main menu</p>
-        {NAV_ITEMS.map(({ to, label, icon }) => (
+        {navItems.map(({ to, label, icon }) => (
           <NavLink
             key={to}
             to={to}

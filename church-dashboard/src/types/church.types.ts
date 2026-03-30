@@ -1,4 +1,16 @@
 export type BaptismStatus = "Baptized" | "Not baptized" | "In preparation";
+
+export type UserRole = "Admin" | "Leader" | "Member";
+
+export type LeaderPosition = 
+  | "Elder" 
+  | "Deacon" 
+  | "Deaconess" 
+  | "Department Head" 
+  | "Pastor" 
+  | "Clerk" 
+  | "Treasurer";
+
 //when creating member
 export type MemberDepartment =
   | "Sabbath School"
@@ -163,3 +175,89 @@ export type CreatePrayerRequestInput = {
 export type PrayerRequest = CreatePrayerRequestInput & {
   id: string;
 };
+
+
+export type AnnouncementCategory = "General" | "Event" | "Finance" | "Youth" | "Health" | "Urgent";
+
+export type AnnouncementPriority = "Low" | "Normal" | "High";
+
+export type AnnouncementStatus = "Active" | "archived";
+
+export type CreateAnnouncementInput = {
+  title: string;
+  body: string;
+  category: AnnouncementCategory;
+  priority: AnnouncementPriority;
+  targetDepartment: MemberDepartment | null;
+  expiresAt?: string;
+  authorName: string;
+  createdAt: string;
+  status: AnnouncementStatus;
+  readBy: string[];
+}
+
+export type Announcement = CreateAnnouncementInput & {
+  id: string;
+}
+
+export type BroadcastChannel = "Email" | "SMS" | "Both";
+
+export type BroadcastStatus = "Sent" | "Pending" | "Failed";
+
+export type CreateBroadcastInput = {
+  subject: string;
+  message: string;
+  channel: BroadcastChannel;
+  targetDepartment: MemberDepartment | null;
+  sentAt: string;
+  sentBy: string;
+  recipientCount: number;
+  status: BroadcastStatus;
+
+}
+
+export type Broadcast = CreateBroadcastInput & {
+  id: string;
+}
+
+//internal messsages
+
+export type MessageThread = {
+  id: string;
+  participants: string[];
+  subject: string;
+  createdAt: string;
+  lastMessageAt: string;
+  unreadCount: number;
+}
+
+export type InternalMessage = {
+  id: string;
+  threadId: string;
+  senderName: string;
+  body: string;
+  sentAt: string;
+  readBy: string[];
+
+}
+
+export type CreateMessageInput = {
+  threadId: string;
+  senderName: string;
+  body: string;
+  sentAt: string;
+  readBy: string[];
+};
+
+export type Leader = {
+  id: string;
+  memberId: string;
+  name: string;
+  position: LeaderPosition;
+  department?: MemberDepartment;
+  termStart: string;
+  termEnd?: string;
+  isActive: boolean;
+};
+
+export type CreateLeaderInput = Omit<Leader, "id">;

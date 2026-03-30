@@ -1,0 +1,82 @@
+@use "sass:color";
+
+// Shared variables for communication feature
+$primary: #2d6a4f;
+$primary-light: #d8f3dc;
+$primary-dark: #1b4332;
+$surface: #ffffff;
+$bg: #f8faf9;
+$text: #1a2e1e;
+$text-muted: #8aab98;
+$border: #e0ece5;
+$danger: #c0392b;
+$success: #10b981;
+$warning: #f59e0b;
+$radius: 10px;
+$transition: 150ms ease;
+
+@mixin primary-button {
+  padding: 10px 20px;
+  background: $primary;
+  color: #fff;
+  border: none;
+  border-radius: $radius;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(45, 106, 79, 0.2);
+  transition: all $transition;
+
+  &:hover:not(:disabled) {
+    background: color.adjust($primary, $lightness: 5%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(45, 106, 79, 0.3);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+@mixin inline-form {
+  background: $surface;
+  padding: 20px;
+  border-radius: 14px;
+  border: 1px solid $border;
+  margin-bottom: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+
+  input,
+  textarea,
+  select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid $border;
+    border-radius: $radius;
+    font-size: 14px;
+    background: #fafafa;
+    outline: none;
+
+    &:focus {
+      border-color: $primary;
+      background: #fff;
+    }
+  }
+
+  .formRow {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 12px;
+  }
+}
+
+@mixin state-message {
+  padding: 40px;
+  text-align: center;
+  color: $text-muted;
+  font-style: italic;
+}

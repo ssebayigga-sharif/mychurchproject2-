@@ -1,7 +1,12 @@
 import { Navigate, Outlet } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import type { UserRole } from "../types/church.types";
 
-export const ProtectedRoute = () => {
+type ProtectedRouteProps = {
+  allowedRoles?: UserRole[];
+};
+
+export const ProtectedRoute = ({ allowedRoles }: ProtectedRouteProps) => {
   const { user, loading } = useAuth();
 
   if (loading) {
@@ -17,6 +22,11 @@ export const ProtectedRoute = () => {
     return <Navigate to="/login" replace />;
   }
 
-  // If authenticated, render the child routes (e.g. Dashboard, Members)
+  // Check role if specified
+  if (allowedRoles && !allowedRoles.includes(user.role)) {
+    return <Navigate to="/" replace />;
+  }
+
+  // If authenticated and authorized, render the child routes
   return <Outlet />;
 };

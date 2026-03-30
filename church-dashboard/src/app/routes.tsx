@@ -8,6 +8,8 @@ import { Dashboard } from "../features/dashboard/Dashboard";
 import { MemberProfilePage } from "../features/members/MemberProfilePage";
 import { PrayerRequests } from "../features/prayers/PrayerRequests";
 import { Login } from "../features/auth/Login";
+import { Communication } from "../features/communication/Communication";
+import { Leaders } from "../features/leaders/Leaders";
 
 
 export const AppRouter = () => {
@@ -17,20 +19,27 @@ export const AppRouter = () => {
         <Route path="/login" element={<Login />} />
         
         <Route element={<Layout />}>
-          {/* Public Home Page */}
-          <Route path="/" element={<Dashboard />} />
-          
-          {/* Protected App Routes */}
+          {/* Dashboard is accessible to all logged in users */}
           <Route element={<ProtectedRoute />}>
-            <Route path="/members" element={<Members />} />
-            <Route path="/programs" element={<Programs />} />
-            <Route path="/attendance" element={<Attendance />} />
-            
-            <Route
-              path="/members/:memberId/profile"
-              element={<MemberProfilePage />}
-            />
-            <Route path="/prayer" element={<PrayerRequests />} />
+             <Route path="/" element={<Dashboard />} />
+             <Route path="/members" element={<Members />} />
+             <Route path="/programs" element={<Programs />} />
+             <Route path="/attendance" element={<Attendance />} />
+             <Route path="/prayer" element={<PrayerRequests />} />
+             <Route
+               path="/members/:memberId/profile"
+               element={<MemberProfilePage />}
+             />
+          </Route>
+
+          {/* Leaders/Admin only routes */}
+          <Route element={<ProtectedRoute allowedRoles={["Admin", "Leader"]} />}>
+            <Route path="/communication" element={<Communication />} />
+          </Route>
+
+          {/* Admin only routes */}
+          <Route element={<ProtectedRoute allowedRoles={["Admin"]} />}>
+            <Route path="/leaders" element={<Leaders />} />
           </Route>
         </Route>
       </Routes>

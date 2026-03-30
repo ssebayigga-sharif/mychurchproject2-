@@ -1,9 +1,11 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import type { ReactNode } from "react";
+import type { UserRole } from "../types/church.types";
 
 type User = {
   email: string;
   name: string;
+  role: UserRole;
 };
 
 type AuthContextType = {
@@ -34,7 +36,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     // Hardcoded auth verification (for frontend closure)
     if (email === "admin@church.org" && pass === "admin123") {
-      const authUser = { email, name: "Church Admin" };
+      const authUser: User = { email, name: "Church Admin", role: "Admin" };
+      setUser(authUser);
+      localStorage.setItem("church_auth_session", JSON.stringify(authUser));
+      return;
+    }
+
+    if (email === "leader@church.org" && pass === "leader123") {
+      const authUser: User = { email, name: "Church Leader", role: "Leader" };
       setUser(authUser);
       localStorage.setItem("church_auth_session", JSON.stringify(authUser));
       return;
