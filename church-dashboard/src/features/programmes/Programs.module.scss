@@ -1,22 +1,31 @@
-// ─── Tokens ───────────────────────────────────────────────────────────────────
+// variablees for the overall page
 
-$primary:       #2d6a4f;
+@use "sass:color";
+
+$primary: #2d6a4f;
 $primary-light: #d8f3dc;
-$primary-dark:  #1b4332;
-$surface:       #ffffff;
-$bg:            #f8faf9;
-$text:          #1a2e1e;
-$text-muted:    #8aab98;
-$border:        #e0ece5;
-$danger:        #c0392b;
-$radius:        10px;
-$transition:    150ms ease;
+$primary-dark: #1b4332;
+$surface: #ffffff;
+$bg: #f8faf9;
+$text: #1a2e1e;
+$text-muted: #8aab98;
+$border: #e0ece5;
+$danger: #c0392b;
+$radius: 10px;
+$transition: 150ms ease;
 
-// ─── Animations & Toasts ───────────────────────────────────────────────────────
+// styles for the toast notification;
 
 @keyframes slideDown {
-  from { transform: translate(-50%, -20px); opacity: 0; }
-  to { transform: translate(-50%, 0); opacity: 1; }
+  from {
+    transform: translate(-50%, -20px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translate(-50%, 0);
+    opacity: 1;
+  }
 }
 
 .toast {
@@ -37,11 +46,16 @@ $transition:    150ms ease;
   align-items: center;
   gap: 8px;
 
-  &.toastsuccess { border-bottom: 3px solid #10b981; }
-  &.toasterror   { border-bottom: 3px solid #ef4444; }
+  &.toastsuccess {
+    border-bottom: 3px solid #10b981;
+  }
+
+  &.toasterror {
+    border-bottom: 3px solid #ef4444;
+  }
 }
 
-// ─── Header & Controls ────────────────────────────────────────────────────────
+// styles for the header and controls;
 
 .page {
   padding: 28px 32px;
@@ -106,7 +120,9 @@ $transition:    150ms ease;
   color: $text;
   outline: none;
 
-  &::placeholder { color: #a1bcae; }
+  &::placeholder {
+    color: #a1bcae;
+  }
 }
 
 .btnAdd {
@@ -123,13 +139,13 @@ $transition:    150ms ease;
   transition: all $transition;
 
   &:hover {
-    background: lighten($primary, 5%);
+    background: color.adjust($primary, $lightness: 5%);
     transform: translateY(-2px);
     box-shadow: 0 6px 16px rgba(45, 106, 79, 0.3);
   }
 }
 
-// ─── Grid & Cards ─────────────────────────────────────────────────────────────
+// styles for the grid and cards;
 
 .grid {
   display: grid;
@@ -250,17 +266,26 @@ $transition:    150ms ease;
   cursor: pointer;
   transition: background $transition;
 
-  &:hover { background: #e3efea; }
-  &:disabled { opacity: 0.5; cursor: not-allowed; }
+  &:hover {
+    background: #e3efea;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
 }
 
 .btnDanger {
   color: $danger;
   background: #fdf0ef;
-  &:hover { background: #f5c6c2; }
+
+  &:hover {
+    background: #f5c6c2;
+  }
 }
 
-// ─── Status Badge ─────────────────────────────────────────────────────────────
+// styles for the badge;
 
 .badge {
   display: inline-flex;
@@ -271,11 +296,18 @@ $transition:    150ms ease;
   text-transform: uppercase;
   letter-spacing: 0.05em;
 
-  &.upcoming  { background: #dbeafe; color: #1e40af; }
-  &.completed { background: #d1fae5; color: #065f46; }
+  &.upcoming {
+    background: #dbeafe;
+    color: #1e40af;
+  }
+
+  &.completed {
+    background: #d1fae5;
+    color: #065f46;
+  }
 }
 
-// ─── Empty State ──────────────────────────────────────────────────────────────
+//  styles for the empty state;
 
 .emptyState {
   display: flex;
@@ -287,8 +319,11 @@ $transition:    150ms ease;
   border: 1px dashed #c0d8cb;
   border-radius: 16px;
   margin-top: 20px;
-  
-  svg { margin-bottom: 20px; opacity: 0.7; }
+
+  svg {
+    margin-bottom: 20px;
+    opacity: 0.7;
+  }
 }
 
 .emptyTitle {
@@ -317,5 +352,7 @@ $transition:    150ms ease;
   cursor: pointer;
   transition: opacity $transition;
 
-  &:hover { opacity: 0.8; }
+  &:hover {
+    opacity: 0.8;
+  }
 }

@@ -4,13 +4,13 @@ import styles from "./Header.module.scss";
 import { NAV_ITEMS } from "../Navigation";
 import { useAuth } from "../../context/AuthContext";
 
-// ─── Types ────────────────────────────────────────────────────────────────────
+// component props;
 
 type HeaderProps = {
   onMenuClick: () => void;
 };
 
-// ─── Component ────────────────────────────────────────────────────────────────
+
 
 const Header = ({ onMenuClick }: HeaderProps) => {
   const navigate = useNavigate();

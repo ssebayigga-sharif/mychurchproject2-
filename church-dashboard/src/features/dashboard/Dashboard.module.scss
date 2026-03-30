@@ -1,19 +1,19 @@
-// ─── Tokens ───────────────────────────────────────────────────────────────────
+// variables for the overall dashboard;
 
-$primary:       #2d6a4f;
+$primary: #2d6a4f;
 $primary-light: #d8f3dc;
-$primary-dark:  #1b4332;
-$gold:          #b5883a;
-$surface:       #ffffff;
-$bg:            #f8faf9;
-$text:          #1a2e1e;
-$text-muted:    #8aab98;
-$border:        #e0ece5;
-$danger:        #c0392b;
-$radius:        10px;
-$transition:    150ms ease;
+$primary-dark: #1b4332;
+$gold: #b5883a;
+$surface: #ffffff;
+$bg: #f8faf9;
+$text: #1a2e1e;
+$text-muted: #8aab98;
+$border: #e0ece5;
+$danger: #c0392b;
+$radius: 10px;
+$transition: 150ms ease;
 
-// ─── Page ─────────────────────────────────────────────────────────────────────
+// page styles;
 
 .page {
   padding: 20px 16px;
@@ -25,7 +25,7 @@ $transition:    150ms ease;
   }
 }
 
-// ─── Hero Banner ──────────────────────────────────────────────────────────────
+// the banner at the top styles
 
 .heroBanner {
   background: linear-gradient(135deg, $primary-dark 0%, $primary 100%);
@@ -73,7 +73,7 @@ $transition:    150ms ease;
   z-index: 1;
 }
 
-// ─── Stat Cards ───────────────────────────────────────────────────────────────
+// styles for the stats cards ;
 
 .statsGrid {
   display: grid;
@@ -102,9 +102,14 @@ $transition:    150ms ease;
     background: $primary-light;
     border-color: #b8e8be;
 
-    .statValue { color: $primary-dark; }
+    .statValue {
+      color: $primary-dark;
+    }
+
     .statLabel,
-    .statSub   { color: #4a9e57; }
+    .statSub {
+      color: #4a9e57;
+    }
   }
 }
 
@@ -129,7 +134,7 @@ $transition:    150ms ease;
   color: $text-muted;
 }
 
-// ─── Two Column Grid ──────────────────────────────────────────────────────────
+// stylesfor the two column grid;
 
 .twoCol {
   display: grid;
@@ -142,7 +147,7 @@ $transition:    150ms ease;
   }
 }
 
-// ─── Card ─────────────────────────────────────────────────────────────────────
+// styles for the card ;
 
 .card {
   background: $surface;
@@ -170,9 +175,11 @@ $transition:    150ms ease;
   }
 }
 
-.cardBody { padding: 4px 0; }
+.cardBody {
+  padding: 4px 0;
+}
 
-// ─── Program Items ────────────────────────────────────────────────────────────
+// styling the program items;
 
 .programItem {
   display: flex;
@@ -182,8 +189,13 @@ $transition:    150ms ease;
   border-bottom: 1px solid $border;
   transition: background $transition;
 
-  &:last-child { border-bottom: none; }
-  &:hover { background: #f4f9f5; }
+  &:last-child {
+    border-bottom: none;
+  }
+
+  &:hover {
+    background: #f4f9f5;
+  }
 }
 
 .dot {
@@ -192,8 +204,13 @@ $transition:    150ms ease;
   border-radius: 50%;
   flex-shrink: 0;
 
-  &.dotBlue  { background: #3b82f6; }
-  &.dotGreen { background: #10b981; }
+  &.dotBlue {
+    background: #3b82f6;
+  }
+
+  &.dotGreen {
+    background: #10b981;
+  }
 }
 
 .programInfo {
@@ -220,11 +237,18 @@ $transition:    150ms ease;
   padding: 2px 7px;
   border-radius: 20px;
 
-  &.upcoming  { background: #dbeafe; color: #1e40af; }
-  &.completed { background: #d1fae5; color: #065f46; }
+  &.upcoming {
+    background: #dbeafe;
+    color: #1e40af;
+  }
+
+  &.completed {
+    background: #d1fae5;
+    color: #065f46;
+  }
 }
 
-// ─── Department Breakdown ─────────────────────────────────────────────────────
+// styles that  show department breakdown;
 
 .deptItem {
   display: flex;
@@ -233,7 +257,9 @@ $transition:    150ms ease;
   padding: 9px 16px;
   border-bottom: 1px solid $border;
 
-  &:last-child { border-bottom: none; }
+  &:last-child {
+    border-bottom: none;
+  }
 }
 
 .deptName {
@@ -266,7 +292,7 @@ $transition:    150ms ease;
   text-align: right;
 }
 
-// ─── Action Cards ─────────────────────────────────────────────────────────────
+// styling the action cards;
 
 .actionCards {
   display: grid;
@@ -300,8 +326,11 @@ $transition:    150ms ease;
     border-color: $primary;
     box-shadow: 0 8px 24px rgba(45, 106, 79, 0.08);
     transform: translateY(-2px);
-    
-    .actionArrow { transform: translateX(2px); color: $primary; }
+
+    .actionArrow {
+      transform: translateX(2px);
+      color: $primary;
+    }
   }
 }
 
@@ -331,14 +360,17 @@ $transition:    150ms ease;
   transition: transform $transition, color $transition;
 }
 
-// ─── Birthdays & Prayers ──────────────────────────────────────────────────────
+// styles for the birthdays and the prayers
 
 .viewAllBtn {
   font-size: 12px;
   font-weight: 600;
   color: $primary;
   text-decoration: none;
-  &:hover { text-decoration: underline; }
+
+  &:hover {
+    text-decoration: underline;
+  }
 }
 
 .emptyText {
@@ -355,7 +387,10 @@ $transition:    150ms ease;
   gap: 12px;
   padding: 12px 16px;
   border-bottom: 1px solid $border;
-  &:last-child { border-bottom: none; }
+
+  &:last-child {
+    border-bottom: none;
+  }
 }
 
 .birthdayIcon {
@@ -388,7 +423,10 @@ $transition:    150ms ease;
 .prayerItem {
   padding: 14px 16px;
   border-bottom: 1px solid $border;
-  &:last-child { border-bottom: none; }
+
+  &:last-child {
+    border-bottom: none;
+  }
 }
 
 .prayerHeader {
@@ -414,7 +452,7 @@ $transition:    150ms ease;
   line-height: 1.5;
 }
 
-// ─── States ───────────────────────────────────────────────────────────────────
+// styling the empty and error states;
 
 .empty {
   padding: 40px;

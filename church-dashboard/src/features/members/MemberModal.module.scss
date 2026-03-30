@@ -1,16 +1,16 @@
-// ─── Tokens ───────────────────────────────────────────────────────────────────
+// variables for the overall modal
 
-$primary:       #2d6a4f;
+$primary: #2d6a4f;
 $primary-light: #d8f3dc;
-$surface:       #ffffff;
-$bg:            #f8faf9;
-$text:          #1a2e1e;
-$text-muted:    #8aab98;
-$border:        #e0ece5;
-$radius:        10px;
-$transition:    150ms ease;
+$surface: #ffffff;
+$bg: #f8faf9;
+$text: #1a2e1e;
+$text-muted: #8aab98;
+$border: #e0ece5;
+$radius: 10px;
+$transition: 150ms ease;
 
-// ─── Backdrop ─────────────────────────────────────────────────────────────────
+// styling the backdrop;
 
 .backdrop {
   position: fixed;
@@ -23,7 +23,7 @@ $transition:    150ms ease;
   padding: 16px;
 }
 
-// ─── Modal ────────────────────────────────────────────────────────────────────
+// styles for the modal;
 
 .modal {
   background: $surface;
@@ -65,7 +65,7 @@ $transition:    150ms ease;
   }
 }
 
-// ─── Body ─────────────────────────────────────────────────────────────────────
+// modal body styles;
 
 .modalBody {
   padding: 40px;
@@ -120,7 +120,7 @@ $transition:    150ms ease;
   font-size: 10px;
 }
 
-// ─── Footer ───────────────────────────────────────────────────────────────────
+// modal footer styles;
 
 .modalFooter {
   display: flex;
@@ -141,7 +141,9 @@ $transition:    150ms ease;
   cursor: pointer;
   transition: background $transition;
 
-  &:hover { background: $bg; }
+  &:hover {
+    background: $bg;
+  }
 }
 
 .btnSave {
@@ -155,5 +157,7 @@ $transition:    150ms ease;
   cursor: pointer;
   transition: opacity $transition;
 
-  &:hover { opacity: 0.88; }
+  &:hover {
+    opacity: 0.88;
+  }
 }

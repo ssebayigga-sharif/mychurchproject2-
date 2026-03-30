@@ -1,22 +1,31 @@
-// ─── Tokens ───────────────────────────────────────────────────────────────────
+// These are the variables for the overall page
 
-$primary:       #2d6a4f;
+@use "sass:color";
+
+$primary: #2d6a4f;
 $primary-light: #d8f3dc;
-$primary-dark:  #1b4332;
-$surface:       #ffffff;
-$bg:            #f8faf9;
-$text:          #1a2e1e;
-$text-muted:    #8aab98;
-$border:        #e0ece5;
-$danger:        #c0392b;
-$radius:        10px;
-$transition:    150ms ease;
+$primary-dark: #1b4332;
+$surface: #ffffff;
+$bg: #f8faf9;
+$text: #1a2e1e;
+$text-muted: #8aab98;
+$border: #e0ece5;
+$danger: #c0392b;
+$radius: 10px;
+$transition: 150ms ease;
 
-// ─── Animations & Toasts ───────────────────────────────────────────────────────
+// here are the toasts and animations 
 
 @keyframes slideDown {
-  from { transform: translate(-50%, -20px); opacity: 0; }
-  to { transform: translate(-50%, 0); opacity: 1; }
+  from {
+    transform: translate(-50%, -20px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translate(-50%, 0);
+    opacity: 1;
+  }
 }
 
 .toast {
@@ -37,12 +46,17 @@ $transition:    150ms ease;
   align-items: center;
   gap: 8px;
 
-  &.toastsuccess { border-bottom: 3px solid #10b981; }
-  &.toasterror   { border-bottom: 3px solid #ef4444; }
+  &.toastsuccess {
+    border-bottom: 3px solid #10b981;
+  }
+
+  &.toasterror {
+    border-bottom: 3px solid #ef4444;
+  }
 }
 
 
-// ─── Header & Controls ────────────────────────────────────────────────────────
+// Header styles here;
 
 .page {
   padding: 20px 16px;
@@ -88,13 +102,15 @@ $transition:    150ms ease;
   overflow-x: auto;
   padding-bottom: 8px;
   -webkit-overflow-scrolling: touch;
-  
+
   &::-webkit-scrollbar {
     height: 4px;
   }
+
   &::-webkit-scrollbar-track {
     background: transparent;
   }
+
   &::-webkit-scrollbar-thumb {
     background: rgba(0, 0, 0, 0.05);
     border-radius: 2px;
@@ -112,12 +128,12 @@ $transition:    150ms ease;
   cursor: pointer;
   white-space: nowrap;
   transition: all $transition;
-  
-  &:hover { 
-    background: #f4f9f5; 
-    color: $text; 
+
+  &:hover {
+    background: #f4f9f5;
+    color: $text;
   }
-  
+
   &.activeTab {
     background: $primary;
     color: #fff;
@@ -158,7 +174,9 @@ $transition:    150ms ease;
   color: $text;
   outline: none;
 
-  &::placeholder { color: #a1bcae; }
+  &::placeholder {
+    color: #a1bcae;
+  }
 }
 
 .btnAdd {
@@ -174,14 +192,14 @@ $transition:    150ms ease;
   box-shadow: 0 4px 12px rgba(45, 106, 79, 0.2);
   transition: all $transition;
 
-  &:hover { 
-    background: lighten($primary, 5%);
+  &:hover {
+    background: color.adjust($primary, $lightness: 5%);
     transform: translateY(-2px);
     box-shadow: 0 6px 16px rgba(45, 106, 79, 0.3);
   }
 }
 
-// ─── Avatars ──────────────────────────────────────────────────────────────────
+// these are the avatar styles 
 
 .avatar {
   width: 44px;
@@ -196,14 +214,28 @@ $transition:    150ms ease;
   flex-shrink: 0;
 }
 
-.avatarBlue   { background: linear-gradient(135deg, #60a5fa, #3b82f6); }
-.avatarGreen  { background: linear-gradient(135deg, #34d399, #10b981); }
-.avatarPurple { background: linear-gradient(135deg, #a78bfa, #8b5cf6); }
-.avatarOrange { background: linear-gradient(135deg, #fbbf24, #f59e0b); }
-.avatarPink   { background: linear-gradient(135deg, #f472b6, #ec4899); }
+.avatarBlue {
+  background: linear-gradient(135deg, #60a5fa, #3b82f6);
+}
+
+.avatarGreen {
+  background: linear-gradient(135deg, #34d399, #10b981);
+}
+
+.avatarPurple {
+  background: linear-gradient(135deg, #a78bfa, #8b5cf6);
+}
+
+.avatarOrange {
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+}
+
+.avatarPink {
+  background: linear-gradient(135deg, #f472b6, #ec4899);
+}
 
 
-// ─── Grid & Cards ─────────────────────────────────────────────────────────────
+//card and grid styles are the ones here;
 
 .grid {
   display: grid;
@@ -304,17 +336,26 @@ $transition:    150ms ease;
   cursor: pointer;
   transition: background $transition;
 
-  &:hover { background: #e3efea; }
-  &:disabled { opacity: 0.5; cursor: not-allowed; }
+  &:hover {
+    background: #e3efea;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
 }
 
 .btnDanger {
   color: $danger;
   background: #fdf0ef;
-  &:hover { background: #f5c6c2; }
+
+  &:hover {
+    background: #f5c6c2;
+  }
 }
 
-// ─── Badges ───────────────────────────────────────────────────────────────────
+// styls for the badges;
 
 .badge {
   display: inline-block;
@@ -325,13 +366,37 @@ $transition:    150ms ease;
   white-space: nowrap;
 }
 
-.badgeDept   { background: $primary-light; color: #245540; align-self: flex-start; }
-.badgeGreen  { background: #d1fae5; color: #065f46; }   // Baptized
-.badgeAmber  { background: #fef3c7; color: #92400e; }   // In preparation
-.badgeGray   { background: #f3f4f6; color: #6b7280; }   // Not baptized
-.badgeVisitor { background: #fef3c7; color: #d97706; border: 1px solid #fde68a; }
+.badgeDept {
+  background: $primary-light;
+  color: #245540;
+  align-self: flex-start;
+}
 
-// ─── Empty & Error ────────────────────────────────────────────────────────────
+.badgeGreen {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+// Baptized
+.badgeAmber {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+// In preparation
+.badgeGray {
+  background: #f3f4f6;
+  color: #6b7280;
+}
+
+// Not baptized
+.badgeVisitor {
+  background: #fef3c7;
+  color: #d97706;
+  border: 1px solid #fde68a;
+}
+
+// Empty and error styles;
 
 .emptyState {
   display: flex;
@@ -343,8 +408,11 @@ $transition:    150ms ease;
   border: 1px dashed #c0d8cb;
   border-radius: 16px;
   margin-top: 20px;
-  
-  svg { margin-bottom: 20px; opacity: 0.7; }
+
+  svg {
+    margin-bottom: 20px;
+    opacity: 0.7;
+  }
 }
 
 .emptyTitle {
@@ -373,10 +441,12 @@ $transition:    150ms ease;
   cursor: pointer;
   transition: opacity $transition;
 
-  &:hover { opacity: 0.8; }
+  &:hover {
+    opacity: 0.8;
+  }
 }
 
-// ─── Modal ────────────────────────────────────────────────────────────────────
+// these are the modal styles; 
 
 .backdrop {
   position: fixed;
@@ -405,7 +475,11 @@ $transition:    150ms ease;
   padding: 18px 20px;
   border-bottom: 1px solid $border;
 
-  h3 { font-size: 15px; font-weight: 700; color: $text; }
+  h3 {
+    font-size: 15px;
+    font-weight: 700;
+    color: $text;
+  }
 }
 
 .modalClose {
@@ -416,7 +490,9 @@ $transition:    150ms ease;
   cursor: pointer;
   line-height: 1;
 
-  &:hover { color: $text; }
+  &:hover {
+    color: $text;
+  }
 }
 
 .modalBody {
@@ -459,7 +535,9 @@ $transition:    150ms ease;
       box-shadow: 0 0 0 3px rgba(45, 106, 79, 0.08);
     }
 
-    &::placeholder { color: $text-muted; }
+    &::placeholder {
+      color: $text-muted;
+    }
   }
 }
 
@@ -472,10 +550,21 @@ $transition:    150ms ease;
   border-radius: $radius;
   cursor: pointer;
 
-  &:hover { background: #f4f9f5; }
+  &:hover {
+    background: #f4f9f5;
+  }
 
-  input { width: 14px; height: 14px; accent-color: $primary; cursor: pointer; }
-  span  { font-size: 13px; color: $text; }
+  input {
+    width: 14px;
+    height: 14px;
+    accent-color: $primary;
+    cursor: pointer;
+  }
+
+  span {
+    font-size: 13px;
+    color: $text;
+  }
 }
 
 .modalFooter {
@@ -496,7 +585,9 @@ $transition:    150ms ease;
   color: $text-muted;
   cursor: pointer;
 
-  &:hover { background: $bg; }
+  &:hover {
+    background: $bg;
+  }
 }
 
 .btnSave {
@@ -510,5 +601,7 @@ $transition:    150ms ease;
   cursor: pointer;
   transition: opacity $transition;
 
-  &:hover { opacity: 0.88; }
+  &:hover {
+    opacity: 0.88;
+  }
 }

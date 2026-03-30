@@ -134,7 +134,7 @@ export const Dashboard = () => {
       <div className={styles.heroBanner}>
         <div className={styles.heroContent}>
           <h1 className={styles.heroGreeting}>{getGreeting()}</h1>
-          <p className={styles.heroSub}> Welcome To Kabulengwa English SDA Church Kampala !!!</p>
+          <p className={styles.heroSub}> Kabulengwa English SDA Church Kampala !!!</p>
         </div>
         <div className={styles.heroDeco}></div>
       </div>
