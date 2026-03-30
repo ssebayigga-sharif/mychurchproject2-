@@ -1,0 +1,165 @@
+export type BaptismStatus = "Baptized" | "Not baptized" | "In preparation";
+//when creating member
+export type MemberDepartment =
+  | "Sabbath School"
+  | "Children"
+  | "Youth"
+  | "Music"
+  | "Deacons"
+  | "Deaconesses"
+  | "Health"
+  | "Communication"
+  | "Elders"
+  | "Personal Ministries"
+  | "Community Services";
+
+//when creating a new member
+export type CreateMemberInput = {
+  firstName: string;
+  lastName: string;
+  phone: string;
+  email?: string;
+  department: MemberDepartment;
+  baptismStatus: BaptismStatus;
+  memberType?: "Member" | "Visitor";
+  joinedAt?: string;
+};
+
+//for members returned from the database
+export type Member = CreateMemberInput & {
+  id: string;
+  joinedAt: string;
+};
+//program
+export type ProgramStatus = "Upcoming" | "Completed";
+export type ProgramTypes =
+  | "Youth Program"
+  | "sabbath School"
+  | "Church At Study"
+  | "Prayer Requests"
+  | "Evangelism"
+  | "Special Event"
+  | "Camp Meeting";
+
+//to create a new program
+export type CreateProgramInput = {
+  title: string;
+  date: string;
+  speaker: string;
+  theme: string;
+  type: ProgramTypes;
+  status: ProgramStatus;
+};
+
+//programms returned from the database
+
+export type Program = CreateProgramInput & {
+  id: string;
+  createdAt: string;
+};
+
+//Attendance
+
+export type AttendanceMap = Record<string, boolean>;
+
+export type AttendanceRecord = {
+  programId: string;
+  memberId: string;
+  isPresent: boolean;
+  markedAt: string;
+};
+
+//dashboard stats types
+
+export type DashboardStats = {
+  totalMembers: number;
+  baptizedCount: number;
+  nonBaptizedCount: number;
+  visitorsCount: number;
+  totalPrograms: number;
+  upcomingPrograms: number;
+  recentPrograms: Program[];
+  departmentBreakdown: { department: string; count: number }[];
+  recentPrayers: PrayerRequest[];
+  upcomingBirthdays: { profile: MemberProfile; memberName: string }[];
+};
+
+//member profile information
+export type Gender = "Male" | "Female";
+
+export type MaritalStatus = "Married" | "Single" | "Widowed" | "Divorced";
+
+export type EmergencyContact = {
+  name: string;
+  relationship: string;
+  phone: string;
+};
+
+export type FamilyInfo = {
+  maritalStatus: MaritalStatus;
+  spouseName?: string;
+  numberOfChildren?: number;
+};
+
+export type HomeChurchInfo = {
+  currentChurch: string;
+  formerChurch?: string;
+  transferDate?: string;
+  transferFromCity?: string;
+};
+
+export type HealthNotes = {
+  dietaryNeeds: string;
+  disabilities?: string;
+  otherNotes?: string;
+};
+
+export type CreateMemberProfileInput = {
+  memberId: string;
+
+  dateOfBirth?: string;
+  gender?: Gender;
+  age?: number;
+
+  phone: string;
+  email?: string;
+  address?: string;
+  city?: string;
+  country?: string;
+
+  emergencyContact: EmergencyContact;
+  familyInfo: FamilyInfo;
+  homeChurchInfo: HomeChurchInfo;
+  healthNotes: HealthNotes;
+};
+
+export type MemberProfile = CreateMemberProfileInput & {
+  id: string;
+  updatedAt: string;
+};
+
+export type PrayerCategory =
+  | "Health"
+  | "Family"
+  | "Financial"
+  | "Spiritual Growth"
+  | "Bereavement"
+  | "Thanks Giving"
+  | "Other";
+
+export type PrayerStatus = "Pending" | "Completed";
+
+export type CreatePrayerRequestInput = {
+  name: string;
+  request: string;
+  category: PrayerCategory;
+  isPrivate: boolean;
+  status: PrayerStatus;
+  prayerCount: number;
+  createdAt: string;
+  completedAt?: string;
+};
+
+export type PrayerRequest = CreatePrayerRequestInput & {
+  id: string;
+};

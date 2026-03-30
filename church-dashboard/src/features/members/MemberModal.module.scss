@@ -1,0 +1,159 @@
+// ─── Tokens ───────────────────────────────────────────────────────────────────
+
+$primary:       #2d6a4f;
+$primary-light: #d8f3dc;
+$surface:       #ffffff;
+$bg:            #f8faf9;
+$text:          #1a2e1e;
+$text-muted:    #8aab98;
+$border:        #e0ece5;
+$radius:        10px;
+$transition:    150ms ease;
+
+// ─── Backdrop ─────────────────────────────────────────────────────────────────
+
+.backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 400;
+  padding: 16px;
+}
+
+// ─── Modal ────────────────────────────────────────────────────────────────────
+
+.modal {
+  background: $surface;
+  border-radius: $radius;
+  width: 100%;
+  max-width: 440px;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+.modalHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 20px;
+  border-bottom: 1px solid $border;
+
+  h3 {
+    font-size: 15px;
+    font-weight: 700;
+    color: $text;
+  }
+}
+
+.modalClose {
+  background: none;
+  border: none;
+  font-size: 16px;
+  color: $text-muted;
+  cursor: pointer;
+  line-height: 1;
+  padding: 2px 6px;
+  border-radius: 4px;
+  transition: background $transition;
+
+  &:hover {
+    background: $bg;
+    color: $text;
+  }
+}
+
+// ─── Body ─────────────────────────────────────────────────────────────────────
+
+.modalBody {
+  padding: 40px;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 35px;
+}
+
+.field {
+  margin-bottom: 14px;
+
+  label {
+    display: block;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: $text-muted;
+    margin-bottom: 5px;
+  }
+
+  input,
+  select {
+    width: 100%;
+    padding: 9px 12px;
+    border: 1px solid $border;
+    border-radius: $radius;
+    font-size: 13px;
+    color: $text;
+    background: $surface;
+    outline: none;
+    transition: border-color $transition;
+
+    &:focus {
+      border-color: $primary;
+      box-shadow: 0 0 0 3px rgba(45, 106, 79, 0.08);
+    }
+
+    &::placeholder {
+      color: $text-muted;
+    }
+  }
+}
+
+.optional {
+  font-weight: 400;
+  text-transform: none;
+  color: $text-muted;
+  font-size: 10px;
+}
+
+// ─── Footer ───────────────────────────────────────────────────────────────────
+
+.modalFooter {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 14px 20px;
+  border-top: 1px solid $border;
+  background: $bg;
+}
+
+.btnCancel {
+  padding: 8px 14px;
+  font-size: 13px;
+  border: 1px solid $border;
+  border-radius: $radius;
+  background: $surface;
+  color: $text-muted;
+  cursor: pointer;
+  transition: background $transition;
+
+  &:hover { background: $bg; }
+}
+
+.btnSave {
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  border: none;
+  border-radius: $radius;
+  background: $primary;
+  color: #fff;
+  cursor: pointer;
+  transition: opacity $transition;
+
+  &:hover { opacity: 0.88; }
+}

@@ -1,0 +1,273 @@
+$primary: #2d6a4f;
+$primary-light: #d8f3dc;
+$primary-dark: #1b4332;
+$surface: #ffffff;
+$bg: #f8faf9;
+$text: #1a2e1e;
+$text-muted: #8aab98;
+$border: #e0ece5;
+$danger: #c0392b;
+$radius: 12px;
+$transition: 200ms ease;
+
+.card {
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(224, 236, 229, 0.8);
+  border-radius: $radius;
+  padding: 20px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.02);
+  transition: transform $transition, box-shadow $transition, border-color $transition;
+
+  &:hover {
+    border-color: #b7dcca;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.04);
+    transform: translateY(-2px);
+  }
+
+  &.cardCompleted {
+    opacity: 0.8;
+    background: #fafcfa;
+    box-shadow: none;
+
+    &:hover {
+      transform: none;
+    }
+  }
+}
+
+.cardHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 14px;
+  gap: 12px;
+}
+
+.cardMeta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 700;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+// Avatar Colors
+.avatarBlue {
+  background: #3b82f6;
+}
+
+.avatarGreen {
+  background: #10b981;
+}
+
+.avatarPurple {
+  background: #8b5cf6;
+}
+
+.avatarOrange {
+  background: #f97316;
+}
+
+.avatarPink {
+  background: #ec4899;
+}
+
+.avatarTeal {
+  background: #14b8a6;
+}
+
+.nameAndBadges {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.name {
+  font-size: 15px;
+  font-weight: 700;
+  color: $text;
+  line-height: 1.2;
+}
+
+.badges {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.date {
+  font-size: 12px;
+  color: $text-muted;
+  white-space: nowrap;
+  flex-shrink: 0;
+  font-weight: 500;
+}
+
+.requestText {
+  font-size: 14px;
+  color: #4a6358;
+  line-height: 1.6;
+  margin-bottom: 18px;
+}
+
+// ─── Card Footer ──────────────────────────────────────────────────────────────
+
+.cardFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding-top: 14px;
+  border-top: 1px solid rgba(224, 236, 229, 0.5);
+}
+
+.prayerCount {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: $text-muted;
+  font-weight: 500;
+
+  svg {
+    color: #e88080;
+  }
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btnPray {
+  padding: 6px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  border: 1px solid $primary-light;
+  border-radius: 8px;
+  background: $primary-light;
+  color: $primary-dark;
+  cursor: pointer;
+  transition: all $transition;
+
+  &:hover {
+    background: #c2eacb;
+  }
+}
+
+.btnComplete {
+  padding: 6px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  border: 1px solid $border;
+  border-radius: 8px;
+  background: $surface;
+  color: $text;
+  cursor: pointer;
+  transition: all $transition;
+
+  &:hover {
+    border-color: $primary;
+    color: $primary;
+  }
+}
+
+.btnDelete {
+  padding: 6px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: transparent;
+  color: $danger;
+  cursor: pointer;
+  transition: background $transition;
+
+  &:hover {
+    background: #fcf1f0;
+  }
+}
+
+.answeredNote {
+  margin-top: 12px;
+  font-size: 12px;
+  color: $primary;
+  font-weight: 500;
+  padding: 10px 14px;
+  background: rgba(45, 106, 79, 0.05);
+  border-radius: 8px;
+}
+
+// ─── Category Badges ──────────────────────────────────────────────────────────
+
+.categoryBadge {
+  display: inline-block;
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.catHealth {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.catFamily {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+.catFinancial {
+  background: #fef9c3;
+  color: #854d0e;
+}
+
+.catSpiritual {
+  background: $primary-light;
+  color: $primary-dark;
+}
+
+.catBereavement {
+  background: #f3f4f6;
+  color: #374151;
+}
+
+.catThanksgiving {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.catOther {
+  background: #f3e8ff;
+  color: #6b21a8;
+}
+
+.privateBadge {
+  display: inline-block;
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background: #f3f4f6;
+  color: #6b7280;
+}

@@ -1,0 +1,160 @@
+$primary:       #2d6a4f;
+$primary-light: #d8f3dc;
+$primary-dark:  #1b4332;
+$surface:       #ffffff;
+$bg:            #f8faf9;
+$text:          #1a2e1e;
+$text-muted:    #8aab98;
+$border:        #e0ece5;
+$danger:        #c0392b;
+$radius:        16px;
+$transition:    150ms ease;
+
+@keyframes fadeInOverlay {
+  from { opacity: 0; backdrop-filter: blur(0px); }
+  to { opacity: 1; backdrop-filter: blur(12px); }
+}
+
+@keyframes scaleUpModal {
+  from { opacity: 0; transform: scale(0.95) translateY(10px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.modalBackdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(26, 46, 30, 0.4);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeInOverlay 0.3s ease forwards;
+  padding: 20px;
+}
+
+.modalCard {
+  width: 100%;
+  max-width: 480px;
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid rgba(224, 236, 229, 0.8);
+  border-radius: 24px;
+  padding: 32px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.15);
+  animation: scaleUpModal 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.header {
+  margin-bottom: 24px;
+  
+  h3 {
+    font-size: 22px;
+    font-weight: 800;
+    color: $primary-dark;
+    margin: 0;
+  }
+  
+  p {
+    font-size: 13px;
+    color: $text-muted;
+    margin-top: 4px;
+  }
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+
+  label {
+    font-size: 13px;
+    font-weight: 700;
+    color: $text;
+  }
+
+  input, select {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid $border;
+    border-radius: 12px;
+    font-size: 14px;
+    color: $text;
+    background: #fdfdfd;
+    transition: all $transition;
+    outline: none;
+
+    &::placeholder { color: #a1bcae; }
+
+    &:focus {
+      border-color: $primary;
+      box-shadow: 0 0 0 4px rgba(45, 106, 79, 0.1);
+      background: $surface;
+    }
+  }
+
+  select {
+    appearance: none;
+    cursor: pointer;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%238aab98'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+    background-position: right 14px center;
+    background-repeat: no-repeat;
+    background-size: 16px;
+    padding-right: 40px;
+  }
+}
+
+.modalActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 32px;
+  background: transparent;
+}
+
+.btnCancel {
+  padding: 12px 20px;
+  background: white;
+  color: $text;
+  border: 1px solid $border;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all $transition;
+
+  &:hover {
+    background: #f4f9f5;
+    border-color: #d1dfd7;
+  }
+}
+
+.btnSave {
+  padding: 12px 24px;
+  background: $primary;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(45, 106, 79, 0.2);
+  transition: all $transition;
+
+  &:hover {
+    background: lighten($primary, 4%);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(45, 106, 79, 0.25);
+  }
+}

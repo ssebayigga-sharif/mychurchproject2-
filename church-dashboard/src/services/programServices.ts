@@ -1,28 +1,32 @@
 import axios from "axios";
-import type { Program } from "../types/Program";
+import type { Program, CreateProgramInput } from "../types/church.types";
 
 const BASE_URL = "https://my-church-9abc5-default-rtdb.firebaseio.com/programs";
 
 export const getPrograms = async (): Promise<Program[]> => {
-  const res = await axios.get(`${BASE_URL}.json`);
+  const res = await axios.get<Record<string, Omit<Program, "id">>>(
+    `${BASE_URL}.json`,
+  );
   const data = res.data;
 
   return data
-    ? Object.entries(data).map(([id, values]: any) => ({
-        id,
-        ...(values as Program),
-      }))
+    ? Object.entries(data).map(([id, value]) => ({ id, ...value }))
     : [];
 };
 
-export const addProgram = async (program: Program) => {
+export const addProgram = async (
+  program: CreateProgramInput,
+): Promise<void> => {
   await axios.post(`${BASE_URL}.json`, program);
 };
 
-export const updateProgram = async (id: string, program: Partial<Program>) => {
+export const updateProgram = async (
+  id: string,
+  program: Partial<CreateProgramInput>,
+): Promise<void> => {
   await axios.patch(`${BASE_URL}/${id}.json`, program);
 };
 
-export const deleteProgram = async (id: string) => {
+export const deleteProgram = async (id: string): Promise<void> => {
   await axios.delete(`${BASE_URL}/${id}.json`);
 };

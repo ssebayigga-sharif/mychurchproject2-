@@ -1,0 +1,184 @@
+$primary:       #2d6a4f;
+$primary-light: #d8f3dc;
+$primary-dark:  #1b4332;
+$surface:       #ffffff;
+$bg:            #f8faf9;
+$text:          #1a2e1e;
+$text-muted:    #8aab98;
+$border:        #e0ece5;
+$danger:        #c0392b;
+$radius:        14px;
+$transition:    150ms ease;
+
+// ─── Animations & Toasts ───────────────────────────────────────────────────────
+
+@keyframes slideDown {
+  from { transform: translate(-50%, -20px); opacity: 0; }
+  to { transform: translate(-50%, 0); opacity: 1; }
+}
+
+@keyframes fadeInScale {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.toast {
+  position: fixed;
+  top: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 12px 24px;
+  border-radius: 30px;
+  background: #fff;
+  color: $text;
+  font-size: 14px;
+  font-weight: 600;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  animation: slideDown 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  &.toastsuccess { border-bottom: 3px solid #10b981; }
+  &.toasterror   { border-bottom: 3px solid #ef4444; }
+}
+
+// ─── Layout ───────────────────────────────────────────────────────
+
+.loginContainer {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, $bg 0%, #e0ece5 100%);
+  padding: 24px;
+}
+
+.loginCard {
+  width: 100%;
+  max-width: 420px;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(224, 236, 229, 0.8);
+  border-radius: 24px;
+  padding: 40px 32px;
+  box-shadow: 0 16px 40px rgba(45, 106, 79, 0.08);
+  animation: fadeInScale 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.brandIcon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: $primary-light;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  font-weight: 800;
+  color: $primary-dark;
+  margin-bottom: 16px;
+  box-shadow: 0 4px 12px rgba(45, 106, 79, 0.1);
+}
+
+.title {
+  font-size: 24px;
+  font-weight: 800;
+  color: $primary-dark;
+  margin-bottom: 8px;
+}
+
+.subtitle {
+  font-size: 14px;
+  color: $text-muted;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  label {
+    font-size: 13px;
+    font-weight: 700;
+    color: $text;
+  }
+
+  input {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid $border;
+    border-radius: $radius;
+    font-size: 15px;
+    color: $text;
+    background: $surface;
+    outline: none;
+    transition: all $transition;
+
+    &::placeholder { color: #a1bcae; }
+
+    &:focus {
+      border-color: $primary;
+      box-shadow: 0 0 0 4px rgba(45, 106, 79, 0.1);
+    }
+    
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+  }
+}
+
+.submitBtn {
+  margin-top: 8px;
+  width: 100%;
+  padding: 14px;
+  background: $primary;
+  color: #fff;
+  border: none;
+  border-radius: $radius;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(45, 106, 79, 0.25);
+  transition: all $transition;
+
+  &:hover {
+    background: lighten($primary, 4%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(45, 106, 79, 0.35);
+  }
+
+  &:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    transform: none;
+  }
+}
+
+.footerInfo {
+  margin-top: 24px;
+  text-align: center;
+  font-size: 12px;
+  color: $text-muted;
+  padding: 12px;
+  background: #f4f9f5;
+  border-radius: 8px;
+  border: 1px dashed #c0d8cb;
+}

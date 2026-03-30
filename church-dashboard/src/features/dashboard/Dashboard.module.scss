@@ -1,0 +1,420 @@
+// ─── Tokens ───────────────────────────────────────────────────────────────────
+
+$primary:       #2d6a4f;
+$primary-light: #d8f3dc;
+$primary-dark:  #1b4332;
+$gold:          #b5883a;
+$surface:       #ffffff;
+$bg:            #f8faf9;
+$text:          #1a2e1e;
+$text-muted:    #8aab98;
+$border:        #e0ece5;
+$danger:        #c0392b;
+$radius:        10px;
+$transition:    150ms ease;
+
+// ─── Page ─────────────────────────────────────────────────────────────────────
+
+.page {
+  padding: 24px 28px;
+  background: $bg;
+  min-height: 100vh;
+}
+
+// ─── Hero Banner ──────────────────────────────────────────────────────────────
+
+.heroBanner {
+  background: linear-gradient(135deg, $primary-dark 0%, $primary 100%);
+  border-radius: 16px;
+  padding: 32px 40px;
+  color: #fff;
+  margin-bottom: 28px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(45, 106, 79, 0.15);
+}
+
+.heroContent {
+  position: relative;
+  z-index: 2;
+}
+
+.heroGreeting {
+  font-size: 28px;
+  font-weight: 800;
+  margin-bottom: 6px;
+  color: #fff;
+}
+
+.heroSub {
+  font-size: 15px;
+  color: $primary-light;
+  opacity: 0.9;
+}
+
+.heroDeco {
+  position: absolute;
+  top: -50px;
+  right: -50px;
+  width: 200px;
+  height: 200px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  filter: blur(40px);
+  z-index: 1;
+}
+
+// ─── Stat Cards ───────────────────────────────────────────────────────────────
+
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-bottom: 16px;
+
+  @media (max-width: 768px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.statCard {
+  background: $surface;
+  border: 1px solid $border;
+  border-radius: $radius;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+
+  &.accent {
+    background: $primary-light;
+    border-color: #b8e8be;
+
+    .statValue { color: $primary-dark; }
+    .statLabel,
+    .statSub   { color: #4a9e57; }
+  }
+}
+
+.statLabel {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: $text-muted;
+}
+
+.statValue {
+  font-size: 28px;
+  font-weight: 700;
+  color: $text;
+  margin: 4px 0 2px;
+  line-height: 1;
+}
+
+.statSub {
+  font-size: 11px;
+  color: $text-muted;
+}
+
+// ─── Two Column Grid ──────────────────────────────────────────────────────────
+
+.twoCol {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-bottom: 14px;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+// ─── Card ─────────────────────────────────────────────────────────────────────
+
+.card {
+  background: $surface;
+  border: 1px solid $border;
+  border-radius: $radius;
+  overflow: hidden;
+}
+
+.cardHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border-bottom: 1px solid $border;
+
+  h3 {
+    font-size: 13px;
+    font-weight: 700;
+    color: $text;
+  }
+
+  span {
+    font-size: 11px;
+    color: $text-muted;
+  }
+}
+
+.cardBody { padding: 4px 0; }
+
+// ─── Program Items ────────────────────────────────────────────────────────────
+
+.programItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 9px 16px;
+  border-bottom: 1px solid $border;
+  transition: background $transition;
+
+  &:last-child { border-bottom: none; }
+  &:hover { background: #f4f9f5; }
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+
+  &.dotBlue  { background: #3b82f6; }
+  &.dotGreen { background: #10b981; }
+}
+
+.programInfo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.programTitle {
+  font-size: 13px;
+  font-weight: 600;
+  color: $text;
+}
+
+.programMeta {
+  font-size: 11px;
+  color: $text-muted;
+}
+
+.badge {
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 7px;
+  border-radius: 20px;
+
+  &.upcoming  { background: #dbeafe; color: #1e40af; }
+  &.completed { background: #d1fae5; color: #065f46; }
+}
+
+// ─── Department Breakdown ─────────────────────────────────────────────────────
+
+.deptItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 16px;
+  border-bottom: 1px solid $border;
+
+  &:last-child { border-bottom: none; }
+}
+
+.deptName {
+  font-size: 12px;
+  color: $text;
+  width: 130px;
+  flex-shrink: 0;
+}
+
+.deptBarWrap {
+  flex: 1;
+  height: 5px;
+  background: #edf5ee;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.deptBar {
+  height: 100%;
+  background: $primary;
+  border-radius: 3px;
+  transition: width 0.4s ease;
+}
+
+.deptCount {
+  font-size: 12px;
+  font-weight: 600;
+  color: $text;
+  min-width: 20px;
+  text-align: right;
+}
+
+// ─── Action Cards ─────────────────────────────────────────────────────────────
+
+.actionCards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-top: 24px;
+
+  @media (max-width: 900px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (max-width: 480px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.actionCard {
+  background: $surface;
+  border: 1px solid $border;
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  text-decoration: none;
+  color: $text;
+  transition: all $transition;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+
+  &:hover {
+    border-color: $primary;
+    box-shadow: 0 8px 24px rgba(45, 106, 79, 0.08);
+    transform: translateY(-2px);
+    
+    .actionArrow { transform: translateX(2px); color: $primary; }
+  }
+}
+
+.quickIcon {
+  width: 48px;
+  height: 48px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.actionInfo {
+  flex: 1;
+}
+
+.quickLabel {
+  font-size: 14px;
+  font-weight: 700;
+  color: $text;
+}
+
+.actionArrow {
+  font-size: 16px;
+  color: $text-muted;
+  transition: transform $transition, color $transition;
+}
+
+// ─── Birthdays & Prayers ──────────────────────────────────────────────────────
+
+.viewAllBtn {
+  font-size: 12px;
+  font-weight: 600;
+  color: $primary;
+  text-decoration: none;
+  &:hover { text-decoration: underline; }
+}
+
+.emptyText {
+  padding: 24px;
+  text-align: center;
+  font-size: 13px;
+  color: $text-muted;
+  font-style: italic;
+}
+
+.birthdayItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border-bottom: 1px solid $border;
+  &:last-child { border-bottom: none; }
+}
+
+.birthdayIcon {
+  font-size: 20px;
+  background: #fffbf0;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+.birthdayInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+.birthdayName {
+  font-size: 14px;
+  font-weight: 600;
+  color: $text;
+}
+
+.birthdayDate {
+  font-size: 12px;
+  color: $text-muted;
+}
+
+.prayerItem {
+  padding: 14px 16px;
+  border-bottom: 1px solid $border;
+  &:last-child { border-bottom: none; }
+}
+
+.prayerHeader {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.prayerName {
+  font-size: 13px;
+  font-weight: 700;
+  color: $text;
+}
+
+.prayerDate {
+  font-size: 11px;
+  color: $text-muted;
+}
+
+.prayerText {
+  font-size: 13px;
+  color: #4a6358;
+  line-height: 1.5;
+}
+
+// ─── States ───────────────────────────────────────────────────────────────────
+
+.empty {
+  padding: 40px;
+  text-align: center;
+  font-size: 13px;
+  color: $text-muted;
+}
+
+.error {
+  padding: 10px 14px;
+  background: #fdf0ef;
+  border: 1px solid #f5c6c2;
+  border-radius: $radius;
+  font-size: 13px;
+  color: $danger;
+}

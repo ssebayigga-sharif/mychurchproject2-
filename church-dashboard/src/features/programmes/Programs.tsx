@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
-import type { Program } from "../../types/Program";
+import { useCallback, useEffect, useState } from "react";
+import styles from "./Programs.module.scss";
+import type { CreateProgramInput, Program } from "../../types/church.types";
 import {
   addProgram,
   deleteProgram,
@@ -12,16 +13,32 @@ export const Programs = () => {
   const [programs, setPrograms] = useState<Program[]>([]);
   const [modalOpen, setModalOpen] = useState(false);
   const [editingProgram, setEditingProgram] = useState<Program | undefined>();
-  const [search, setSearch] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
+
+  const [toast, setToast] = useState<{ message: string; type: "success" | "error" } | null>(null);
+
+  const showToast = (message: string, type: "success" | "error" = "success") => {
+    setToast({ message, type });
+    setTimeout(() => setToast(null), 3500);
+  };
+
+  const fetchPrograms = useCallback(async () => {
+    try {
+      setIsLoading(true);
+      const data = await getPrograms();
+      setPrograms(data);
+    } catch {
+      showToast("Failed to load programs. Please try again.", "error");
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
 
   useEffect(() => {
     fetchPrograms();
-  }, []);
-
-  const fetchPrograms = async () => {
-    const data = await getPrograms();
-    setPrograms(data);
-  };
+  }, [fetchPrograms]);
 
   const addProgramHandler = () => {
     setEditingProgram(undefined);
@@ -33,72 +50,163 @@ export const Programs = () => {
     setModalOpen(true);
   };
 
-  const deleteProgramHandler = async (id: string) => {
-    if (confirm("Delete This Program")) {
-      await deleteProgram(id);
-      fetchPrograms();
+  const deleteProgramHandler = async (program: Program) => {
+    const confirmed = window.confirm(`Delete "${program.title}"? This cannot be undone.`);
+    if (!confirmed) return;
+    try {
+      setDeletingId(program.id);
+      await deleteProgram(program.id);
+      setPrograms((prev) => prev.filter((p) => p.id !== program.id));
+      showToast(`Deleted program: ${program.title}`);
+    } catch {
+      showToast("Failed to delete program. Please try again.", "error");
+    } finally {
+      setDeletingId(null);
     }
   };
 
-  const saveProgramHandler = async (program: Program) => {
-    if (program.id) {
-      await updateProgram(program.id, program);
-    } else {
-      await addProgram(program);
+  const saveProgramHandler = async (data: CreateProgramInput, id?: string) => {
+    try {
+      if (id) {
+        await updateProgram(id, data);
+      } else {
+        await addProgram(data);
+      }
+      setModalOpen(false);
+      await fetchPrograms();
+      showToast(`Program successfully ${id ? "updated" : "added"}!`);
+    } catch {
+      showToast("Failed to save program. Please try again.", "error");
     }
-
-    setModalOpen(false);
-    fetchPrograms();
   };
 
-  const filterPrograms = programs.filter(
-    (p) =>
-      p.title.toLowerCase().includes(search.toLowerCase()) ||
-      p.speaker.toLowerCase().includes(search.toLowerCase()),
-  );
+  const query = searchQuery.trim().toLowerCase();
+  const filteredPrograms = programs.filter((p) => {
+    if (query === "") return true;
+    const title = (p.title || "").toLowerCase();
+    const speaker = (p.speaker || "").toLowerCase();
+    const theme = (p.theme || "").toLowerCase();
+    return title.includes(query) || speaker.includes(query) || theme.includes(query);
+  });
+
+  // Helper to parse date for the calendar block
+  const parseDate = (dateStr: string) => {
+    try {
+      const d = new Date(dateStr);
+      if (isNaN(d.getTime())) return { month: "—", day: "—" };
+      return {
+        month: d.toLocaleDateString("en-US", { month: "short" }).toUpperCase(),
+        day: d.getDate(),
+      };
+    } catch {
+      return { month: "—", day: "—" };
+    }
+  };
 
   return (
-    <div>
-      <h2>Sabbath Programs</h2>
-      <div className="page-actions">
-        <button onClick={addProgramHandler}>Add Program</button>
-        <input
-          placeholder=" Search Programs...."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-        />
+    <div className={styles.page}>
+      {/* Toast Notification */}
+      {toast && (
+        <div className={`${styles.toast} ${styles[`toast${toast.type}`]}`}>
+          {toast.type === "success" ? "✅" : "❌"} {toast.message}
+        </div>
+      )}
+
+      {/* Header & Controls */}
+      <div className={styles.pageHeader}>
+        <div>
+          <h1 className={styles.heading}>Sabbath Programs</h1>
+          <p className={styles.subheading}>Manage upcoming schedules, events, and church activities</p>
+        </div>
+        <button onClick={addProgramHandler} className={styles.btnAdd}>+ Add Program</button>
       </div>
-      <table>
-        <thead>
-          <tr>
-            <th>Title</th>
-            <th>Date</th>
-            <th>Speaker</th>
-            <th>Theme</th>
-            <th>Status</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
 
-        <tbody>
-          {filterPrograms.map((p) => (
-            <tr key={p.id}>
-              <td>{p.title}</td>
-              <td>{p.date}</td>
-              <td>{p.speaker}</td>
-              <td>{p.theme}</td>
-              <td>{p.status}</td>
-              <td>
-                <button onClick={() => editProgramHandler(p)}>Edit</button>
-                <button onClick={() => deleteProgramHandler(p.id!)}>
-                  Delete
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <div className={styles.controls}>
+        <div className={styles.searchWrap}>
+          <span className={styles.searchIcon}>🔍</span>
+          <input
+            className={styles.searchInput}
+            placeholder="Search by title, speaker, or theme..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+        </div>
+      </div>
 
+      {/* Main Feed */}
+      {isLoading ? (
+        <p className={styles.emptyText}>Loading programs...</p>
+      ) : filteredPrograms.length === 0 ? (
+        <div className={styles.emptyState}>
+          <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#b7dcca" strokeWidth="1.5">
+            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+            <line x1="16" y1="2" x2="16" y2="6"></line>
+            <line x1="8" y1="2" x2="8" y2="6"></line>
+            <line x1="3" y1="10" x2="21" y2="10"></line>
+          </svg>
+          <p className={styles.emptyTitle}>No programs found</p>
+          {query !== "" && (
+            <button className={styles.btnClear} onClick={() => setSearchQuery("")}>
+              Clear Search
+            </button>
+          )}
+        </div>
+      ) : (
+        <div className={styles.grid}>
+          {filteredPrograms.map((p) => {
+            const { month, day } = parseDate(p.date);
+            return (
+              <div key={p.id} className={styles.programCard}>
+                {/* Calendar Date Block */}
+                <div className={styles.dateBlock}>
+                  <span className={styles.dateMonth}>{month}</span>
+                  <span className={styles.dateDay}>{day}</span>
+                </div>
+
+                {/* Card Content */}
+                <div className={styles.cardContent}>
+                  <div className={styles.cardHeader}>
+                    <span className={styles.title}>{p.title}</span>
+                    <span className={`${styles.badge} ${p.status === "Upcoming" ? styles.upcoming : styles.completed}`}>
+                      {p.status}
+                    </span>
+                  </div>
+                  
+                  <div className={styles.cardDetails}>
+                    <div className={styles.detailRow}>
+                      <span className={styles.detailLabel}>Theme:</span>
+                      <span className={styles.detailValue}>{p.theme || "—"}</span>
+                    </div>
+                    <div className={styles.detailRow}>
+                      <span className={styles.detailLabel}>Speaker:</span>
+                      <span className={styles.detailValue}>{p.speaker || "—"}</span>
+                    </div>
+                    <div className={styles.detailRow}>
+                      <span className={styles.detailLabel}>Type:</span>
+                      <span className={styles.detailValue}>{p.type || "General"}</span>
+                    </div>
+                  </div>
+
+                  <div className={styles.cardActions}>
+                    <button onClick={() => editProgramHandler(p)} className={styles.btnAction}>
+                      Edit
+                    </button>
+                    <button
+                      onClick={() => deleteProgramHandler(p)}
+                      className={`${styles.btnAction} ${styles.btnDanger}`}
+                      disabled={deletingId === p.id}
+                    >
+                      {deletingId === p.id ? "..." : "Delete"}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      )}
+
+      {/* Add/Edit Modal */}
       <ProgramModal
         visible={modalOpen}
         onClose={() => setModalOpen(false)}

@@ -1,0 +1,365 @@
+// ─── Tokens ───────────────────────────────────────────────────────────────────
+
+$primary:       #2d6a4f;
+$primary-light: #d8f3dc;
+$primary-dark:  #1b4332;
+$surface:       #ffffff;
+$bg:            #f8faf9;
+$text:          #1a2e1e;
+$text-muted:    #8aab98;
+$border:        #e0ece5;
+$danger:        #c0392b;
+$radius:        10px;
+$transition:    150ms ease;
+
+// ─── Animations & Toasts ───────────────────────────────────────────────────────
+
+@keyframes slideDown {
+  from { transform: translate(-50%, -20px); opacity: 0; }
+  to { transform: translate(-50%, 0); opacity: 1; }
+}
+
+.toast {
+  position: fixed;
+  top: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 12px 24px;
+  border-radius: 30px;
+  background: #fff;
+  color: $text;
+  font-size: 14px;
+  font-weight: 600;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  animation: slideDown 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  &.toastsuccess { border-bottom: 3px solid #10b981; }
+  &.toasterror   { border-bottom: 3px solid #ef4444; }
+}
+
+// ─── Header & Controls ────────────────────────────────────────────────────────
+
+.page {
+  padding: 28px 32px;
+  background: $bg;
+  min-height: 100vh;
+}
+
+.pageHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.heading {
+  font-size: 24px;
+  font-weight: 800;
+  color: $primary-dark;
+  margin-bottom: 4px;
+}
+
+.subheading {
+  font-size: 14px;
+  color: $text-muted;
+}
+
+// ─── Selector Card ────────────────────────────────────────────────────────────
+
+.selectCard {
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(224, 236, 229, 0.8);
+  border-radius: 12px;
+  padding: 20px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.02);
+  margin-bottom: 24px;
+
+  @media (max-width: 600px) {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+}
+
+.selectInfo {
+  h3 {
+    font-size: 16px;
+    font-weight: 700;
+    color: $text;
+    margin-bottom: 4px;
+  }
+  p {
+    font-size: 13px;
+    color: $text-muted;
+  }
+}
+
+.selectBox {
+  min-width: 320px;
+  padding: 12px 16px;
+  border: 1px solid $border;
+  border-radius: $radius;
+  font-size: 14px;
+  font-weight: 500;
+  color: $text;
+  background: $surface;
+  outline: none;
+  cursor: pointer;
+  transition: all $transition;
+
+  &:focus { 
+    border-color: $primary; 
+    box-shadow: 0 0 0 3px rgba(45, 106, 79, 0.1);
+  }
+  &:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  @media (max-width: 600px) {
+    width: 100%;
+    min-width: unset;
+  }
+}
+
+// ─── Summary Banner ───────────────────────────────────────────────────────────
+
+.summaryBanner {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 16px 20px;
+  background: $primary-light;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  border: 1px solid #b8e8be;
+
+  @media (max-width: 600px) {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+}
+
+.summaryStats {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.summaryCount {
+  font-size: 28px;
+  font-weight: 800;
+  color: $primary-dark;
+  line-height: 1;
+}
+
+.summaryLabel {
+  font-size: 13px;
+  font-weight: 600;
+  color: #245540;
+}
+
+.progressBarWrap {
+  flex: 1;
+  height: 6px;
+  background: rgba(36, 85, 64, 0.1);
+  border-radius: 3px;
+  overflow: hidden;
+  width: 100%;
+}
+
+.progressBar {
+  height: 100%;
+  background: $primary;
+  transition: width 0.5s ease;
+}
+
+.progressText {
+  font-size: 13px;
+  font-weight: 700;
+  color: $primary-dark;
+}
+
+// ─── Avatars ──────────────────────────────────────────────────────────────────
+
+.avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.avatarBlue   { background: linear-gradient(135deg, #60a5fa, #3b82f6); }
+.avatarGreen  { background: linear-gradient(135deg, #34d399, #10b981); }
+.avatarPurple { background: linear-gradient(135deg, #a78bfa, #8b5cf6); }
+.avatarOrange { background: linear-gradient(135deg, #fbbf24, #f59e0b); }
+.avatarPink   { background: linear-gradient(135deg, #f472b6, #ec4899); }
+
+// ─── Table ────────────────────────────────────────────────────────────────────
+
+.tableWrap {
+  background: $surface;
+  border: 1px solid $border;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.02);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+
+  th {
+    padding: 12px 16px;
+    text-align: left;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: $text-muted;
+    background: #fafcfa;
+    border-bottom: 2px solid $border;
+  }
+
+  td {
+    padding: 12px 16px;
+    font-size: 14px;
+    color: $text;
+    border-bottom: 1px solid $border;
+    vertical-align: middle;
+  }
+
+  tbody tr {
+    transition: background $transition;
+
+    &:last-child td { border-bottom: none; }
+    &:hover { background: #fdfefe; }
+
+    &.present {
+      background: #f4fbf7;
+      .memberName { color: $primary-dark; }
+    }
+  }
+}
+
+.memberName {
+  font-weight: 600;
+  color: $text;
+  transition: color $transition;
+}
+
+.badge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.badgeDept { background: $primary-light; color: #245540; }
+
+// ─── Checkbox ─────────────────────────────────────────────────────────────────
+
+.checkCell {
+  width: 80px;
+  text-align: center;
+}
+
+.checkboxWrapper {
+  position: relative;
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+
+  input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+}
+
+.customCheck {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 24px;
+  width: 24px;
+  background-color: #fff;
+  border: 2px solid #ccc;
+  border-radius: 6px;
+  transition: all $transition;
+
+  &:after {
+    content: "";
+    position: absolute;
+    display: none;
+    left: 7px;
+    top: 3px;
+    width: 6px;
+    height: 12px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+  }
+}
+
+.checkboxWrapper input:checked ~ .customCheck {
+  background-color: $primary;
+  border-color: $primary;
+
+  &:after {
+    display: block;
+  }
+}
+
+.checkboxWrapper input:disabled ~ .customCheck {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+// ─── Empty & Error ────────────────────────────────────────────────────────────
+
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px dashed #c0d8cb;
+  border-radius: 16px;
+  margin-top: 20px;
+  
+  svg { margin-bottom: 20px; opacity: 0.7; }
+}
+
+.emptyTitle {
+  font-size: 18px;
+  font-weight: 700;
+  color: $primary-dark;
+  margin-bottom: 8px;
+}
+
+.emptyText {
+  padding: 40px;
+  text-align: center;
+  font-size: 13px;
+  color: $text-muted;
+}

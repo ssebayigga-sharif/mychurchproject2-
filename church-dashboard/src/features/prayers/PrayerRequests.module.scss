@@ -1,0 +1,231 @@
+// ─── Tokens ───────────────────────────────────────────────────────────────────
+
+$primary:       #2d6a4f;
+$primary-light: #d8f3dc;
+$primary-dark:  #1b4332;
+$surface:       #ffffff;
+$bg:            #f8faf9;
+$text:          #1a2e1e;
+$text-muted:    #8aab98;
+$border:        #e0ece5;
+$danger:        #c0392b;
+$radius:        10px;
+$transition:    150ms ease;
+
+// ─── Page ─────────────────────────────────────────────────────────────────────
+
+.page {
+  padding: 28px 32px;
+  background: $bg;
+  min-height: 100vh;
+}
+
+.pageHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.heading {
+  font-size: 20px;
+  font-weight: 700;
+  color: $text;
+}
+
+.subheading {
+  font-size: 12px;
+  color: $text-muted;
+  margin-top: 3px;
+  font-style: italic;
+}
+
+.btnAdd {
+  padding: 9px 16px;
+  background: $primary;
+  color: #fff;
+  border: none;
+  border-radius: $radius;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: opacity $transition;
+
+  &:hover { opacity: 0.88; }
+}
+
+// ─── Tabs ─────────────────────────────────────────────────────────────────────
+
+.tabs {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid $border;
+}
+
+.tab {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 500;
+  color: $text-muted;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  transition: all $transition;
+  margin-bottom: -1px;
+
+  &:hover { color: $text; }
+
+  &.tabActive {
+    color: $primary;
+    border-bottom-color: $primary;
+    font-weight: 600;
+  }
+}
+
+.tabBadge {
+  background: $primary;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 20px;
+}
+
+// ─── Cards ────────────────────────────────────────────────────────────────────
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+// ─── Search & Filters ─────────────────────────────────────────────────────────
+
+.controls {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.searchInput, .filterSelect {
+  padding: 10px 16px;
+  border: 1px solid $border;
+  border-radius: $radius;
+  font-size: 14px;
+  outline: none;
+  background: $surface;
+  transition: border-color $transition;
+  color: $text;
+  
+  &:focus { border-color: $primary; }
+  &::placeholder { color: $text-muted; }
+}
+
+.searchInput {
+  flex: 1;
+  min-width: 200px;
+}
+
+.filterSelect {
+  min-width: 140px;
+}
+
+// ─── Toasts ───────────────────────────────────────────────────────────────────
+
+.toast {
+  position: fixed;
+  top: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 12px 24px;
+  border-radius: 30px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+  z-index: 9999;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+  animation: slideDown 0.3s ease forwards;
+}
+
+.toastSuccess { background: #10b981; }
+.toastError { background: #ef4444; }
+
+@keyframes slideDown {
+  from { transform: translate(-50%, -20px); opacity: 0; }
+  to { transform: translate(-50%, 0); opacity: 1; }
+}
+
+// ─── Empty States ─────────────────────────────────────────────────────────────
+
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 64px 24px;
+  text-align: center;
+}
+
+.emptyIcon {
+  color: #c4d7cd;
+  margin-bottom: 20px;
+}
+
+.emptyTitle {
+  font-size: 18px;
+  font-weight: 700;
+  color: $text;
+  margin-bottom: 8px;
+}
+
+.emptyText {
+  font-size: 14px;
+  color: $text-muted;
+  max-width: 320px;
+  line-height: 1.5;
+}
+
+.btnClear {
+  margin-top: 16px;
+  padding: 8px 20px;
+  background: $primary-light;
+  color: $primary-dark;
+  border: none;
+  border-radius: $radius;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity $transition;
+
+  &:hover {
+    opacity: 0.8;
+  }
+}
+
+// ─── States ───────────────────────────────────────────────────────────────────
+
+.empty {
+  padding: 48px;
+  text-align: center;
+  font-size: 13px;
+  color: $text-muted;
+}
+
+.error {
+  padding: 10px 14px;
+  background: #fdf0ef;
+  border: 1px solid #f5c6c2;
+  border-radius: $radius;
+  font-size: 13px;
+  color: $danger;
+  margin-bottom: 16px;
+}

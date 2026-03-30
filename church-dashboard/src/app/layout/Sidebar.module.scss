@@ -1,0 +1,152 @@
+$primary:       #2d6a4f;
+$primary-light: #d8f3dc;
+$primary-dark:  #1b4332;
+$sidebar-width: 240px;
+$header-height: 56px;
+$breakpoint:    768px;
+$transition:    250ms ease;
+
+.sidebar {
+  width: $sidebar-width;
+  background: $primary-dark;
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+
+  // ── Desktop: fixed left column ──────────────────────────────────────────
+  @media (min-width: $breakpoint) {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    z-index: 100;
+  }
+
+  // ── Mobile: off-screen by default, slides in when .open ─────────────────
+  @media (max-width: #{$breakpoint - 1px}) {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 50vw;
+    min-width: 220px;
+    max-width: 340px;
+    z-index: 100;
+    transform: translateX(-100%);
+    transition: transform $transition, box-shadow $transition;
+
+    &.open {
+      transform: translateX(0);
+      box-shadow: 8px 0 32px rgba(0, 0, 0, 0.5);
+    }
+  }
+}
+
+// ─── Brand ────────────────────────────────────────────────────────────────────
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 18px 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.brandIcon {
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  background: $primary-light;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  font-weight: 700;
+  color: $primary-dark;
+  flex-shrink: 0;
+}
+
+.brandName {
+  font-size: 13px;
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 1.2;
+}
+
+.brandSub {
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.45);
+  margin-top: 1px;
+}
+
+// ─── Nav ──────────────────────────────────────────────────────────────────────
+
+.nav {
+  flex: 1;
+  padding: 12px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.navLabel {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.3);
+  padding: 0 8px;
+  margin-bottom: 6px;
+}
+
+.navLink {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 10px;
+  border-left: 3px solid transparent;
+  border-radius: 0 8px 8px 0;
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.65);
+  text-decoration: none;
+  transition: all 200ms ease;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: #ffffff;
+  }
+
+  &.active {
+    background: linear-gradient(90deg, rgba(216, 243, 220, 0.12) 0%, transparent 100%);
+    color: #ffffff;
+    border-left-color: $primary-light;
+
+    .navIcon { 
+      opacity: 1; 
+      color: $primary-light; 
+    }
+  }
+}
+
+.navIcon {
+  display: flex;
+  align-items: center;
+  opacity: 0.7;
+  flex-shrink: 0;
+  transition: color 200ms ease;
+
+  svg { width: 16px; height: 16px; }
+}
+
+// ─── Footer ───────────────────────────────────────────────────────────────────
+
+.sidebarFooter {
+  padding: 14px 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.footerText {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.3);
+}
