@@ -1,5 +1,8 @@
 import { useCallback, useEffect, useState } from "react";
 import styles from "./Programs.module.scss";
+import { Button, Search } from "@carbon/react";
+import { Add } from "@carbon/icons-react";
+
 import type { CreateProgramInput, Program } from "../../types/church.types";
 import {
   addProgram,
@@ -17,9 +20,15 @@ export const Programs = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [deletingId, setDeletingId] = useState<string | null>(null);
 
-  const [toast, setToast] = useState<{ message: string; type: "success" | "error" } | null>(null);
+  const [toast, setToast] = useState<{
+    message: string;
+    type: "success" | "error";
+  } | null>(null);
 
-  const showToast = (message: string, type: "success" | "error" = "success") => {
+  const showToast = (
+    message: string,
+    type: "success" | "error" = "success",
+  ) => {
     setToast({ message, type });
     setTimeout(() => setToast(null), 3500);
   };
@@ -51,7 +60,9 @@ export const Programs = () => {
   };
 
   const deleteProgramHandler = async (program: Program) => {
-    const confirmed = window.confirm(`Delete "${program.title}"? This cannot be undone.`);
+    const confirmed = window.confirm(
+      `Delete "${program.title}"? This cannot be undone.`,
+    );
     if (!confirmed) return;
     try {
       setDeletingId(program.id);
@@ -86,7 +97,9 @@ export const Programs = () => {
     const title = (p.title || "").toLowerCase();
     const speaker = (p.speaker || "").toLowerCase();
     const theme = (p.theme || "").toLowerCase();
-    return title.includes(query) || speaker.includes(query) || theme.includes(query);
+    return (
+      title.includes(query) || speaker.includes(query) || theme.includes(query)
+    );
   });
 
   // Helper to parse date for the calendar block
@@ -116,21 +129,29 @@ export const Programs = () => {
       <div className={styles.pageHeader}>
         <div>
           <h1 className={styles.heading}>Sabbath Programs</h1>
-          <p className={styles.subheading}>Manage upcoming schedules, events, and church activities</p>
+          <p className={styles.subheading}>
+            Manage upcoming schedules, events, and church activities
+          </p>
         </div>
-        <button onClick={addProgramHandler} className={styles.btnAdd}>+ Add Program</button>
+        <Button
+          onClick={addProgramHandler}
+          kind="primary"
+          renderIcon={Add}
+          // className={styles.btnAdd}
+        >
+          Add Program
+        </Button>
       </div>
 
       <div className={styles.controls}>
-        <div className={styles.searchWrap}>
-          <span className={styles.searchIcon}>🔍</span>
-          <input
-            className={styles.searchInput}
-            placeholder="Search by title, speaker, or theme..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
-        </div>
+        {/* <span className={styles.searchIcon}>🔍</span> */}
+        <Search
+          labelText="Search"
+          // className={styles.searchInput}
+          // placeholder="Search by title, speaker, or theme..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+        />
       </div>
 
       {/* Main Feed */}
@@ -138,17 +159,28 @@ export const Programs = () => {
         <p className={styles.emptyText}>Loading programs...</p>
       ) : filteredPrograms.length === 0 ? (
         <div className={styles.emptyState}>
-          <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#b7dcca" strokeWidth="1.5">
+          {/* <svg
+            width="64"
+            height="64"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="#b7dcca"
+            strokeWidth="1.5"
+          >
             <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
             <line x1="16" y1="2" x2="16" y2="6"></line>
             <line x1="8" y1="2" x2="8" y2="6"></line>
             <line x1="3" y1="10" x2="21" y2="10"></line>
-          </svg>
+          </svg> */}
           <p className={styles.emptyTitle}>No programs found</p>
           {query !== "" && (
-            <button className={styles.btnClear} onClick={() => setSearchQuery("")}>
+            <Button
+              // className={styles.btnClear}
+              kind="tertiary"
+              onClick={() => setSearchQuery("")}
+            >
               Clear Search
-            </button>
+            </Button>
           )}
         </div>
       ) : (
@@ -167,37 +199,50 @@ export const Programs = () => {
                 <div className={styles.cardContent}>
                   <div className={styles.cardHeader}>
                     <span className={styles.title}>{p.title}</span>
-                    <span className={`${styles.badge} ${p.status === "Upcoming" ? styles.upcoming : styles.completed}`}>
+                    <span
+                      className={`${styles.badge} ${p.status === "Upcoming" ? styles.upcoming : styles.completed}`}
+                    >
                       {p.status}
                     </span>
                   </div>
-                  
+
                   <div className={styles.cardDetails}>
                     <div className={styles.detailRow}>
                       <span className={styles.detailLabel}>Theme:</span>
-                      <span className={styles.detailValue}>{p.theme || "—"}</span>
+                      <span className={styles.detailValue}>
+                        {p.theme || "—"}
+                      </span>
                     </div>
                     <div className={styles.detailRow}>
                       <span className={styles.detailLabel}>Speaker:</span>
-                      <span className={styles.detailValue}>{p.speaker || "—"}</span>
+                      <span className={styles.detailValue}>
+                        {p.speaker || "—"}
+                      </span>
                     </div>
                     <div className={styles.detailRow}>
                       <span className={styles.detailLabel}>Type:</span>
-                      <span className={styles.detailValue}>{p.type || "General"}</span>
+                      <span className={styles.detailValue}>
+                        {p.type || "General"}
+                      </span>
                     </div>
                   </div>
 
                   <div className={styles.cardActions}>
-                    <button onClick={() => editProgramHandler(p)} className={styles.btnAction}>
+                    <Button
+                      onClick={() => editProgramHandler(p)}
+                      kind="tertiary"
+                      // className={styles.btnAction}
+                    >
                       Edit
-                    </button>
-                    <button
+                    </Button>
+                    <Button
                       onClick={() => deleteProgramHandler(p)}
-                      className={`${styles.btnAction} ${styles.btnDanger}`}
+                      // className={`${styles.btnAction} ${styles.btnDanger}`}
+                      kind="secondary"
                       disabled={deletingId === p.id}
                     >
                       {deletingId === p.id ? "..." : "Delete"}
-                    </button>
+                    </Button>
                   </div>
                 </div>
               </div>

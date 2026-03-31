@@ -1,3 +1,5 @@
+import { Button, Search } from "@carbon/react";
+import { Add } from "@carbon/icons-react";
 import { useCallback, useEffect, useState } from "react";
 import type {
   PrayerRequest,
@@ -58,13 +60,21 @@ export const PrayerRequests = () => {
   const [prayers, setPrayers] = useState<PrayerRequest[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState<"Pending" | "Completed">("Pending");
+  const [activeTab, setActiveTab] = useState<"Pending" | "Completed">(
+    "Pending",
+  );
   const [searchQuery, setSearchQuery] = useState("");
   const [filterCategory, setFilterCategory] = useState("All");
 
-  const [toast, setToast] = useState<{ message: string; type: "success" | "error" } | null>(null);
+  const [toast, setToast] = useState<{
+    message: string;
+    type: "success" | "error";
+  } | null>(null);
 
-  const showToast = (message: string, type: "success" | "error" = "success") => {
+  const showToast = (
+    message: string,
+    type: "success" | "error" = "success",
+  ) => {
     setToast({ message, type });
     setTimeout(() => setToast(null), 3500);
   };
@@ -97,16 +107,22 @@ export const PrayerRequests = () => {
   };
 
   const completePrayerHandler = async (prayer: PrayerRequest) => {
-    const confirmed = window.confirm(`Mark "${prayer.name}'s" request as answered?`);
+    const confirmed = window.confirm(
+      `Mark "${prayer.name}'s" request as answered?`,
+    );
     if (!confirmed) return;
     try {
       await completePrayerRequest(prayer.id);
       setPrayers((prev) =>
         prev.map((p) =>
           p.id === prayer.id
-            ? { ...p, status: "Completed", completedAt: new Date().toISOString() }
-            : p
-        )
+            ? {
+                ...p,
+                status: "Completed",
+                completedAt: new Date().toISOString(),
+              }
+            : p,
+        ),
       );
       showToast("Praise God! Prayer marked as answered.");
     } catch {
@@ -118,8 +134,8 @@ export const PrayerRequests = () => {
     try {
       setPrayers((prev) =>
         prev.map((p) =>
-          p.id === prayer.id ? { ...p, prayerCount: p.prayerCount + 1 } : p
-        )
+          p.id === prayer.id ? { ...p, prayerCount: p.prayerCount + 1 } : p,
+        ),
       );
       showToast("You've joined in praying for this request.");
     } catch {
@@ -128,7 +144,9 @@ export const PrayerRequests = () => {
   };
 
   const deleteHandler = async (prayer: PrayerRequest) => {
-    const confirmed = window.confirm(`Delete this prayer request from ${prayer.name}?`);
+    const confirmed = window.confirm(
+      `Delete this prayer request from ${prayer.name}?`,
+    );
     if (!confirmed) return;
     try {
       await deletePrayerRequest(prayer.id);
@@ -144,8 +162,10 @@ export const PrayerRequests = () => {
     const query = searchQuery.trim().toLowerCase();
     const safeName = (p.name || "").toLowerCase();
     const safeRequest = (p.request || "").toLowerCase();
-    const matchesSearch = query === "" || safeName.includes(query) || safeRequest.includes(query);
-    const matchesCategory = filterCategory === "All" || p.category === filterCategory;
+    const matchesSearch =
+      query === "" || safeName.includes(query) || safeRequest.includes(query);
+    const matchesCategory =
+      filterCategory === "All" || p.category === filterCategory;
     return matchesTab && matchesSearch && matchesCategory;
   });
 
@@ -154,7 +174,9 @@ export const PrayerRequests = () => {
   return (
     <div className={styles.page}>
       {toast && (
-        <div className={`${styles.toast} ${toast.type === "success" ? styles.toastSuccess : styles.toastError}`}>
+        <div
+          className={`${styles.toast} ${toast.type === "success" ? styles.toastSuccess : styles.toastError}`}
+        >
           {toast.message}
         </div>
       )}
@@ -164,36 +186,46 @@ export const PrayerRequests = () => {
           <h2 className={styles.heading}>Prayer Requests</h2>
           <p className={styles.subheading}>Lifting one another up in prayer</p>
         </div>
-        <button className={styles.btnAdd} onClick={() => setIsModalOpen(true)}>
-          + Add Prayer Request
-        </button>
+        <Button
+          kind="primary"
+          renderIcon={Add}
+          // className={styles.btnAdd}
+          onClick={() => setIsModalOpen(true)}
+        >
+          Add Prayer Request
+        </Button>
       </div>
 
       {/* Tabs */}
       <div className={styles.tabs}>
-        <button
-          className={`${styles.tab} ${activeTab === "Pending" ? styles.tabActive : ""}`}
+        <Button
+          // className={`${styles.tab} ${activeTab === "Pending" ? styles.tabActive : ""}`}
+          kind="secondary"
           onClick={() => setActiveTab("Pending")}
         >
           Pending
-          {pendingCount > 0 && <span className={styles.tabBadge}>{pendingCount}</span>}
-        </button>
-        <button
-          className={`${styles.tab} ${activeTab === "Completed" ? styles.tabActive : ""}`}
+          {pendingCount > 0 && (
+            <span className={styles.tabBadge}>{pendingCount}</span>
+          )}
+        </Button>
+        <Button
+          // className={`${styles.tab} ${activeTab === "Completed" ? styles.tabActive : ""}`}
+          kind="secondary"
           onClick={() => setActiveTab("Completed")}
         >
           Answered
-        </button>
+        </Button>
       </div>
 
       {/* Search & Filters */}
       <div className={styles.controls}>
-        <input
-          type="text"
-          placeholder="Search requests by name or keyword..."
+        <Search
+          labelText="Search"
+          // type="text"
+          // placeholder="Search requests by name or keyword..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className={styles.searchInput}
+          // className={styles.searchInput}
         />
         <select
           value={filterCategory}
@@ -201,7 +233,9 @@ export const PrayerRequests = () => {
           className={styles.filterSelect}
         >
           {CATEGORIES.map((cat) => (
-            <option key={cat} value={cat}>{cat}</option>
+            <option key={cat} value={cat}>
+              {cat}
+            </option>
           ))}
         </select>
       </div>
@@ -210,15 +244,21 @@ export const PrayerRequests = () => {
       {isLoading ? (
         <p className={styles.empty}>Loading prayer requests...</p>
       ) : filtered.length === 0 ? (
-        (searchQuery.trim() !== "" || filterCategory !== "All") ? (
+        searchQuery.trim() !== "" || filterCategory !== "All" ? (
           <div className={styles.emptyState}>
-            <p className={styles.emptyTitle}>No requests match your current filters</p>
-            <button 
-               className={styles.btnClear} 
-               onClick={() => { setSearchQuery(""); setFilterCategory("All"); }}
+            <p className={styles.emptyTitle}>
+              No requests match your current Search
+            </p>
+            <Button
+              kind="tertiary"
+              // className={styles.btnClear}
+              onClick={() => {
+                setSearchQuery("");
+                setFilterCategory("All");
+              }}
             >
               Clear Filters
-            </button>
+            </Button>
           </div>
         ) : (
           <EmptyState tab={activeTab} />

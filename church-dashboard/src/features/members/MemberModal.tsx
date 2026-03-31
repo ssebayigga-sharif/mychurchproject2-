@@ -153,22 +153,22 @@ export const MemberModal = ({
 
               <div className={styles.field}>
                 <label>Department</label>
-              <select
-                name="department"
-                value={form.department}
-                onChange={changeHandler}
-                required
-              >
-                {DEPARTMENTS.map((dept) => (
-                  <option key={dept} value={dept}>
-                    {dept}
-                  </option>
-                ))}
-              </select>
+                <select
+                  name="department"
+                  value={form.department}
+                  onChange={changeHandler}
+                  required
+                >
+                  {DEPARTMENTS.map((dept) => (
+                    <option key={dept} value={dept}>
+                      {dept}
+                    </option>
+                  ))}
+                </select>
+              </div>
             </div>
-          </div>
 
-          <div className={styles.field}>
+            <div className={styles.field}>
               <label>Baptism status</label>
               <select
                 name="baptismStatus"

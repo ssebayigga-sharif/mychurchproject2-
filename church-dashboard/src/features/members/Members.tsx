@@ -1,9 +1,20 @@
 import { useCallback, useEffect, useState } from "react";
 import styles from "./members.module.scss";
-import type { Member, BaptismStatus, CreateMemberInput } from "../../types/church.types";
-import { getMembers, addMember, deleteMember, updateMember } from "../../services/memberServices";
+import type {
+  Member,
+  BaptismStatus,
+  CreateMemberInput,
+} from "../../types/church.types";
+import {
+  getMembers,
+  addMember,
+  deleteMember,
+  updateMember,
+} from "../../services/memberServices";
 import { MemberModal } from "./MemberModal";
 import { useNavigate } from "react-router-dom";
+import { Button } from "@carbon/react";
+import { Add } from "@carbon/icons-react";
 
 // Badge style per baptism status
 const BAPTISM_STYLE: Record<BaptismStatus, string> = {
@@ -40,13 +51,21 @@ export const Members = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [editingMember, setEditingMember] = useState<Member | undefined>();
   const [searchQuery, setSearchQuery] = useState("");
-  const [activeTab, setActiveTab] = useState<"All" | "Members" | "Visitors">("All");
+  const [activeTab, setActiveTab] = useState<"All" | "Members" | "Visitors">(
+    "All",
+  );
   const [isLoading, setIsLoading] = useState(true);
   const [deletingId, setDeletingId] = useState<string | null>(null);
-  
-  const [toast, setToast] = useState<{ message: string; type: "success" | "error" } | null>(null);
 
-  const showToast = (message: string, type: "success" | "error" = "success") => {
+  const [toast, setToast] = useState<{
+    message: string;
+    type: "success" | "error";
+  } | null>(null);
+
+  const showToast = (
+    message: string,
+    type: "success" | "error" = "success",
+  ) => {
     setToast({ message, type });
     setTimeout(() => setToast(null), 3500);
   };
@@ -78,7 +97,9 @@ export const Members = () => {
   };
 
   const handleDelete = async (member: Member) => {
-    const confirmed = window.confirm(`Remove ${member.firstName} ${member.lastName} from the church records?`);
+    const confirmed = window.confirm(
+      `Remove ${member.firstName} ${member.lastName} from the church records?`,
+    );
     if (!confirmed) return;
 
     try {
@@ -120,7 +141,9 @@ export const Members = () => {
     const fName = (m.firstName || "").toLowerCase();
     const lName = (m.lastName || "").toLowerCase();
     const dept = (m.department || "").toLowerCase();
-    return fName.includes(query) || lName.includes(query) || dept.includes(query);
+    return (
+      fName.includes(query) || lName.includes(query) || dept.includes(query)
+    );
   });
 
   return (
@@ -136,31 +159,38 @@ export const Members = () => {
       <div className={styles.pageHeader}>
         <div>
           <h1 className={styles.heading}>Church Members</h1>
-          <p className={styles.subheading}>Manage the registry of all active church members</p>
+          <p className={styles.subheading}>
+            Manage the registry of all active church members
+          </p>
         </div>
-        <button onClick={handleAdd} className={styles.btnAdd}>+ Add Member</button>
+        <Button onClick={handleAdd} kind="primary" renderIcon={Add}>
+          Add Member
+        </Button>
       </div>
 
       <div className={styles.controls}>
         <div className={styles.tabs}>
-          <button 
-            className={`${styles.tabBtn} ${activeTab === "All" ? styles.activeTab : ""}`}
+          <Button
+            // className={`${styles.tabBtn} ${activeTab === "All" ? styles.activeTab : ""}`}
             onClick={() => setActiveTab("All")}
+            kind="primary"
           >
-            All People ({members.length})
-          </button>
-          <button 
-            className={`${styles.tabBtn} ${activeTab === "Members" ? styles.activeTab : ""}`}
+            All Members ({members.length})
+          </Button>
+          <Button
+            // className={`${styles.tabBtn} ${activeTab === "Members" ? styles.activeTab : ""}`}
             onClick={() => setActiveTab("Members")}
+            kind="secondary"
           >
             Official Members
-          </button>
-          <button 
-            className={`${styles.tabBtn} ${activeTab === "Visitors" ? styles.activeTab : ""}`}
+          </Button>
+          <Button
+            // className={`${styles.tabBtn} ${activeTab === "Visitors" ? styles.activeTab : ""}`}
             onClick={() => setActiveTab("Visitors")}
+            kind="secondary"
           >
             Visitors
-          </button>
+          </Button>
         </div>
 
         <div className={styles.searchWrap}>
@@ -179,7 +209,14 @@ export const Members = () => {
         <p className={styles.emptyText}>Loading members...</p>
       ) : filteredMembers.length === 0 ? (
         <div className={styles.emptyState}>
-          <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#b7dcca" strokeWidth="1.5">
+          <svg
+            width="64"
+            height="64"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="#b7dcca"
+            strokeWidth="1.5"
+          >
             <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
             <circle cx="9" cy="7" r="4"></circle>
             <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
@@ -187,9 +224,13 @@ export const Members = () => {
           </svg>
           <p className={styles.emptyTitle}>No members found</p>
           {query !== "" && (
-            <button className={styles.btnClear} onClick={() => setSearchQuery("")}>
+            <Button
+              // className={styles.btnClear}
+              onClick={() => setSearchQuery("")}
+              kind="primary"
+            >
               Clear Search
-            </button>
+            </Button>
           )}
         </div>
       ) : (
@@ -199,17 +240,25 @@ export const Members = () => {
             return (
               <div key={m.id} className={styles.memberCard}>
                 <div className={styles.cardHeader}>
-                  <div className={`${styles.avatar} ${getAvatarColor(fullName)}`}>
+                  <div
+                    className={`${styles.avatar} ${getAvatarColor(fullName)}`}
+                  >
                     {getInitials(fullName)}
                   </div>
                   <div className={styles.headerInfo}>
                     <div className={styles.nameRow}>
                       <span className={styles.memberName}>{fullName}</span>
                       {m.memberType === "Visitor" && (
-                        <span className={`${styles.badge} ${styles.badgeVisitor}`}>Visitor</span>
+                        <span
+                          className={`${styles.badge} ${styles.badgeVisitor}`}
+                        >
+                          Visitor
+                        </span>
                       )}
                     </div>
-                    <span className={`${styles.badge} ${styles.badgeDept}`}>{m.department}</span>
+                    <span className={`${styles.badge} ${styles.badgeDept}`}>
+                      {m.department}
+                    </span>
                   </div>
                 </div>
 
@@ -224,26 +273,37 @@ export const Members = () => {
                   </div>
                   <div className={styles.infoRow}>
                     <span className={styles.infoLabel}>Baptism Status</span>
-                    <span className={`${styles.badge} ${BAPTISM_STYLE[m.baptismStatus]}`}>
+                    <span
+                      className={`${styles.badge} ${BAPTISM_STYLE[m.baptismStatus]}`}
+                    >
                       {m.baptismStatus}
                     </span>
                   </div>
                 </div>
 
                 <div className={styles.cardFooter}>
-                  <button className={styles.btnAction} onClick={() => navigate(`/members/${m.id}/profile`)}>
+                  <Button
+                    // className={styles.btnAction}
+                    onClick={() => navigate(`/members/${m.id}/profile`)}
+                    kind="secondary"
+                  >
                     Profile
-                  </button>
-                  <button className={styles.btnAction} onClick={() => handleEdit(m)}>
+                  </Button>
+                  <Button
+                    // className={styles.btnAction}
+                    onClick={() => handleEdit(m)}
+                    kind="secondary"
+                  >
                     Edit
-                  </button>
-                  <button
-                    className={`${styles.btnAction} ${styles.btnDanger}`}
+                  </Button>
+                  <Button
+                    // className={`${styles.btnAction} ${styles.btnDanger}`}
                     onClick={() => handleDelete(m)}
+                    kind="secondary"
                     disabled={deletingId === m.id}
                   >
-                    {deletingId === m.id ? "..." : "Delete"}
-                  </button>
+                    {deletingId === m.id ? "Delete" : "Delete"}
+                  </Button>
                 </div>
               </div>
             );
