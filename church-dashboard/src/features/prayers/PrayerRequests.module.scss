@@ -1,253 +1,159 @@
-// styles for the prayer requests page;
-
-$primary: #2d6a4f;
-$primary-light: #d8f3dc;
-$primary-dark: #1b4332;
-$surface: #ffffff;
-$bg: #f8faf9;
-$text: #1a2e1e;
-$text-muted: #8aab98;
-$border: #e0ece5;
-$danger: #c0392b;
-$radius: 10px;
-$transition: 150ms ease;
-
-// styles for the page;
+// Only layout and custom pieces Carbon has no component for.
+// Colors use Carbon tokens so dark mode works automatically.
 
 .page {
-  padding: 28px 32px;
-  background: $bg;
+  padding: 2rem;
   min-height: 100vh;
+  background: var(--cds-background);
+  position: relative;
+  transition: padding-right 0.3s cubic-bezier(0.20, 0, 0.38, 0.9);
+  overflow-x: hidden;
 }
 
+.pageWithDrawerOpen {
+  @media (min-width: 672px) {
+    padding-right: calc(2rem + 420px);
+  }
+}
+
+
+
+// Header
 .pageHeader {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  margin-bottom: 24px;
-  gap: 16px;
+  margin-bottom: 1.5rem;
+  gap: 1rem;
   flex-wrap: wrap;
 }
 
 .heading {
-  font-size: 20px;
-  font-weight: 700;
-  color: $text;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--cds-text-primary);
 }
 
 .subheading {
-  font-size: 12px;
-  color: $text-muted;
-  margin-top: 3px;
+  font-size: 0.75rem;
+  color: var(--cds-text-helper);
+  margin-top: 2px;
   font-style: italic;
 }
 
-.btnAdd {
-  padding: 9px 16px;
-  background: $primary;
-  color: #fff;
-  border: none;
-  border-radius: $radius;
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
-  white-space: nowrap;
-  transition: opacity $transition;
-
-  &:hover {
-    opacity: 0.88;
-  }
+.switcherWrapper {
+  margin-bottom: 0.5rem;
+  width: 100%;
+  max-width: 400px;
 }
 
-// tab stles;
-
-.tabs {
-  display: flex;
-  gap: 4px;
-  margin-bottom: 20px;
-  border-bottom: 1px solid $border;
-}
-
-.tab {
+.switchLabel {
   display: flex;
   align-items: center;
-  gap: 6px;
-  padding: 8px 16px;
-  font-size: 13px;
-  font-weight: 500;
-  color: $text-muted;
-  background: none;
-  border: none;
-  border-bottom: 2px solid transparent;
-  cursor: pointer;
-  transition: all $transition;
-  margin-bottom: -1px;
-
-  &:hover {
-    color: $text;
-  }
-
-  &.tabActive {
-    color: $primary;
-    border-bottom-color: $primary;
-    font-weight: 600;
-  }
+  gap: 0.5rem;
+  justify-content: center;
 }
 
-.tabBadge {
-  background: $primary;
-  color: #fff;
-  font-size: 10px;
-  font-weight: 700;
-  padding: 1px 6px;
-  border-radius: 20px;
+.switchBadge {
+  margin: 0;
 }
 
-// cards styles;
-
-.list {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-// stles for the search fillters;
-
-.controls {
-  display: flex;
-  gap: 12px;
-  margin-bottom: 24px;
-  flex-wrap: wrap;
-}
-
-.searchInput,
-.filterSelect {
-  padding: 10px 16px;
-  border: 1px solid $border;
-  border-radius: $radius;
-  font-size: 14px;
-  outline: none;
-  background: $surface;
-  transition: border-color $transition;
-  color: $text;
-
-  &:focus {
-    border-color: $primary;
-  }
-
-  &::placeholder {
-    color: $text-muted;
-  }
-}
-
-.searchInput {
-  flex: 1;
-  min-width: 200px;
-}
-
-.filterSelect {
-  min-width: 140px;
-}
-
-// styles for the toast notification;
-
-.toast {
-  position: fixed;
-  top: 24px;
-  left: 50%;
-  transform: translateX(-50%);
-  padding: 12px 24px;
-  border-radius: 30px;
-  font-size: 14px;
-  font-weight: 600;
-  color: #fff;
-  z-index: 9999;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
-  animation: slideDown 0.3s ease forwards;
-}
-
-.toastSuccess {
-  background: #10b981;
-}
-
-.toastError {
-  background: #ef4444;
-}
-
-@keyframes slideDown {
-  from {
-    transform: translate(-50%, -20px);
-    opacity: 0;
-  }
-
-  to {
-    transform: translate(-50%, 0);
-    opacity: 1;
-  }
-}
-
-// styles for the empty state;
-
+// Empty state
 .emptyState {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 64px 24px;
+  padding: 4rem 1.5rem;
   text-align: center;
 }
 
 .emptyIcon {
-  color: #c4d7cd;
-  margin-bottom: 20px;
+  color: var(--cds-icon-disabled);
+  margin-bottom: 1.25rem;
 }
 
 .emptyTitle {
-  font-size: 18px;
-  font-weight: 700;
-  color: $text;
-  margin-bottom: 8px;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--cds-text-primary);
+  margin-bottom: 0.5rem;
 }
 
 .emptyText {
-  font-size: 14px;
-  color: $text-muted;
+  font-size: 0.875rem;
+  color: var(--cds-text-helper);
   max-width: 320px;
   line-height: 1.5;
 }
 
-.btnClear {
-  margin-top: 16px;
-  padding: 8px 20px;
-  background: $primary-light;
-  color: $primary-dark;
-  border: none;
-  border-radius: $radius;
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: opacity $transition;
+// InlineNotification bar (fixed top)
+.notificationBar {
+  position: fixed;
+  top: 1.5rem;
+  right: 1.5rem;
+  z-index: 9999;
+}
 
-  &:hover {
-    opacity: 0.8;
+// Mobile backdrop
+.backdrop {
+  display: none;
+
+  @media (max-width: 671px) {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 100;
   }
 }
 
-// styles for the states;
+// Slide-in drawer
+.drawer {
+  position: fixed;
+  top: 48px; // Avoid covering global Carbon header (48px)
+  right: 0;
+  height: calc(100vh - 48px);
+  width: 420px;
+  background: var(--cds-layer);
+  border-left: 1px solid var(--cds-border-subtle);
+  box-shadow: -4px 0 24px rgba(0, 0, 0, 0.12);
+  transform: translateX(100%);
+  transition: transform 0.3s ease;
+  z-index: 101;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 
-.empty {
-  padding: 48px;
-  text-align: center;
-  font-size: 13px;
-  color: $text-muted;
+  @media (max-width: 671px) {
+    width: 100%;
+  }
+
+  &.drawerOpen {
+    transform: translateX(0);
+  }
 }
 
-.error {
-  padding: 10px 14px;
-  background: #fdf0ef;
-  border: 1px solid #f5c6c2;
-  border-radius: $radius;
-  font-size: 13px;
-  color: $danger;
-  margin-bottom: 16px;
+.drawerHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid var(--cds-border-subtle);
+  flex-shrink: 0;
+}
+
+.drawerTitle {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--cds-text-primary);
+  margin: 0;
+}
+
+.drawerBody {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
 }

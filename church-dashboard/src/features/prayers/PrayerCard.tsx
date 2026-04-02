@@ -1,3 +1,5 @@
+import { Button, Tag, Tile } from "@carbon/react";
+import { Checkmark, TrashCan, UserAvatar } from "@carbon/icons-react";
 import type { PrayerRequest } from "../../types/church.types";
 import styles from "./PrayerCard.module.scss";
 
@@ -8,37 +10,26 @@ type PrayerCardProps = {
   onDelete: (prayer: PrayerRequest) => void;
 };
 
-const CATEGORY_COLORS: Record<string, string> = {
-  Health: styles.catHealth,
-  Family: styles.catFamily,
-  Financial: styles.catFinancial,
-  Bereavement: styles.catBereavement,
-  "Spiritual Growth": styles.catSpiritual,
-  "Thanks Giving": styles.catThanksgiving,
-  Other: styles.catOther,
-};
-
-const getInitials = (name: string) => {
-  if (!name) return "?";
-  const words = name.trim().split(/\s+/);
-  if (words.length === 1) return words[0].substring(0, 2).toUpperCase();
-  return (words[0][0] + words[1][0]).toUpperCase();//take first letter of the first word and first letter of the second word and the capitalise
-};
-
-const getAvatarColor = (name: string) => {
-  const colors = [
-    styles.avatarBlue,
-    styles.avatarGreen,
-    styles.avatarPurple,
-    styles.avatarOrange,
-    styles.avatarPink,
-    styles.avatarTeal,
-  ];
-  let hash = 0;
-  for (let i = 0; i < name.length; i++) {
-    hash = name.charCodeAt(i) + ((hash << 5) - hash);
+// Map categories to official Carbon Tag types
+const getCategoryTagType = (
+  category: string,
+): "red" | "magenta" | "purple" | "blue" | "cyan" | "teal" | "green" | "gray" | "cool-gray" | "warm-gray" => {
+  switch (category) {
+    case "Health":
+      return "red";
+    case "Family":
+      return "magenta";
+    case "Financial":
+      return "green";
+    case "Spiritual Growth":
+      return "blue";
+    case "Thanks Giving":
+      return "cyan";
+    case "Bereavement":
+      return "cool-gray";
+    default:
+      return "purple";
   }
-  return colors[Math.abs(hash) % colors.length];
 };
 
 export const PrayerCard = ({
@@ -48,99 +39,82 @@ export const PrayerCard = ({
   onDelete,
 }: PrayerCardProps) => {
   const isCompleted = prayer.status === "Completed";
-  const initials = getInitials(prayer.name);
-  const avatarClass = getAvatarColor(prayer.name);
 
   return (
-    <div
-      className={`${styles.card} ${
-        isCompleted ? styles.cardCompleted : ""
-      }`}
-    >
-      {/* Card header */}
-      <div className={styles.cardHeader}>
-        <div className={styles.cardMeta}>
-          <div className={`${styles.avatar} ${avatarClass}`}>{initials}</div>
-          <div className={styles.nameAndBadges}>
-            <span className={styles.name}>{prayer.name}</span>
-            <div className={styles.badges}>
-              {prayer.isPrivate && (
-                <span className={styles.privateBadge}>Private</span>
-              )}
-              <span
-                className={`${styles.categoryBadge} ${
-                  CATEGORY_COLORS[prayer.category] || styles.catOther
-                }`}
-              >
-                {prayer.category}
-              </span>
-            </div>
-          </div>
+    <Tile className={styles.cardContainer}>
+      {/* Header */}
+      <div className={styles.header}>
+        <div className={styles.userInfo}>
+          <UserAvatar size={24} className={styles.avatarIcon} />
+          <span className={styles.userName}>{prayer.name}</span>
+          {prayer.isPrivate && (
+            <Tag type="red" size="sm" className={styles.tagSpacing}>
+              Private
+            </Tag>
+          )}
+          <Tag type={getCategoryTagType(prayer.category)} size="sm" className={styles.tagSpacing}>
+            {prayer.category}
+          </Tag>
         </div>
-        <span className={styles.date}>
+        <div className={styles.dateInfo}>
           {new Date(prayer.createdAt).toLocaleDateString("en-US", {
             month: "short",
             day: "numeric",
             year: "numeric",
           })}
-        </span>
+        </div>
       </div>
 
-      {/* Request text */}
-      <p className={styles.requestText}>{prayer.request}</p>
+      {/* Request body */}
+      <div className={styles.requestBody}>
+        <p>{prayer.request}</p>
+      </div>
 
-      {/* Card footer */}
-      <div className={styles.cardFooter}>
-        <div className={styles.prayerCount}>
-          <svg
-            width="14"
-            height="14"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-          >
-            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
-          </svg>
+      {/* Footer / Actions */}
+      <div className={styles.footer}>
+        <div className={styles.stats}>
           <span>
-            {prayer.prayerCount} {prayer.prayerCount === 1 ? "person" : "people"} prayed
+            {prayer.prayerCount} {prayer.prayerCount === 1 ? "person has" : "people have"} prayed
           </span>
+          {isCompleted && prayer.completedAt && (
+            <span className={styles.answeredDate}>
+              • Answered on{" "}
+              {new Date(prayer.completedAt).toLocaleDateString("en-US", {
+                month: "short",
+                day: "numeric",
+                year: "numeric",
+              })}
+            </span>
+          )}
         </div>
 
         <div className={styles.actions}>
           {!isCompleted && (
             <>
-              <button
-                className={styles.btnPray}
-                onClick={() => onPrayForIt(prayer)}
-              >
-                I prayed for this
-              </button>
-              <button
-                className={styles.btnComplete}
+              <Button kind="secondary" size="sm" onClick={() => onPrayForIt(prayer)}>
+                Prayed
+              </Button>
+              <Button
+                kind="ghost"
+                size="sm"
+                renderIcon={Checkmark}
                 onClick={() => onMarkAnswered(prayer)}
               >
-                Mark answered
-              </button>
+                Mark Answered
+              </Button>
             </>
           )}
-          <button className={styles.btnDelete} onClick={() => onDelete(prayer)}>
-            Delete
-          </button>
+          <Button
+            kind="danger--ghost"
+            size="sm"
+            renderIcon={TrashCan}
+            iconDescription="Delete Request"
+            hasIconOnly
+            onClick={() => onDelete(prayer)}
+          />
         </div>
       </div>
-
-      {isCompleted && prayer.completedAt && (
-        <p className={styles.answeredNote}>
-          Answered on{" "}
-          {new Date(prayer.completedAt).toLocaleDateString("en-US", {
-            month: "long",
-            day: "numeric",
-            year: "numeric",
-          })}
-        </p>
-      )}
-    </div>
+    </Tile>
   );
 };
+

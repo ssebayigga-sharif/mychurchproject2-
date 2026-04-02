@@ -1,5 +1,17 @@
-import { Button, Search } from "@carbon/react";
-import { Add } from "@carbon/icons-react";
+import {
+  Button,
+  Column,
+  Grid,
+  Stack,
+  ToastNotification,
+  Search,
+  SkeletonText,
+  ContentSwitcher,
+  Switch,
+  Tag,
+  Tile,
+} from "@carbon/react";
+import { Add, Close } from "@carbon/icons-react";
 import { useCallback, useEffect, useState } from "react";
 import type {
   PrayerRequest,
@@ -14,17 +26,6 @@ import {
 } from "../../services/prayerServices";
 import { PrayerModal } from "./PrayerModal";
 import { PrayerCard } from "./PrayerCard";
-
-const CATEGORIES = [
-  "All",
-  "Health",
-  "Family",
-  "Financial",
-  "Spiritual Growth",
-  "Bereavement",
-  "Thanks Giving",
-  "Other",
-];
 
 const EmptyState = ({ tab }: { tab: "Pending" | "Completed" }) => (
   <div className={styles.emptyState}>
@@ -59,24 +60,21 @@ const EmptyState = ({ tab }: { tab: "Pending" | "Completed" }) => (
 export const PrayerRequests = () => {
   const [prayers, setPrayers] = useState<PrayerRequest[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState<"Pending" | "Completed">(
-    "Pending",
-  );
+  const [isPanelOpen, setIsPanelOpen] = useState(false);
+  const [activeTabIndex, setActiveTabIndex] = useState(0);
   const [searchQuery, setSearchQuery] = useState("");
-  const [filterCategory, setFilterCategory] = useState("All");
-
-  const [toast, setToast] = useState<{
+  const [notification, setNotification] = useState<{
     message: string;
-    type: "success" | "error";
+    kind: "success" | "error";
   } | null>(null);
+  const activeTab = activeTabIndex === 0 ? "Pending" : "Completed";
 
-  const showToast = (
+  const showNotification = (
     message: string,
-    type: "success" | "error" = "success",
+    kind: "success" | "error" = "success",
   ) => {
-    setToast({ message, type });
-    setTimeout(() => setToast(null), 3500);
+    setNotification({ message, kind });
+    setTimeout(() => setNotification(null), 3500);
   };
 
   const fetchPrayers = useCallback(async () => {
@@ -85,7 +83,7 @@ export const PrayerRequests = () => {
       const data = await getPrayerRequest();
       setPrayers(data);
     } catch {
-      showToast("Failed to load prayer requests", "error");
+      showNotification("Failed to load prayer requests", "error");
     } finally {
       setIsLoading(false);
     }
@@ -95,14 +93,25 @@ export const PrayerRequests = () => {
     fetchPrayers();
   }, [fetchPrayers]);
 
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setIsPanelOpen(false);
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
+
   const addHandler = async (input: CreatePrayerRequestInput) => {
     try {
       await addPrayerRequest(input);
-      setIsModalOpen(false);
-      showToast("Prayer request submitted successfully!");
+      setIsPanelOpen(false);
+      showNotification("Prayer request submitted successfully!", "success");
       fetchPrayers();
     } catch {
-      showToast("Failed to submit prayer request. Please try again.", "error");
+      showNotification(
+        "Failed to submit prayer request. Please try again.",
+        "error",
+      );
     }
   };
 
@@ -124,9 +133,9 @@ export const PrayerRequests = () => {
             : p,
         ),
       );
-      showToast("Praise God! Prayer marked as answered.");
+      showNotification("Praise God! Prayer marked as answered.");
     } catch {
-      showToast("Failed to update prayer request", "error");
+      showNotification("Failed to update prayer request", "error");
     }
   };
 
@@ -137,9 +146,9 @@ export const PrayerRequests = () => {
           p.id === prayer.id ? { ...p, prayerCount: p.prayerCount + 1 } : p,
         ),
       );
-      showToast("You've joined in praying for this request.");
+      showNotification("You've joined in praying for this request.");
     } catch {
-      showToast("Failed to update prayer count.", "error");
+      showNotification("Failed to update prayer count.", "error");
     }
   };
 
@@ -151,137 +160,206 @@ export const PrayerRequests = () => {
     try {
       await deletePrayerRequest(prayer.id);
       setPrayers((prev) => prev.filter((p) => p.id !== prayer.id));
-      showToast("Prayer request removed.");
+      showNotification("Prayer request removed.");
     } catch {
-      showToast("Failed to delete prayer request.", "error");
+      showNotification("Failed to delete prayer request.", "error");
     }
   };
 
   const filtered = prayers.filter((p) => {
     const matchesTab = p.status === activeTab;
     const query = searchQuery.trim().toLowerCase();
-    const safeName = (p.name || "").toLowerCase();
-    const safeRequest = (p.request || "").toLowerCase();
     const matchesSearch =
-      query === "" || safeName.includes(query) || safeRequest.includes(query);
-    const matchesCategory =
-      filterCategory === "All" || p.category === filterCategory;
-    return matchesTab && matchesSearch && matchesCategory;
+      query === "" ||
+      (p.name || "").toLowerCase().includes(query) ||
+      (p.request || "").toLowerCase().includes(query);
+
+    return matchesTab && matchesSearch;
   });
 
   const pendingCount = prayers.filter((p) => p.status === "Pending").length;
 
   return (
-    <div className={styles.page}>
-      {toast && (
-        <div
-          className={`${styles.toast} ${toast.type === "success" ? styles.toastSuccess : styles.toastError}`}
-        >
-          {toast.message}
+    <div className={`${styles.page} ${isPanelOpen ? styles.pageWithDrawerOpen : ""}`}>
+      {notification && (
+        <div className={styles.notificationBar}>
+          <ToastNotification
+            kind={notification.kind}
+            title={notification.kind === "success" ? "Success" : "Error"}
+            subtitle={notification.message}
+            onClose={() => setNotification(null)}
+            lowContrast
+          />
         </div>
       )}
 
-      <div className={styles.pageHeader}>
-        <div>
-          <h2 className={styles.heading}>Prayer Requests</h2>
-          <p className={styles.subheading}>Lifting one another up in prayer</p>
-        </div>
-        <Button
-          kind="primary"
-          renderIcon={Add}
-          // className={styles.btnAdd}
-          onClick={() => setIsModalOpen(true)}
-        >
-          Add Prayer Request
-        </Button>
-      </div>
-
-      {/* Tabs */}
-      <div className={styles.tabs}>
-        <Button
-          // className={`${styles.tab} ${activeTab === "Pending" ? styles.tabActive : ""}`}
-          kind="secondary"
-          onClick={() => setActiveTab("Pending")}
-        >
-          Pending
-          {pendingCount > 0 && (
-            <span className={styles.tabBadge}>{pendingCount}</span>
-          )}
-        </Button>
-        <Button
-          // className={`${styles.tab} ${activeTab === "Completed" ? styles.tabActive : ""}`}
-          kind="secondary"
-          onClick={() => setActiveTab("Completed")}
-        >
-          Answered
-        </Button>
-      </div>
-
-      {/* Search & Filters */}
-      <div className={styles.controls}>
-        <Search
-          labelText="Search"
-          // type="text"
-          // placeholder="Search requests by name or keyword..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          // className={styles.searchInput}
+      {isPanelOpen && (
+        <div
+          className={styles.backdrop}
+          onClick={() => setIsPanelOpen(false)}
+          aria-hidden="true"
         />
-        <select
-          value={filterCategory}
-          onChange={(e) => setFilterCategory(e.target.value)}
-          className={styles.filterSelect}
-        >
-          {CATEGORIES.map((cat) => (
-            <option key={cat} value={cat}>
-              {cat}
-            </option>
-          ))}
-        </select>
-      </div>
+      )}
 
-      {/* List */}
-      {isLoading ? (
-        <p className={styles.empty}>Loading prayer requests...</p>
-      ) : filtered.length === 0 ? (
-        searchQuery.trim() !== "" || filterCategory !== "All" ? (
-          <div className={styles.emptyState}>
-            <p className={styles.emptyTitle}>
-              No requests match your current Search
-            </p>
+      <Grid fullWidth>
+        <Column lg={16} md={8} sm={4}>
+          <div className={styles.pageHeader}>
+            <div>
+              <h2 className={styles.heading}>Prayer Request</h2>
+              <p className={styles.subheading}>Lifting One Another In Prayer</p>
+            </div>
             <Button
-              kind="tertiary"
-              // className={styles.btnClear}
-              onClick={() => {
-                setSearchQuery("");
-                setFilterCategory("All");
-              }}
+              kind="primary"
+              renderIcon={Add}
+              onClick={() => setIsPanelOpen(true)}
             >
-              Clear Filters
+              Add A Prayer Request
             </Button>
           </div>
-        ) : (
-          <EmptyState tab={activeTab} />
-        )
-      ) : (
-        <div className={styles.list}>
-          {filtered.map((p) => (
-            <PrayerCard
-              key={p.id}
-              prayer={p}
-              onPrayForIt={prayerHandler}
-              onMarkAnswered={completePrayerHandler}
-              onDelete={deleteHandler}
-            />
-          ))}
-        </div>
-      )}
 
-      <PrayerModal
-        visible={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        onSave={addHandler}
-      />
+            <div className={styles.switcherWrapper}>
+              <ContentSwitcher
+                selectedIndex={activeTabIndex}
+                onChange={({ index }) => setActiveTabIndex(index as number)}
+                size="lg"
+              >
+                <Switch
+                  name="Pending"
+                  text={
+                    <span className={styles.switchLabel}>
+                      Pending
+                      {pendingCount > 0 && (
+                        <Tag type="green" size="sm" className={styles.switchBadge}>
+                          {pendingCount}
+                        </Tag>
+                      )}
+                    </span>
+                  }
+                />
+                <Switch name="Answered" text="Answered" />
+              </ContentSwitcher>
+            </div>
+
+            <Grid className={styles.controlsGrid} narrow style={{ paddingLeft: 0, paddingRight: 0, marginBottom: '2rem', marginTop: '1rem' }}>
+              <Column sm={4} md={8} lg={16}>
+                <Search
+                  size="lg"
+                  labelText="Search prayer requests"
+                  placeholder="Search by name or keyword..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onClear={() => setSearchQuery("")}
+                />
+              </Column>
+            </Grid>
+
+            <div className={styles.listContainer}>
+              {activeTabIndex === 0 && (
+                <>
+                  {isLoading ? (
+                    <Stack gap={5}>
+                      {[1, 2, 3].map((i) => (
+                        <Tile key={i} style={{ padding: '2rem', background: 'var(--cds-layer-01)' }}>
+                          <SkeletonText heading width="30%" />
+                          <div style={{ marginTop: '1rem' }}>
+                            <SkeletonText paragraph lineCount={3} />
+                          </div>
+                        </Tile>
+                      ))}
+                    </Stack>
+                  ) : filtered.length === 0 ? (
+                    searchQuery.trim() !== "" ? (
+                      <div className={styles.emptyState}>
+                        <p className={styles.emptyTitle}>
+                          No requests match your search
+                        </p>
+                        <Button
+                          kind="tertiary"
+                          onClick={() => {
+                            setSearchQuery("");
+                          }}
+                        >
+                          Clear Filters
+                        </Button>
+                      </div>
+                    ) : (
+                      <EmptyState tab="Pending" />
+                    )
+                  ) : (
+                    <Stack gap={5}>
+                      {filtered.map((p) => (
+                        <PrayerCard
+                          key={p.id}
+                          prayer={p}
+                          onPrayForIt={prayerHandler}
+                          onMarkAnswered={completePrayerHandler}
+                          onDelete={deleteHandler}
+                        />
+                      ))}
+                    </Stack>
+                  )}
+                </>
+              )}
+
+              {activeTabIndex === 1 && (
+                <>
+                  {isLoading ? (
+                    <Stack gap={5}>
+                      {[1, 2].map((i) => (
+                        <Tile key={i} style={{ padding: '2rem', background: 'var(--cds-layer-01)' }}>
+                          <SkeletonText heading width="30%" />
+                          <div style={{ marginTop: '1rem' }}>
+                            <SkeletonText paragraph lineCount={2} />
+                          </div>
+                        </Tile>
+                      ))}
+                    </Stack>
+                  ) : filtered.length === 0 ? (
+                    <EmptyState tab="Completed" />
+                  ) : (
+                    <Stack gap={5}>
+                      {filtered.map((p) => (
+                        <PrayerCard
+                          key={p.id}
+                          prayer={p}
+                          onPrayForIt={prayerHandler}
+                          onMarkAnswered={completePrayerHandler}
+                          onDelete={deleteHandler}
+                        />
+                      ))}
+                    </Stack>
+                  )}
+                </>
+              )}
+            </div>
+        </Column>
+      </Grid>
+
+      {/* Drawer — sibling to Grid, not inside it */}
+      <div
+        className={`${styles.drawer} ${isPanelOpen ? styles.drawerOpen : ""}`}
+        role="complementary"
+        aria-label="Submit Prayer Request"
+      >
+        <div className={styles.drawerHeader}>
+          <h3 className={styles.drawerTitle}>New Prayer Request</h3>
+          <Button
+            kind="ghost"
+            renderIcon={Close}
+            iconDescription="Close panel"
+            hasIconOnly
+            onClick={() => setIsPanelOpen(false)}
+          />
+        </div>
+        <div className={styles.drawerBody}>
+          {isPanelOpen && (
+            <PrayerModal
+              onClose={() => setIsPanelOpen(false)}
+              onSave={addHandler}
+            />
+          )}
+        </div>
+      </div>
     </div>
   );
 };

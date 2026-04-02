@@ -3,12 +3,21 @@ import type {
   CreatePrayerRequestInput,
   PrayerCategory,
 } from "../../types/church.types";
-import styles from "./PrayerModal.module.scss";
+
 type PrayerModalProps = {
-  visible: boolean;
   onClose: () => void;
   onSave: (data: CreatePrayerRequestInput) => void;
 };
+import {
+  Button,
+  Checkbox,
+  Dropdown,
+  Form,
+  FormGroup,
+  Stack,
+  TextArea,
+  TextInput,
+} from "@carbon/react";
 
 const CATEGORIES: PrayerCategory[] = [
   "Health",
@@ -18,7 +27,7 @@ const CATEGORIES: PrayerCategory[] = [
   "Bereavement",
   "Thanks Giving",
   "Other",
-];
+] ;
 
 const DEFAULT_FORM = {
   name: "",
@@ -26,9 +35,10 @@ const DEFAULT_FORM = {
   category: "Health" as PrayerCategory,
   isPrivate: false,
 };
-export const PrayerModal = ({ visible, onClose, onSave }: PrayerModalProps) => {
+
+export const PrayerModal = ({ onClose, onSave }: PrayerModalProps) => {
   const [form, setForm] = useState(DEFAULT_FORM);
-  if (!visible) return null;
+  //if (!visible) return null;
 
   const changeHandler = (
     e: React.ChangeEvent<
@@ -38,12 +48,16 @@ export const PrayerModal = ({ visible, onClose, onSave }: PrayerModalProps) => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
   };
-  const checkboxHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const checked = e.target.checked;
+  //check box handled from here
+  const checkboxHandler = (
+    _e: React.ChangeEvent<HTMLInputElement>,
+    { checked }: { checked: boolean },
+  ) => {
     setForm((prev) => ({ ...prev, isPrivate: checked }));
   };
-  const submitHandler = (e: React.FormEvent) => {
-    e.preventDefault();
+
+  //form submiting is handled from here;
+  const saveForm = () => {
     onSave({
       name: form.name,
       category: form.category,
@@ -54,85 +68,75 @@ export const PrayerModal = ({ visible, onClose, onSave }: PrayerModalProps) => {
       createdAt: new Date().toISOString(),
     });
     setForm(DEFAULT_FORM);
+    onClose();
+  };
+
+  const formSubmitHandler = (e: React.FormEvent) => {
+    e.preventDefault();
+    saveForm();
   };
   return (
-    <div className={styles.backdrop}>
-      <div className={styles.modal} role="dialog" aria-modal="true">
-        <div className={styles.modalHeader}>
-          <h3>Submit a prayer request</h3>
-          <button className={styles.closeBtn} onClick={onClose}>
-            ✕
-          </button>
-        </div>
+    <Form onSubmit={formSubmitHandler} style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+      <Stack gap={6} style={{ flex: 1, paddingBottom: '2rem' }}>
+        <TextInput
+          id="name"
+          name="name"
+          labelText="Full Name"
+          value={form.name}
+          onChange={changeHandler}
+          required
+        />
 
-        <form onSubmit={submitHandler}>
-          <div className={styles.modalBody}>
-            <div className={styles.field}>
-              <label>Your name</label>
-              <input
-                name="name"
-                placeholder="Full name"
-                value={form.name}
-                onChange={changeHandler}
-                required
-              />
-            </div>
+        <Dropdown
+          id="category"
+          titleText="Prayer Request Category"
+          label="Select a category"
+          items={CATEGORIES}
+          itemToString={(item) => item ?? ""}
+          selectedItem={form.category}
+          onChange={({ selectedItem }) =>
+            setForm((prev) => ({
+              ...prev,
+              category: selectedItem ?? "Health",
+            }))
+          }
+        />
 
-            <div className={styles.field}>
-              <label>Category</label>
-              <select
-                name="category"
-                value={form.category}
-                onChange={changeHandler}
-              >
-                {CATEGORIES.map((c) => (
-                  <option key={c} value={c}>
-                    {c}
-                  </option>
-                ))}
-              </select>
-            </div>
+        <TextArea
+          id="request"
+          name="request"
+          labelText="Your Prayer Request"
+          value={form.request}
+          onChange={changeHandler}
+          required
+          placeholder="What would you like to be prayed for"
+          maxLength={500}
+          rows={7}
+        />
 
-            <div className={styles.field}>
-              <label>Prayer request</label>
-              <textarea
-                name="request"
-                placeholder="Share what you'd like the church to pray for..."
-                value={form.request}
-                onChange={changeHandler}
-                rows={4}
-                required
-                maxLength={500}
-              />
-              <span className={styles.charCount}>
-                {form.request.length} / 500
-              </span>
-            </div>
-
-            <label className={styles.checkboxField}>
-              <input
-                type="checkbox"
-                checked={form.isPrivate}
-                onChange={checkboxHandler}
-              />
-              <span>Keep this request private (visible to leaders only)</span>
-            </label>
-          </div>
-
-          <div className={styles.modalFooter}>
-            <button
-              type="button"
-              className={styles.btnCancel}
-              onClick={onClose}
-            >
-              Cancel
-            </button>
-            <button type="submit" className={styles.btnSave}>
-              Submit Prayer Request
-            </button>
-          </div>
-        </form>
+        <FormGroup legendText="Privacy">
+          <Checkbox
+            id="isPrivate"
+            labelText="Keep this request Private to church Leaders"
+            checked={form.isPrivate}
+            onChange={checkboxHandler}
+          />
+        </FormGroup>
+      </Stack>
+      
+      <div style={{ display: 'flex', gap: '1rem', marginTop: 'auto', paddingTop: '1rem', borderTop: '1px solid var(--cds-border-subtle)' }}>
+        <Button kind="secondary" onClick={onClose} style={{ flex: 1 }}>
+          Cancel
+        </Button>
+        <Button
+          kind="primary"
+          type="submit"
+          disabled={!form.name || !form.request}
+          style={{ flex: 1 }}
+        >
+          Submit Request
+        </Button>
       </div>
-    </div>
+    </Form>
   );
 };
