@@ -212,6 +212,7 @@ export const PrayerRequests = () => {
               kind="primary"
               renderIcon={Add}
               onClick={() => setIsPanelOpen(true)}
+              className={styles.selector}
             >
               Add A Prayer Request
             </Button>

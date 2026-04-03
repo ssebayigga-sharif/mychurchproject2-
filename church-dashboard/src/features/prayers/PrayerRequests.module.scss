@@ -1,5 +1,10 @@
 // Only layout and custom pieces Carbon has no component for.
 // Colors use Carbon tokens so dark mode works automatically.
+@use "@carbon/colors";
+
+.selector {
+  background: colors.$blue-10;
+}
 
 .page {
   padding: 2rem;
