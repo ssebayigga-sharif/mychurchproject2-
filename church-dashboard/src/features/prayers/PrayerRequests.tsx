@@ -8,7 +8,6 @@ import {
   SkeletonText,
   ContentSwitcher,
   Switch,
-  Tag,
   Tile,
 } from "@carbon/react";
 import { Add, Close } from "@carbon/icons-react";
@@ -226,16 +225,7 @@ export const PrayerRequests = () => {
               >
                 <Switch
                   name="Pending"
-                  text={
-                    <span className={styles.switchLabel}>
-                      Pending
-                      {pendingCount > 0 && (
-                        <Tag type="green" size="sm" className={styles.switchBadge}>
-                          {pendingCount}
-                        </Tag>
-                      )}
-                    </span>
-                  }
+                  text={`Pending ${pendingCount > 0 ? `(${pendingCount})` : ''}`}
                 />
                 <Switch name="Answered" text="Answered" />
               </ContentSwitcher>

@@ -6,6 +6,7 @@ const BASE_URL = "https://church-dashboard-65a45-default-rtdb.firebaseio.com/lea
 export const getLeaders = async (): Promise<Leader[]> => {
   const response = await axios.get(`${BASE_URL}.json`);
   if (!response.data) return [];
+  
   return Object.entries(response.data).map(([id, data]) => ({
     id,
     ...(data as any),
@@ -13,8 +14,8 @@ export const getLeaders = async (): Promise<Leader[]> => {
 };
 
 export const addLeader = async (leader: CreateLeaderInput): Promise<string> => {
-  const response = await axios.post(`${BASE_URL}.json`, leader);
-  return response.data.name;
+  const res = await axios.post(`${BASE_URL}.json`, leader);
+  return res.data.name;
 };
 
 export const updateLeader = async (id: string, leader: Partial<Leader>): Promise<void> => {
@@ -24,3 +25,4 @@ export const updateLeader = async (id: string, leader: Partial<Leader>): Promise
 export const removeLeader = async (id: string): Promise<void> => {
   await axios.delete(`${BASE_URL}/${id}.json`);
 };
+

@@ -1,212 +1,103 @@
-// variables for the overall attendance page;
-
-$primary: #2d6a4f;
-$primary-light: #d8f3dc;
-$primary-dark: #1b4332;
-$surface: #ffffff;
-$bg: #f8faf9;
-$text: #1a2e1e;
-$text-muted: #8aab98;
-$border: #e0ece5;
-$danger: #c0392b;
-$radius: 10px;
-$transition: 150ms ease;
-
-// animation for the toast notification styles;
-
-@keyframes slideDown {
-  from {
-    transform: translate(-50%, -20px);
-    opacity: 0;
-  }
-
-  to {
-    transform: translate(-50%, 0);
-    opacity: 1;
-  }
-}
-
-.toast {
-  position: fixed;
-  top: 24px;
-  left: 50%;
-  transform: translateX(-50%);
-  padding: 12px 24px;
-  border-radius: 30px;
-  background: #fff;
-  color: $text;
-  font-size: 14px;
-  font-weight: 600;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
-  z-index: 1000;
-  animation: slideDown 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-
-  &.toastsuccess {
-    border-bottom: 3px solid #10b981;
-  }
-
-  &.toasterror {
-    border-bottom: 3px solid #ef4444;
-  }
-}
-
-// styles for the header 
+@use "../../styles/variables" as *;
 
 .page {
-  padding: 28px 32px;
-  background: $bg;
+  padding: 1.5rem 1rem;
+  background-color: var(--cds-background);
   min-height: 100vh;
+
+  @media (min-width: 1056px) {
+    padding: 2rem 3rem;
+  }
 }
 
 .pageHeader {
   display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
   align-items: flex-start;
-  justify-content: space-between;
-  margin-bottom: 24px;
-  flex-wrap: wrap;
-  gap: 16px;
-}
 
-.heading {
-  font-size: 24px;
-  font-weight: 800;
-  color: $primary-dark;
-  margin-bottom: 4px;
-}
-
-.subheading {
-  font-size: 14px;
-  color: $text-muted;
-}
-
-// selector card styles here
-
-.selectCard {
-  background: rgba(255, 255, 255, 0.9);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border: 1px solid rgba(224, 236, 229, 0.8);
-  border-radius: 12px;
-  padding: 20px 24px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.02);
-  margin-bottom: 24px;
-
-  @media (max-width: 600px) {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 16px;
+  @media (min-width: 672px) {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 3rem;
   }
 }
 
-.selectInfo {
-  h3 {
-    font-size: 16px;
-    font-weight: 700;
-    color: $text;
-    margin-bottom: 4px;
-  }
-
-  p {
-    font-size: 13px;
-    color: $text-muted;
-  }
+.title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--cds-text-primary);
+  margin-bottom: 0.25rem;
+  letter-spacing: -0.02em;
 }
 
-.selectBox {
-  min-width: 320px;
-  padding: 12px 16px;
-  border: 1px solid $border;
-  border-radius: $radius;
-  font-size: 14px;
-  font-weight: 500;
-  color: $text;
-  background: $surface;
-  outline: none;
-  cursor: pointer;
-  transition: all $transition;
-
-  &:focus {
-    border-color: $primary;
-    box-shadow: 0 0 0 3px rgba(45, 106, 79, 0.1);
-  }
-
-  &:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-  }
-
-  @media (max-width: 600px) {
-    width: 100%;
-    min-width: unset;
-  }
+.subtitle {
+  font-size: 0.875rem;
+  color: var(--cds-text-secondary);
 }
 
-// Summary banner styles are  here;
+.toastContainer {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  z-index: 10000;
+  animation: slideIn 0.3s ease-out;
+}
 
-.summaryBanner {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  padding: 16px 20px;
-  background: $primary-light;
-  border-radius: 12px;
-  margin-bottom: 20px;
-  border: 1px solid #b8e8be;
+@keyframes slideIn {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
 
-  @media (max-width: 600px) {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 12px;
-  }
+.selectionSection {
+  background: var(--cds-layer-01);
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  border: 1px solid var(--cds-border-subtle);
+  margin-bottom: 2rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+}
+
+.attendanceContent {
+  margin-top: 1rem;
 }
 
 .summaryStats {
-  display: flex;
-  align-items: baseline;
-  gap: 8px;
-}
-
-.summaryCount {
-  font-size: 28px;
-  font-weight: 800;
-  color: $primary-dark;
-  line-height: 1;
-}
-
-.summaryLabel {
-  font-size: 13px;
-  font-weight: 600;
-  color: #245540;
-}
-
-.progressBarWrap {
-  flex: 1;
-  height: 6px;
-  background: rgba(36, 85, 64, 0.1);
-  border-radius: 3px;
-  overflow: hidden;
-  width: 100%;
+  background: var(--cds-layer-01);
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  border: 1px solid var(--cds-border-subtle);
+  margin-bottom: 1.5rem;
 }
 
 .progressBar {
-  height: 100%;
-  background: $primary;
-  transition: width 0.5s ease;
+  :global(.cds--progress-bar__bar) {
+    background-color: var(--cds-support-success);
+  }
 }
 
-.progressText {
-  font-size: 13px;
-  font-weight: 700;
-  color: $primary-dark;
+.tableWrapper {
+  background: var(--cds-layer-01);
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  border: 1px solid var(--cds-border-subtle);
+
+  :global(.cds--data-table-container) {
+    padding: 0;
+  }
+
+  :global(.cds--data-table-header) {
+    padding: 1.5rem 1rem;
+    background: var(--cds-layer-02);
+  }
 }
 
-// styling the avatars;
+.avatarCell {
+  width: 60px;
+}
 
 .avatar {
   width: 38px;
@@ -218,193 +109,40 @@ $transition: 150ms ease;
   font-size: 13px;
   font-weight: 700;
   color: #fff;
-  flex-shrink: 0;
 }
 
-.avatarBlue {
-  background: linear-gradient(135deg, #60a5fa, #3b82f6);
-}
-
-.avatarGreen {
-  background: linear-gradient(135deg, #34d399, #10b981);
-}
-
-.avatarPurple {
-  background: linear-gradient(135deg, #a78bfa, #8b5cf6);
-}
-
-.avatarOrange {
-  background: linear-gradient(135deg, #fbbf24, #f59e0b);
-}
-
-.avatarPink {
-  background: linear-gradient(135deg, #f472b6, #ec4899);
-}
-
-// styling the tables;
-
-.tableWrap {
-  background: $surface;
-  border: 1px solid $border;
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.02);
-}
-
-.table {
-  width: 100%;
-  border-collapse: collapse;
-
-  th {
-    padding: 12px 16px;
-    text-align: left;
-    font-size: 11px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: $text-muted;
-    background: #fafcfa;
-    border-bottom: 2px solid $border;
-  }
-
-  td {
-    padding: 12px 16px;
-    font-size: 14px;
-    color: $text;
-    border-bottom: 1px solid $border;
-    vertical-align: middle;
-  }
-
-  tbody tr {
-    transition: background $transition;
-
-    &:last-child td {
-      border-bottom: none;
-    }
-
-    &:hover {
-      background: #fdfefe;
-    }
-
-    &.present {
-      background: #f4fbf7;
-
-      .memberName {
-        color: $primary-dark;
-      }
-    }
-  }
-}
-
-.memberName {
-  font-weight: 600;
-  color: $text;
-  transition: color $transition;
-}
-
-.badge {
-  display: inline-block;
-  padding: 3px 10px;
-  border-radius: 20px;
-  font-size: 11px;
-  font-weight: 600;
-  white-space: nowrap;
-}
-
-.badgeDept {
-  background: $primary-light;
-  color: #245540;
-}
-
-// styles for my checkbox;
+.avatarBlue { background: linear-gradient(135deg, #60a5fa, #3b82f6); }
+.avatarGreen { background: linear-gradient(135deg, #34d399, #10b981); }
+.avatarPurple { background: linear-gradient(135deg, #a78bfa, #8b5cf6); }
+.avatarOrange { background: linear-gradient(135deg, #fbbf24, #f59e0b); }
+.avatarPink { background: linear-gradient(135deg, #f472b6, #ec4899); }
 
 .checkCell {
   width: 80px;
-  text-align: center;
+  display: flex;
+  justify-content: center;
 }
-
-.checkboxWrapper {
-  position: relative;
-  display: inline-block;
-  width: 24px;
-  height: 24px;
-  cursor: pointer;
-
-  input {
-    opacity: 0;
-    width: 0;
-    height: 0;
-  }
-}
-
-.customCheck {
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 24px;
-  width: 24px;
-  background-color: #fff;
-  border: 2px solid #ccc;
-  border-radius: 6px;
-  transition: all $transition;
-
-  &:after {
-    content: "";
-    position: absolute;
-    display: none;
-    left: 7px;
-    top: 3px;
-    width: 6px;
-    height: 12px;
-    border: solid white;
-    border-width: 0 2px 2px 0;
-    transform: rotate(45deg);
-  }
-}
-
-.checkboxWrapper input:checked~.customCheck {
-  background-color: $primary;
-  border-color: $primary;
-
-  &:after {
-    display: block;
-  }
-}
-
-.checkboxWrapper input:disabled~.customCheck {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-// error and empty state styles;
 
 .emptyState {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 60px 20px;
-  background: rgba(255, 255, 255, 0.6);
-  border: 1px dashed #c0d8cb;
-  border-radius: 16px;
-  margin-top: 20px;
-
-  svg {
-    margin-bottom: 20px;
-    opacity: 0.7;
-  }
+  padding: 4rem 2rem;
+  text-align: center;
+  background: var(--cds-layer-01);
+  border: 2px dashed var(--cds-border-subtle);
+  border-radius: 0.5rem;
 }
 
 .emptyTitle {
-  font-size: 18px;
-  font-weight: 700;
-  color: $primary-dark;
-  margin-bottom: 8px;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--cds-text-primary);
+  margin-bottom: 0.5rem;
 }
 
 .emptyText {
-  padding: 40px;
-  text-align: center;
-  font-size: 13px;
-  color: $text-muted;
+  font-size: 0.875rem;
+  color: var(--cds-text-secondary);
 }

@@ -77,7 +77,7 @@ export const PrayerModal = ({ onClose, onSave }: PrayerModalProps) => {
   };
   return (
     <Form onSubmit={formSubmitHandler} style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
-      <Stack gap={6} style={{ flex: 1, paddingBottom: '2rem' }}>
+      <Stack gap={6} style={{ flex: 1, paddingBottom: '32px' }}>
         <TextInput
           id="name"
           name="name"

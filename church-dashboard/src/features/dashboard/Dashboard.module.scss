@@ -1,428 +1,222 @@
-// variables for the overall dashboard;
-
-$primary: #2d6a4f;
-$primary-light: #d8f3dc;
-$primary-dark: #1b4332;
-$gold: #b5883a;
-$surface: #ffffff;
-$bg: #f8faf9;
-$text: #1a2e1e;
-$text-muted: #8aab98;
-$border: #e0ece5;
-$danger: #c0392b;
-$radius: 10px;
-$transition: 150ms ease;
-
-// page styles;
+@use "../../styles/variables" as *;
 
 .page {
-  padding: 20px 16px;
-  background: $bg;
+  padding: 1.5rem 1rem;
+  background-color: var(--cds-background);
   min-height: 100vh;
 
-  @media (min-width: 768px) {
-    padding: 24px 28px;
+  @media (min-width: 1056px) {
+    padding: 2rem 3rem;
   }
 }
 
-// the banner at the top styles
+.loadingWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-color: var(--cds-background);
+}
+
+.heroColumn {
+  margin-bottom: 2rem;
+}
 
 .heroBanner {
-  background: linear-gradient(135deg, $primary-dark 0%, $primary 100%);
-  border-radius: 16px;
-  padding: 24px;
+  background: linear-gradient(135deg, #1b4332 0%, #2d6a4f 100%);
+  border-radius: 0.5rem;
+  padding: 2rem;
   color: #fff;
-  margin-bottom: 24px;
   position: relative;
   overflow: hidden;
-  box-shadow: 0 10px 30px rgba(45, 106, 79, 0.15);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
 
-  @media (min-width: 768px) {
-    padding: 32px 40px;
-    margin-bottom: 28px;
+  @media (min-width: 672px) {
+    padding: 3rem;
   }
-}
-
-.heroContent {
-  position: relative;
-  z-index: 2;
 }
 
 .heroGreeting {
-  font-size: 28px;
+  font-size: 2.25rem;
   font-weight: 800;
-  margin-bottom: 6px;
-  color: #fff;
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.02em;
 }
 
 .heroSub {
-  font-size: 15px;
-  color: $primary-light;
+  font-size: 1rem;
   opacity: 0.9;
+  color: #d8f3dc;
 }
 
-.heroDeco {
-  position: absolute;
-  top: -50px;
-  right: -50px;
-  width: 200px;
-  height: 200px;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 50%;
-  filter: blur(40px);
-  z-index: 1;
-}
+.statTile {
+  background: var(--cds-layer-01);
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
+  border: 1px solid var(--cds-border-subtle);
+  transition: transform 0.2s ease;
 
-// styles for the stats cards ;
-
-.statsGrid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 12px;
-  margin-bottom: 16px;
-
-  @media (min-width: 400px) {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  @media (min-width: 1024px) {
-    grid-template-columns: repeat(4, 1fr);
+  &:hover {
+    transform: translateY(-2px);
   }
 }
 
-.statCard {
-  background: $surface;
-  border: 1px solid $border;
-  border-radius: $radius;
-  padding: 14px 16px;
-  display: flex;
-  flex-direction: column;
-
-  &.accent {
-    background: $primary-light;
-    border-color: #b8e8be;
-
-    .statValue {
-      color: $primary-dark;
-    }
-
-    .statLabel,
-    .statSub {
-      color: #4a9e57;
-    }
-  }
+.accentTile {
+  background: #f0fff4;
+  border-color: #c6f6d5;
 }
 
 .statLabel {
-  font-size: 11px;
+  font-size: 0.75rem;
   font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: $text-muted;
+  letter-spacing: 0.05em;
+  color: var(--cds-text-secondary);
+  display: block;
+  margin-bottom: 0.5rem;
 }
 
-.statValue {
-  font-size: 28px;
-  font-weight: 700;
-  color: $text;
-  margin: 4px 0 2px;
-  line-height: 1;
-}
-
-.statSub {
-  font-size: 11px;
-  color: $text-muted;
-}
-
-// stylesfor the two column grid;
-
-.twoCol {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 14px;
-  margin-bottom: 14px;
-
-  @media (max-width: 768px) {
-    grid-template-columns: 1fr;
-  }
-}
-
-// styles for the card ;
-
-.card {
-  background: $surface;
-  border: 1px solid $border;
-  border-radius: $radius;
-  overflow: hidden;
-}
-
-.cardHead {
+.statLine {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 12px 16px;
-  border-bottom: 1px solid $border;
+  margin-bottom: 0.25rem;
+}
+
+.statValue {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--cds-text-primary);
+}
+
+.statIcon {
+  width: 2rem;
+  height: 2rem;
+  fill: var(--cds-icon-secondary);
+  opacity: 0.5;
+}
+
+.statSub {
+  font-size: 0.75rem;
+  color: var(--cds-text-helper);
+}
+
+.listCard {
+  background: var(--cds-layer-01);
+  border-radius: 0.5rem;
+  margin-bottom: 2rem;
+  border: 1px solid var(--cds-border-subtle);
+  height: 100%;
+}
+
+.cardHead {
+  padding: 1.25rem 1rem;
+  border-bottom: 1px solid var(--cds-border-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 
   h3 {
-    font-size: 13px;
-    font-weight: 700;
-    color: $text;
+    font-size: 1rem;
+    font-weight: 600;
   }
 
   span {
-    font-size: 11px;
-    color: $text-muted;
+    font-size: 0.75rem;
+    color: var(--cds-text-helper);
   }
 }
 
 .cardBody {
-  padding: 4px 0;
+  padding: 0.5rem 0;
 }
 
-// styling the program items;
-
-.programItem {
+.listItem {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 9px 16px;
-  border-bottom: 1px solid $border;
-  transition: background $transition;
+  gap: 1rem;
+  padding: 1rem;
+  border-bottom: 1px solid var(--cds-border-subtle);
+  transition: background 0.2s ease;
 
   &:last-child {
     border-bottom: none;
   }
 
   &:hover {
-    background: #f4f9f5;
+    background: var(--cds-layer-hover-01);
   }
 }
 
 .dot {
-  width: 8px;
-  height: 8px;
+  width: 0.5rem;
+  height: 0.5rem;
   border-radius: 50%;
   flex-shrink: 0;
 
-  &.dotBlue {
-    background: #3b82f6;
-  }
-
-  &.dotGreen {
-    background: #10b981;
-  }
+  &.dotBlue { background: var(--cds-support-info); }
+  &.dotGreen { background: var(--cds-support-success); }
 }
 
-.programInfo {
+.listInfo {
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 1px;
 }
 
-.programTitle {
-  font-size: 13px;
+.listTitle {
+  font-size: 0.875rem;
   font-weight: 600;
-  color: $text;
+  color: var(--cds-text-primary);
 }
 
-.programMeta {
-  font-size: 11px;
-  color: $text-muted;
+.listMeta {
+  font-size: 0.75rem;
+  color: var(--cds-text-secondary);
 }
 
 .badge {
-  font-size: 10px;
-  font-weight: 600;
-  padding: 2px 7px;
-  border-radius: 20px;
+  font-size: 0.625rem;
+  font-weight: 700;
+  padding: 0.125rem 0.5rem;
+  border-radius: 1rem;
+  text-transform: uppercase;
 
   &.upcoming {
-    background: #dbeafe;
-    color: #1e40af;
+    background: var(--cds-support-info-inverse);
+    color: var(--cds-text-inverse);
   }
 
   &.completed {
-    background: #d1fae5;
-    color: #065f46;
+    background: var(--cds-support-success-inverse);
+    color: var(--cds-text-inverse);
   }
 }
 
-// styles that  show department breakdown;
-
-.deptItem {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 9px 16px;
-  border-bottom: 1px solid $border;
-
-  &:last-child {
-    border-bottom: none;
-  }
-}
-
-.deptName {
-  font-size: 12px;
-  color: $text;
-  width: 130px;
-  flex-shrink: 0;
-}
-
-.deptBarWrap {
-  flex: 1;
-  height: 5px;
-  background: #edf5ee;
-  border-radius: 3px;
-  overflow: hidden;
+.deptStack {
+  padding: 1rem;
 }
 
 .deptBar {
-  height: 100%;
-  background: $primary;
-  border-radius: 3px;
-  transition: width 0.4s ease;
-}
-
-.deptCount {
-  font-size: 12px;
-  font-weight: 600;
-  color: $text;
-  min-width: 20px;
-  text-align: right;
-}
-
-// styling the action cards;
-
-.actionCards {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 16px;
-  margin-top: 24px;
-
-  @media (max-width: 900px) {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  @media (max-width: 480px) {
-    grid-template-columns: 1fr;
+  :global(.cds--progress-bar__bar) {
+    background-color: var(--cds-support-info);
   }
 }
 
-.actionCard {
-  background: $surface;
-  border: 1px solid $border;
-  border-radius: 12px;
-  padding: 20px;
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  text-decoration: none;
-  color: $text;
-  transition: all $transition;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
-
-  &:hover {
-    border-color: $primary;
-    box-shadow: 0 8px 24px rgba(45, 106, 79, 0.08);
-    transform: translateY(-2px);
-
-    .actionArrow {
-      transform: translateX(2px);
-      color: $primary;
-    }
-  }
-}
-
-.quickIcon {
-  width: 48px;
-  height: 48px;
-  border-radius: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-
-.actionInfo {
-  flex: 1;
-}
-
-.quickLabel {
-  font-size: 14px;
-  font-weight: 700;
-  color: $text;
-}
-
-.actionArrow {
-  font-size: 16px;
-  color: $text-muted;
-  transition: transform $transition, color $transition;
-}
-
-// styles for the birthdays and the prayers
-
-.viewAllBtn {
-  font-size: 12px;
-  font-weight: 600;
-  color: $primary;
-  text-decoration: none;
-
-  &:hover {
-    text-decoration: underline;
-  }
-}
-
-.emptyText {
-  padding: 24px;
-  text-align: center;
-  font-size: 13px;
-  color: $text-muted;
-  font-style: italic;
-}
-
-.birthdayItem {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 12px 16px;
-  border-bottom: 1px solid $border;
-
-  &:last-child {
-    border-bottom: none;
-  }
-}
-
-.birthdayIcon {
-  font-size: 20px;
-  background: #fffbf0;
-  width: 36px;
-  height: 36px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.avatarMini {
+  width: 2.25rem;
+  height: 2.25rem;
+  background: var(--cds-layer-02);
   border-radius: 50%;
-}
-
-.birthdayInfo {
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
 }
 
-.birthdayName {
-  font-size: 14px;
-  font-weight: 600;
-  color: $text;
-}
-
-.birthdayDate {
-  font-size: 12px;
-  color: $text-muted;
-}
-
-.prayerItem {
-  padding: 14px 16px;
-  border-bottom: 1px solid $border;
+.prayerListItem {
+  padding: 1rem;
+  border-bottom: 1px solid var(--cds-border-subtle);
 
   &:last-child {
     border-bottom: none;
@@ -432,40 +226,99 @@ $transition: 150ms ease;
 .prayerHeader {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 6px;
+  margin-bottom: 0.5rem;
 }
 
-.prayerName {
-  font-size: 13px;
-  font-weight: 700;
-  color: $text;
+.prayerExcerpt {
+  font-size: 0.875rem;
+  color: var(--cds-text-secondary);
+  line-height: 1.4;
 }
 
-.prayerDate {
-  font-size: 11px;
-  color: $text-muted;
+.viewAllBtn {
+  font-size: 0.75rem;
+  color: var(--cds-link-primary);
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
 }
 
-.prayerText {
-  font-size: 13px;
-  color: #4a6358;
-  line-height: 1.5;
+.actionGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  margin-top: 1.5rem;
+
+  @media (min-width: 672px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (min-width: 1312px) {
+    grid-template-columns: repeat(4, 1fr);
+  }
 }
 
-// styling the empty and error states;
+.actionTile {
+  background: var(--cds-layer-01);
+  border-radius: 0.5rem;
+  border: 1px solid var(--cds-border-subtle);
+  min-height: 100px;
+}
 
-.empty {
-  padding: 40px;
+.actionContent {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.actionIcon {
+  width: 3rem;
+  height: 3rem;
+  background: var(--cds-layer-02);
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+
+  svg {
+    width: 1.5rem;
+    height: 1.5rem;
+    fill: var(--cds-icon-primary);
+  }
+}
+
+.actionText {
+  flex: 1;
+}
+
+.actionLabel {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--cds-text-primary);
+  display: block;
+}
+
+.actionDesc {
+  font-size: 0.75rem;
+  color: var(--cds-text-secondary);
+}
+
+.errorTile {
+  background: #fff5f5;
+  border-color: #feb2b2;
+}
+
+.errorText {
+  color: #c53030;
+  font-weight: 600;
+}
+
+.emptyText {
+  padding: 2rem;
   text-align: center;
-  font-size: 13px;
-  color: $text-muted;
-}
-
-.error {
-  padding: 10px 14px;
-  background: #fdf0ef;
-  border: 1px solid #f5c6c2;
-  border-radius: $radius;
-  font-size: 13px;
-  color: $danger;
+  color: var(--cds-text-helper);
+  font-style: italic;
 }

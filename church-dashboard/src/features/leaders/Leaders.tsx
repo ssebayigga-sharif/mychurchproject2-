@@ -1,21 +1,45 @@
 import { useState, useEffect, useCallback } from "react";
+import {
+  Button,
+  Column,
+  DataTable,
+  Grid,
+  Modal,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+  TableContainer,
+  TableToolbar,
+  TableToolbarContent,
+  TableToolbarSearch,
+  Select,
+  SelectItem,
+  Loading,
+  Tag,
+  Stack,
+  IconButton,
+} from "@carbon/react";
+import { Add, TrashCan } from "@carbon/icons-react";
 import { getLeaders, addLeader, removeLeader } from "../../services/leadersServices";
 import { getMembers } from "../../services/memberServices";
 import type { Leader, Member, LeaderPosition, MemberDepartment, CreateLeaderInput } from "../../types/church.types";
 import styles from "./leaders.module.scss";
 
-const POSITIONS: LeaderPosition[] = ["Pastor", "Elder", "Deacon", "Deaconess", "Treasurer", "Clerk", "Department Head"];
+const POSITIONS: LeaderPosition[] = ["Elder", "Deacon", "Deaconess", "Treasurer", "Clerk", "Department Head", "Pastor"];
 const DEPARTMENTS: MemberDepartment[] = ["Sabbath School", "Children", "Youth", "Music", "Deacons", "Deaconesses", "Health", "Communication", "Elders", "Personal Ministries", "Community Services"];
 
 export const Leaders = () => {
   const [leaders, setLeaders] = useState<Leader[]>([]);
   const [members, setMembers] = useState<Member[]>([]);
   const [loading, setLoading] = useState(true);
-  const [showModal, setShowModal] = useState(false);
-  const [search, setSearch] = useState("");
-  const [submitting, setSubmitting] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const [form, setForm] = useState<Omit<CreateLeaderInput, "name">>({
+  const [formData, setFormData] = useState<Omit<CreateLeaderInput, "name">>({
     memberId: "",
     position: "Elder",
     department: undefined,
@@ -27,9 +51,9 @@ export const Leaders = () => {
   const fetchData = useCallback(async () => {
     try {
       setLoading(true);
-      const [l, m] = await Promise.all([getLeaders(), getMembers()]);
-      setLeaders(l);
-      setMembers(m);
+      const [leaderData, memberData] = await Promise.all([getLeaders(), getMembers()]);
+      setLeaders(leaderData);
+      setMembers(memberData);
     } catch (error) {
       console.error("Failed to fetch leaders", error);
     } finally {
@@ -41,28 +65,35 @@ export const Leaders = () => {
     fetchData();
   }, [fetchData]);
 
-  const handleAdd = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const member = members.find(m => m.id === form.memberId);
+  const handleAddLeader = async () => {
+    const member = members.find(m => m.id === formData.memberId);
     if (!member) return;
 
     try {
-      setSubmitting(true);
+      setIsSubmitting(true);
       await addLeader({
-        ...form,
+        ...formData,
         name: `${member.firstName} ${member.lastName}`,
       });
-      setShowModal(false);
+      setIsModalOpen(false);
+      setFormData({
+        memberId: "",
+        position: "Elder",
+        department: undefined,
+        termStart: new Date().getFullYear().toString(),
+        termEnd: (new Date().getFullYear() + 1).toString(),
+        isActive: true,
+      });
       fetchData();
     } catch (error) {
       console.error("Failed to add leader", error);
     } finally {
-      setSubmitting(false);
+      setIsSubmitting(false);
     }
   };
 
-  const handleRemove = async (id: string) => {
-    if (!window.confirm("Remove this leader?")) return;
+  const handleRemoveLeader = async (id: string) => {
+    if (!window.confirm("Are you sure you want to remove this leader?")) return;
     try {
       await removeLeader(id);
       fetchData();
@@ -71,114 +102,181 @@ export const Leaders = () => {
     }
   };
 
-  const filtered = leaders.filter(l => 
-    l.name.toLowerCase().includes(search.toLowerCase()) ||
-    l.position.toLowerCase().includes(search.toLowerCase())
+  const headers = [
+    { key: "name", header: "Name" },
+    { key: "position", header: "Position" },
+    { key: "department", header: "Department" },
+    { key: "term", header: "Term" },
+    { key: "status", header: "Status" },
+    { key: "actions", header: "" },
+  ];
+
+  const filteredLeaders = leaders.filter(l => 
+    l.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    l.position.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    (l.department || "").toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+  const rows = filteredLeaders.map(leader => ({
+    id: leader.id,
+    name: leader.name,
+    position: leader.position,
+    department: leader.department || "N/A",
+    term: `${leader.termStart} - ${leader.termEnd || "Present"}`,
+    status: leader.isActive ? "Active" : "Inactive",
+    actions: leader.id
+  }));
 
   return (
     <div className={styles.page}>
-      <header className={styles.header}>
-        <h1>Church Leadership</h1>
-        <button className={styles.primaryBtn} onClick={() => setShowModal(true)}>
-          + Assign Leader
-        </button>
-      </header>
-
-      <div className={styles.toolbar}>
-        <div className={styles.searchBox}>
-          <input 
-            placeholder="Search leaders by name or position..." 
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-          />
-        </div>
-      </div>
-
-      {loading ? (
-        <div className={styles.emptyState}>Loading leadership data...</div>
-      ) : filtered.length > 0 ? (
-        <div className={styles.grid}>
-          {filtered.map(leader => (
-            <div key={leader.id} className={styles.card}>
-              <div className={styles.actions}>
-                <button className={styles.removeBtn} onClick={() => handleRemove(leader.id)} title="Remove leader">
-                  ✕
-                </button>
-              </div>
-              <div className={styles.avatar}>
-                {leader.name.split(" ").map((n: string) => n[0]).join("")}
-              </div>
-              <h3 className={styles.name}>{leader.name}</h3>
-              <span className={styles.position}>{leader.position}</span>
-              {leader.department && <p className={styles.dept}>{leader.department}</p>}
-              <div className={styles.term}>
-                <span>Term: {leader.termStart} - {leader.termEnd || "Present"}</span>
-                <span style={{ color: leader.isActive ? "#10b981" : "#ef4444" }}>
-                  ● {leader.isActive ? "Active" : "Inactive"}
-                </span>
-              </div>
+      <Grid fullWidth>
+        <Column lg={16} md={8} sm={4}>
+          <div className={styles.header}>
+            <div>
+              <h2 className={styles.title}>Church Leadership</h2>
+              <p className={styles.subtitle}>Manage and assign ecclesiastical roles</p>
             </div>
-          ))}
-        </div>
-      ) : (
-        <div className={styles.emptyState}>
-          {search ? "No leaders match your search." : "No leaders assigned yet."}
-        </div>
-      )}
-
-      {showModal && (
-        <div className={styles.modalOverlay}>
-          <div className={styles.modal}>
-            <h2>Assign New Leader</h2>
-            <form onSubmit={handleAdd} className={styles.form}>
-              <label>
-                Select Member
-                <select 
-                  value={form.memberId} 
-                  onChange={e => setForm({...form, memberId: e.target.value})}
-                  required
-                >
-                  <option value="">Select a member...</option>
-                  {members.map(m => (
-                    <option key={m.id} value={m.id}>{m.firstName} {m.lastName}</option>
-                  ))}
-                </select>
-              </label>
-
-              <label>
-                Leadership Position
-                <select 
-                  value={form.position} 
-                  onChange={e => setForm({...form, position: e.target.value as any})}
-                >
-                  {POSITIONS.map(p => <option key={p} value={p}>{p}</option>)}
-                </select>
-              </label>
-
-              <label>
-                Department (Optional)
-                <select 
-                  value={form.department || ""} 
-                  onChange={e => setForm({...form, department: (e.target.value as any) || undefined})}
-                >
-                  <option value="">None</option>
-                  {DEPARTMENTS.map(d => <option key={d} value={d}>{d}</option>)}
-                </select>
-              </label>
-
-              <div className={styles.modalActions}>
-                <button type="button" className={styles.cancelBtn} onClick={() => setShowModal(false)}>
-                  Cancel
-                </button>
-                <button type="submit" className={styles.primaryBtn} disabled={submitting}>
-                  {submitting ? "Saving..." : "Save Assignment"}
-                </button>
-              </div>
-            </form>
+            <Button
+              renderIcon={Add}
+              onClick={() => setIsModalOpen(true)}
+              size="lg"
+            >
+              Assign New Leader
+            </Button>
           </div>
-        </div>
-      )}
+
+          <div className={styles.tableWrapper}>
+            {loading ? (
+              <Loading withOverlay={false} />
+            ) : (
+              <DataTable rows={rows} headers={headers}>
+                {({
+                  rows,
+                  headers,
+                  getHeaderProps,
+                  getRowProps,
+                  getTableProps,
+                  getToolbarProps,
+                  getTableContainerProps,
+                }) => (
+                  <TableContainer
+                    title="Active Leadership"
+                    description={`${filteredLeaders.length} leaders found`}
+                    {...getTableContainerProps()}
+                  >
+                    <TableToolbar {...getToolbarProps()}>
+                      <TableToolbarContent>
+                        <TableToolbarSearch
+                          persistent
+                          placeholder="Filter leaders..."
+                          onChange={(e: any) => setSearchQuery(e?.target?.value || "")}
+                        />
+                      </TableToolbarContent>
+                    </TableToolbar>
+                    <Table {...getTableProps()}>
+                      <TableHead>
+                        <TableRow>
+                          {headers.map((header) => (
+                            <TableHeader {...getHeaderProps({ header })}>
+                              {header.header}
+                            </TableHeader>
+                          ))}
+                        </TableRow>
+                      </TableHead>
+                      <TableBody>
+                        {rows.map((row) => (
+                          <TableRow {...getRowProps({ row })}>
+                            {row.cells.map((cell) => {
+                              if (cell.info.header === "status") {
+                                return (
+                                  <TableCell key={cell.id}>
+                                    <Tag type={cell.value === "Active" ? "green" : "red"}>
+                                      {cell.value}
+                                    </Tag>
+                                  </TableCell>
+                                );
+                              }
+                              if (cell.info.header === "actions") {
+                                return (
+                                  <TableCell key={cell.id} className={styles.actionsCell}>
+                                    <IconButton
+                                      label="Remove Leader"
+                                      kind="ghost"
+                                      size="sm"
+                                      onClick={() => handleRemoveLeader(row.id)}
+                                      align="bottom-right"
+                                    >
+                                      <TrashCan />
+                                    </IconButton>
+                                  </TableCell>
+                                );
+                              }
+                              return (
+                                <TableCell key={cell.id}>{cell.value}</TableCell>
+                              );
+                            })}
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </TableContainer>
+                )}
+              </DataTable>
+            )}
+          </div>
+        </Column>
+      </Grid>
+
+      <Modal
+        open={isModalOpen}
+        modalHeading="Assign New Leader"
+        primaryButtonText={isSubmitting ? "Saving..." : "Save Assignment"}
+        secondaryButtonText="Cancel"
+        onRequestClose={() => setIsModalOpen(false)}
+        onRequestSubmit={handleAddLeader}
+        primaryButtonDisabled={!formData.memberId || isSubmitting}
+      >
+        <Stack gap={6}>
+          <p className={styles.modalText}>
+            Select a member from the registry and assign them to a leadership role.
+          </p>
+          <Select
+            id="member-select"
+            labelText="Select Member"
+            value={formData.memberId}
+            onChange={(e) => setFormData({ ...formData, memberId: e.target.value })}
+            required
+          >
+            <SelectItem value="" text="Choose a member..." />
+            {members.map((m) => (
+              <SelectItem key={m.id} value={m.id} text={`${m.firstName} ${m.lastName}`} />
+            ))}
+          </Select>
+
+          <Select
+            id="position-select"
+            labelText="Leadership Position"
+            value={formData.position}
+            onChange={(e) => setFormData({ ...formData, position: e.target.value as LeaderPosition })}
+          >
+            {POSITIONS.map((p) => (
+              <SelectItem key={p} value={p} text={p} />
+            ))}
+          </Select>
+
+          <Select
+            id="dept-select"
+            labelText="Department (Optional)"
+            value={formData.department || ""}
+            onChange={(e) => setFormData({ ...formData, department: (e.target.value as MemberDepartment) || undefined })}
+          >
+            <SelectItem value="" text="No Department" />
+            {DEPARTMENTS.map((d) => (
+              <SelectItem key={d} value={d} text={d} />
+            ))}
+          </Select>
+        </Stack>
+      </Modal>
     </div>
   );
 };

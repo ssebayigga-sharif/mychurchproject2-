@@ -75,11 +75,13 @@ export type Program = CreateProgramInput & {
 export type AttendanceMap = Record<string, boolean>;
 
 export type AttendanceRecord = {
+  id?: number;
   programId: string;
   memberId: string;
   isPresent: boolean;
   markedAt: string;
 };
+
 
 //dashboard stats types
 

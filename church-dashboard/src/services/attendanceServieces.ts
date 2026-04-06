@@ -7,10 +7,8 @@ const BASE_URL =
 export const getAttendance = async (
   programId: string,
 ): Promise<AttendanceMap> => {
-  const res = await axios.get<AttendanceMap | null>(
-    `${BASE_URL}/${programId}.json`,
-  );
-  return res.data ?? {};
+  const res = await axios.get<AttendanceMap | null>(`${BASE_URL}/${programId}.json`);
+  return res.data || {};
 };
 
 export const markAttendance = async (
@@ -20,3 +18,4 @@ export const markAttendance = async (
 ): Promise<void> => {
   await axios.put(`${BASE_URL}/${programId}/${memberId}.json`, present);
 };
+

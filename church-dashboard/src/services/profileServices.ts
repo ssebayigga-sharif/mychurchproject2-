@@ -13,14 +13,9 @@ export const getProfileByMemberId = async (
   const res = await axios.get<Record<string, Omit<MemberProfile, "id">> | null>(
     `${BASE_URL}.json?orderBy="memberId"&equalTo="${memberId}"`,
   );
-
   const data = res.data;
-  if (!data) return null;
-
-  const entries = Object.entries(data);
-  if (entries.length === 0) return null;
-
-  const [id, value] = entries[0];
+  if (!data || Object.keys(data).length === 0) return null;
+  const [id, value] = Object.entries(data)[0];
   return { id, ...value };
 };
 
@@ -29,10 +24,8 @@ export const getAllProfiles = async (): Promise<MemberProfile[]> => {
   const res = await axios.get<Record<string, Omit<MemberProfile, "id">> | null>(
     `${BASE_URL}.json`,
   );
-
   const data = res.data;
   if (!data) return [];
-
   return Object.entries(data).map(([id, value]) => ({ id, ...value }));
 };
 
@@ -40,10 +33,7 @@ export const getAllProfiles = async (): Promise<MemberProfile[]> => {
 export const createProfile = async (
   profile: CreateMemberProfileInput,
 ): Promise<void> => {
-  await axios.post(`${BASE_URL}.json`, {
-    ...profile,
-    updatedAt: new Date().toISOString(),
-  });
+  await axios.post(`${BASE_URL}.json`, profile);
 };
 
 // Update an existing profile
@@ -51,13 +41,15 @@ export const updateProfile = async (
   id: string,
   profile: Partial<CreateMemberProfileInput>,
 ): Promise<void> => {
-  await axios.patch(`${BASE_URL}/${id}.json`, {
+  const update = {
     ...profile,
     updatedAt: new Date().toISOString(),
-  });
+  };
+  await axios.patch(`${BASE_URL}/${id}.json`, update);
 };
 
 // Delete a profile
 export const deleteProfile = async (id: string): Promise<void> => {
   await axios.delete(`${BASE_URL}/${id}.json`);
 };
+

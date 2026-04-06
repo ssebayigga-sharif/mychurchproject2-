@@ -35,10 +35,6 @@ export const AppRouter = () => {
           {/* Leaders/Admin only routes */}
           <Route element={<ProtectedRoute allowedRoles={["Admin", "Leader"]} />}>
             <Route path="/communication" element={<Communication />} />
-          </Route>
-
-          {/* Admin only routes */}
-          <Route element={<ProtectedRoute allowedRoles={["Admin"]} />}>
             <Route path="/leaders" element={<Leaders />} />
           </Route>
         </Route>

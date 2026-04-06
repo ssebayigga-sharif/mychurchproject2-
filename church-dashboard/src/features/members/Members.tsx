@@ -1,8 +1,30 @@
 import { useCallback, useEffect, useState } from "react";
-import styles from "./members.module.scss";
+import { useNavigate } from "react-router-dom";
+import {
+  Button,
+  ContentSwitcher,
+  DataTable,
+  Loading,
+  OverflowMenu,
+  OverflowMenuItem,
+  Switch,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableHeader,
+  TableRow,
+  TableToolbar,
+  TableToolbarContent,
+  TableToolbarSearch,
+  Tag,
+  ToastNotification,
+} from "@carbon/react";
+import { Add } from "@carbon/icons-react";
+
 import type {
   Member,
-  BaptismStatus,
   CreateMemberInput,
 } from "../../types/church.types";
 import {
@@ -12,16 +34,7 @@ import {
   updateMember,
 } from "../../services/memberServices";
 import { MemberModal } from "./MemberModal";
-import { useNavigate } from "react-router-dom";
-import { Button } from "@carbon/react";
-import { Add } from "@carbon/icons-react";
-
-// Badge style per baptism status
-const BAPTISM_STYLE: Record<BaptismStatus, string> = {
-  Baptized: styles.badgeGreen,
-  "Not baptized": styles.badgeGray,
-  "In preparation": styles.badgeAmber,
-};
+import styles from "./members.module.scss";
 
 const getAvatarColor = (name: string) => {
   const colors = [
@@ -42,7 +55,7 @@ const getInitials = (name: string) => {
   if (!name) return "?";
   const words = name.trim().split(/\s+/);
   if (words.length === 1) return words[0].substring(0, 2).toUpperCase();
-  return (words[0][0] + words[1][0]).toUpperCase();
+  return (words[0][0] + (words[1]?.[0] || "")).toUpperCase();
 };
 
 export const Members = () => {
@@ -50,10 +63,7 @@ export const Members = () => {
   const [members, setMembers] = useState<Member[]>([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [editingMember, setEditingMember] = useState<Member | undefined>();
-  const [searchQuery, setSearchQuery] = useState("");
-  const [activeTab, setActiveTab] = useState<"All" | "Members" | "Visitors">(
-    "All",
-  );
+  const [activeTab, setActiveTab] = useState<number>(0);
   const [isLoading, setIsLoading] = useState(true);
   const [deletingId, setDeletingId] = useState<string | null>(null);
 
@@ -64,7 +74,7 @@ export const Members = () => {
 
   const showToast = (
     message: string,
-    type: "success" | "error" = "success",
+    type: "success" | "error" = "success"
   ) => {
     setToast({ message, type });
     setTimeout(() => setToast(null), 3500);
@@ -98,7 +108,7 @@ export const Members = () => {
 
   const handleDelete = async (member: Member) => {
     const confirmed = window.confirm(
-      `Remove ${member.firstName} ${member.lastName} from the church records?`,
+      `Remove ${member.firstName} ${member.lastName} from the church records?`
     );
     if (!confirmed) return;
 
@@ -129,39 +139,55 @@ export const Members = () => {
     }
   };
 
-  const query = searchQuery.trim().toLowerCase();
   const filteredMembers = members.filter((m) => {
-    // 1. Filter by Tab
     const isVisitor = m.memberType === "Visitor";
-    if (activeTab === "Members" && isVisitor) return false;
-    if (activeTab === "Visitors" && !isVisitor) return false;
-
-    // 2. Filter by Search Query
-    if (query === "") return true;
-    const fName = (m.firstName || "").toLowerCase();
-    const lName = (m.lastName || "").toLowerCase();
-    const dept = (m.department || "").toLowerCase();
-    return (
-      fName.includes(query) || lName.includes(query) || dept.includes(query)
-    );
+    if (activeTab === 1 && isVisitor) return false; // Members only
+    if (activeTab === 2 && !isVisitor) return false; // Visitors only
+    return true;
   });
+
+  const headerData = [
+    { header: "Member", key: "name" },
+    { header: "Department", key: "department" },
+    { header: "Baptism", key: "baptismStatus" },
+    { header: "Contact", key: "contact" },
+    { header: "Role", key: "memberType" },
+    { header: "", key: "actions" },
+  ];
+
+  const rows = filteredMembers.map((m) => ({
+    id: m.id,
+    name: `${m.firstName} ${m.lastName}`,
+    firstName: m.firstName,
+    lastName: m.lastName,
+    memberType: m.memberType,
+    department: m.department,
+    baptismStatus: m.baptismStatus,
+    phone: m.phone,
+    email: m.email,
+  }));
+
+  if (isLoading) {
+    return <Loading withOverlay title="Loading Members..." />;
+  }
 
   return (
     <div className={styles.page}>
-      {/* Toast Notification */}
       {toast && (
-        <div className={`${styles.toast} ${styles[`toast${toast.type}`]}`}>
-          {toast.type === "success" ? "✅" : "❌"} {toast.message}
-        </div>
+        <ToastNotification
+          kind={toast.type}
+          title={toast.type === "success" ? "Success" : "Error"}
+          subtitle={toast.message}
+          timeout={3000}
+          onClose={() => setToast(null)}
+          className={styles.notification}
+        />
       )}
 
-      {/* Header & Controls */}
       <div className={styles.pageHeader}>
         <div>
           <h1 className={styles.heading}>Church Members</h1>
-          <p className={styles.subheading}>
-            Manage the registry of all active church members
-          </p>
+          <p className={styles.subheading}>Manage the registry of all active church members</p>
         </div>
         <Button onClick={handleAdd} kind="primary" renderIcon={Add}>
           Add Member
@@ -169,149 +195,114 @@ export const Members = () => {
       </div>
 
       <div className={styles.controls}>
-        <div className={styles.tabs}>
-          <Button
-            // className={`${styles.tabBtn} ${activeTab === "All" ? styles.activeTab : ""}`}
-            onClick={() => setActiveTab("All")}
-            kind="primary"
-          >
-            All Members ({members.length})
-          </Button>
-          <Button
-            // className={`${styles.tabBtn} ${activeTab === "Members" ? styles.activeTab : ""}`}
-            onClick={() => setActiveTab("Members")}
-            kind="secondary"
-          >
-            Official Members
-          </Button>
-          <Button
-            // className={`${styles.tabBtn} ${activeTab === "Visitors" ? styles.activeTab : ""}`}
-            onClick={() => setActiveTab("Visitors")}
-            kind="secondary"
-          >
-            Visitors
-          </Button>
-        </div>
-
-        <div className={styles.searchWrap}>
-          <span className={styles.searchIcon}>🔍</span>
-          <input
-            className={styles.searchInput}
-            placeholder="Search by name or department..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
-        </div>
+        <ContentSwitcher
+          onChange={(e) => setActiveTab(e.index ?? 0)}
+          selectedIndex={activeTab}
+          className={styles.switcher}
+        >
+          <Switch text={`All (${members.length})`} />
+          <Switch text="Official Members" />
+          <Switch text="Recent Visitors" />
+        </ContentSwitcher>
       </div>
 
-      {/* Main List */}
-      {isLoading ? (
-        <p className={styles.emptyText}>Loading members...</p>
-      ) : filteredMembers.length === 0 ? (
-        <div className={styles.emptyState}>
-          <svg
-            width="64"
-            height="64"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="#b7dcca"
-            strokeWidth="1.5"
-          >
-            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-            <circle cx="9" cy="7" r="4"></circle>
-            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
-            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-          </svg>
-          <p className={styles.emptyTitle}>No members found</p>
-          {query !== "" && (
-            <Button
-              // className={styles.btnClear}
-              onClick={() => setSearchQuery("")}
-              kind="primary"
-            >
-              Clear Search
-            </Button>
-          )}
-        </div>
-      ) : (
-        <div className={styles.grid}>
-          {filteredMembers.map((m) => {
-            const fullName = `${m.firstName} ${m.lastName}`;
-            return (
-              <div key={m.id} className={styles.memberCard}>
-                <div className={styles.cardHeader}>
-                  <div
-                    className={`${styles.avatar} ${getAvatarColor(fullName)}`}
-                  >
-                    {getInitials(fullName)}
-                  </div>
-                  <div className={styles.headerInfo}>
-                    <div className={styles.nameRow}>
-                      <span className={styles.memberName}>{fullName}</span>
-                      {m.memberType === "Visitor" && (
-                        <span
-                          className={`${styles.badge} ${styles.badgeVisitor}`}
+      <DataTable rows={rows} headers={headerData}>
+        {({
+          rows,
+          headers,
+          getHeaderProps,
+          getRowProps,
+          getTableProps,
+          getToolbarProps,
+          onInputChange,
+        }) => (
+          <TableContainer className={styles.tableContainer}>
+            <TableToolbar {...getToolbarProps()}>
+              <TableToolbarContent>
+                <TableToolbarSearch
+                  placeholder="Search by name or department..."
+                  onChange={onInputChange}
+                />
+              </TableToolbarContent>
+            </TableToolbar>
+            <Table {...getTableProps()}>
+              <TableHead>
+                <TableRow>
+                  {headers.map((header) => (
+                    <TableHeader {...getHeaderProps({ header })}>
+                      {header.header}
+                    </TableHeader>
+                  ))}
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {rows.map((row) => {
+                  const member = filteredMembers.find((m) => m.id === row.id)!;
+                  const fullName = `${member.firstName} ${member.lastName}`;
+                  return (
+                    <TableRow {...getRowProps({ row })}>
+                      <TableCell>
+                        <div className={styles.memberCell}>
+                          <div className={`${styles.avatarMini} ${getAvatarColor(fullName)}`}>
+                            {getInitials(fullName)}
+                          </div>
+                          <span className={styles.nameText}>{fullName}</span>
+                        </div>
+                      </TableCell>
+                      <TableCell>{member.department}</TableCell>
+                      <TableCell>
+                        <Tag
+                          type={
+                            member.baptismStatus === "Baptized"
+                              ? "green"
+                              : member.baptismStatus === "In preparation"
+                              ? "warm-gray"
+                              : "outline"
+                          }
+                          size="sm"
                         >
-                          Visitor
-                        </span>
-                      )}
-                    </div>
-                    <span className={`${styles.badge} ${styles.badgeDept}`}>
-                      {m.department}
-                    </span>
-                  </div>
-                </div>
+                          {member.baptismStatus}
+                        </Tag>
+                      </TableCell>
+                      <TableCell>
+                        <div className={styles.contactCell}>
+                          <span className={styles.contactValue}>{member.phone || "—"}</span>
+                          <span className={styles.contactSub}>{member.email || ""}</span>
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        <Tag type={member.memberType === "Visitor" ? "purple" : "cool-gray"} size="sm">
+                          {member.memberType}
+                        </Tag>
+                      </TableCell>
+                      <TableCell>
+                        <OverflowMenu flipped size="sm">
+                          <OverflowMenuItem
+                            itemText="View Profile"
+                            onClick={() => navigate(`/members/${member.id}/profile`)}
+                          />
+                          <OverflowMenuItem
+                            itemText="Edit Details"
+                            onClick={() => handleEdit(member)}
+                          />
+                          <OverflowMenuItem
+                            itemText="Delete Member"
+                            hasDivider
+                            isDelete
+                            onClick={() => handleDelete(member)}
+                            disabled={deletingId === member.id}
+                          />
+                        </OverflowMenu>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        )}
+      </DataTable>
 
-                <div className={styles.cardBody}>
-                  <div className={styles.infoRow}>
-                    <span className={styles.infoLabel}>Phone</span>
-                    <span className={styles.infoValue}>{m.phone || "—"}</span>
-                  </div>
-                  <div className={styles.infoRow}>
-                    <span className={styles.infoLabel}>Email</span>
-                    <span className={styles.infoValue}>{m.email || "—"}</span>
-                  </div>
-                  <div className={styles.infoRow}>
-                    <span className={styles.infoLabel}>Baptism Status</span>
-                    <span
-                      className={`${styles.badge} ${BAPTISM_STYLE[m.baptismStatus]}`}
-                    >
-                      {m.baptismStatus}
-                    </span>
-                  </div>
-                </div>
-
-                <div className={styles.cardFooter}>
-                  <Button
-                    // className={styles.btnAction}
-                    onClick={() => navigate(`/members/${m.id}/profile`)}
-                    kind="secondary"
-                  >
-                    Profile
-                  </Button>
-                  <Button
-                    // className={styles.btnAction}
-                    onClick={() => handleEdit(m)}
-                    kind="secondary"
-                  >
-                    Edit
-                  </Button>
-                  <Button
-                    // className={`${styles.btnAction} ${styles.btnDanger}`}
-                    onClick={() => handleDelete(m)}
-                    kind="secondary"
-                    disabled={deletingId === m.id}
-                  >
-                    {deletingId === m.id ? "Delete" : "Delete"}
-                  </Button>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      )}
-
-      {/* Add/Edit Modal */}
       <MemberModal
         visible={modalVisible}
         onClose={() => setModalVisible(false)}

@@ -1,6 +1,17 @@
 import { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import {
+  ClickableTile,
+  Column,
+  Grid,
+  Loading,
+  ProgressBar,
+  Stack,
+  Tile,
+} from "@carbon/react";
+import { ArrowRight, UserMultiple, Events, Calendar, Chat, Trophy } from "@carbon/icons-react";
 import type { DashboardStats, Member, Program, MemberProfile, PrayerRequest } from "../../types/church.types";
+
 import { getMembers } from "../../services/memberServices";
 import { getPrograms } from "../../services/programServices";
 import { getAllProfiles } from "../../services/profileServices";
@@ -114,174 +125,206 @@ export const Dashboard = () => {
 
   if (isLoading) {
     return (
-      <div className={styles.page}>
-        <p className={styles.empty}>Loading Dashboard...</p>
+      <div className={styles.loadingWrapper}>
+        <Loading withOverlay title="Loading Dashboard..." />
       </div>
     );
   }
+
   if (isError) {
     return (
       <div className={styles.page}>
-        <p className={styles.error}>{isError}</p>
+        <Grid>
+          <Column lg={16} md={8} sm={4}>
+            <Tile className={styles.errorTile}>
+              <p className={styles.errorText}>{isError}</p>
+            </Tile>
+          </Column>
+        </Grid>
       </div>
     );
   }
+
   if (!stats) return null;
 
   return (
     <div className={styles.page}>
-      {/* Top Banner*/}
-      <div className={styles.heroBanner}>
-        <div className={styles.heroContent}>
-          <h1 className={styles.heroGreeting}>{getGreeting()}</h1>
-          <p className={styles.heroSub}> Kabulengwa English SDA Church Kampala !!!</p>
-        </div>
-        <div className={styles.heroDeco}></div>
-      </div>
-
-      {/* these are the Stat Cards  */}
-      <div className={styles.statsGrid}>
-        <div className={`${styles.statCard} ${styles.accent}`}>
-          <span className={styles.statLabel}>Total members</span>
-          <span className={styles.statValue}>{stats.totalMembers}</span>
-          <span className={styles.statSub}>Active in registry</span>
-        </div>
-        <div className={styles.statCard}>
-          <span className={styles.statLabel}>Recent Visitors</span>
-          <span className={styles.statValue}>{stats.visitorsCount}</span>
-          <span className={styles.statSub}>Logged in directory</span>
-        </div>
-        <div className={styles.statCard}>
-          <span className={styles.statLabel}>Baptized</span>
-          <span className={styles.statValue}>{stats.baptizedCount}</span>
-          <span className={styles.statSub}>{baptizedPct}% of members</span>
-        </div>
-        <div className={styles.statCard}>
-          <span className={styles.statLabel}>Upcoming Programs</span>
-          <span className={styles.statValue}>{stats.upcomingPrograms}</span>
-          <span className={styles.statSub}>Programs scheduled</span>
-        </div>
-      </div>
-
-      {/* these are the  Programs and  Departments */}
-      <div className={styles.twoCol}>
-        {/* these are the Recent Programs */}
-        <div className={styles.card}>
-          <div className={styles.cardHead}>
-            <h3>Recent programs</h3>
-            <span>Last {stats.recentPrograms.length}</span>
+      <Grid fullWidth>
+        {/* Top Banner */}
+        <Column lg={16} md={8} sm={4} className={styles.heroColumn}>
+          <div className={styles.heroBanner}>
+            <div className={styles.heroContent}>
+              <h1 className={styles.heroGreeting}>{getGreeting()}</h1>
+              <p className={styles.heroSub}>Kabulengwa English SDA Church Kampala !!!</p>
+            </div>
           </div>
-          <div className={styles.cardBody}>
-            {stats.recentPrograms.map((p) => (
-              <div key={p.id} className={styles.programItem}>
-                <span className={`${styles.dot} ${p.status === "Upcoming" ? styles.dotBlue : styles.dotGreen}`} />
-                <div className={styles.programInfo}>
-                  <span className={styles.programTitle}>{p.title}</span>
-                  <span className={styles.programMeta}>{p.speaker} · {p.date}</span>
+        </Column>
+
+        {/* Statistic Cards */}
+        <Column lg={4} md={4} sm={4}>
+          <Tile className={`${styles.statTile} ${styles.accentTile}`}>
+            <span className={styles.statLabel}>Total members</span>
+            <div className={styles.statLine}>
+              <span className={styles.statValue}>{stats.totalMembers}</span>
+              <UserMultiple className={styles.statIcon} />
+            </div>
+            <span className={styles.statSub}>Active in registry</span>
+          </Tile>
+        </Column>
+        <Column lg={4} md={4} sm={4}>
+          <Tile className={styles.statTile}>
+            <span className={styles.statLabel}>Recent Visitors</span>
+            <div className={styles.statLine}>
+              <span className={styles.statValue}>{stats.visitorsCount}</span>
+              <Events className={styles.statIcon} />
+            </div>
+            <span className={styles.statSub}>Logged in directory</span>
+          </Tile>
+        </Column>
+        <Column lg={4} md={4} sm={4}>
+          <Tile className={styles.statTile}>
+            <span className={styles.statLabel}>Baptized</span>
+            <div className={styles.statLine}>
+              <span className={styles.statValue}>{stats.baptizedCount}</span>
+              <Trophy className={styles.statIcon} />
+            </div>
+            <span className={styles.statSub}>{baptizedPct}% of members</span>
+          </Tile>
+        </Column>
+        <Column lg={4} md={4} sm={4}>
+          <Tile className={styles.statTile}>
+            <span className={styles.statLabel}>Upcoming Programs</span>
+            <div className={styles.statLine}>
+              <span className={styles.statValue}>{stats.upcomingPrograms}</span>
+              <Calendar className={styles.statIcon} />
+            </div>
+            <span className={styles.statSub}>Scheduled this month</span>
+          </Tile>
+        </Column>
+
+        {/* Recent Programs & Department Breakdown */}
+        <Column lg={8} md={8} sm={4}>
+          <Tile className={styles.listCard}>
+            <div className={styles.cardHead}>
+              <h3>Recent Programs</h3>
+              <span>Latest Activity</span>
+            </div>
+            <div className={styles.cardBody}>
+              {stats.recentPrograms.map((p) => (
+                <div key={p.id} className={styles.listItem}>
+                  <div className={`${styles.dot} ${p.status === "Upcoming" ? styles.dotBlue : styles.dotGreen}`} />
+                  <div className={styles.listInfo}>
+                    <span className={styles.listTitle}>{p.title}</span>
+                    <span className={styles.listMeta}>{p.speaker} · {p.date}</span>
+                  </div>
+                  <span className={`${styles.badge} ${p.status === "Upcoming" ? styles.upcoming : styles.completed}`}>
+                    {p.status}
+                  </span>
                 </div>
-                <span className={`${styles.badge} ${p.status === "Upcoming" ? styles.upcoming : styles.completed}`}>
-                  {p.status}
-                </span>
-              </div>
-            ))}
-          </div>
-        </div>
+              ))}
+            </div>
+          </Tile>
+        </Column>
 
-        {/* the Department Breakdown */}
-        <div className={styles.card}>
-          <div className={styles.cardHead}>
-            <h3>Members by department</h3>
-            <span>{stats.totalMembers} total</span>
-          </div>
-          <div className={styles.cardBody}>
-            {stats.departmentBreakdown.map(({ department, count }) => (
-              <div key={department} className={styles.deptItem}>
-                <span className={styles.deptName}>{department}</span>
-                <div className={styles.deptBarWrap}>
-                  <div className={styles.deptBar} style={{ width: `${(count / maxDeptCount) * 100}%` }} />
-                </div>
-                <span className={styles.deptCount}>{count}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
+        <Column lg={8} md={8} sm={4}>
+          <Tile className={styles.listCard}>
+            <div className={styles.cardHead}>
+              <h3>Members by Department</h3>
+              <span>{stats.totalMembers} total</span>
+            </div>
+            <div className={styles.cardBody}>
+              <Stack gap={6} className={styles.deptStack}>
+                {stats.departmentBreakdown.map(({ department, count }) => (
+                  <div key={department} className={styles.deptItem}>
+                    <ProgressBar
+                      label={department}
+                      helperText={`${count} members`}
+                      value={(count / maxDeptCount) * 100}
+                      status="active"
+                      className={styles.deptBar}
+                    />
+                  </div>
+                ))}
+              </Stack>
+            </div>
+          </Tile>
+        </Column>
 
-      {/* here are the Celebrations & Prayers */}
-      <div className={styles.twoCol}>
-        {/* here are  the Celebrations Widget */}
-        <div className={styles.card}>
-          <div className={styles.cardHead}>
-            <h3>This Month's Birthdays</h3>
-            <span>{stats.upcomingBirthdays.length} found</span>
-          </div>
-          <div className={styles.cardBody}>
-            {stats.upcomingBirthdays.length === 0 ? (
-              <p className={styles.emptyText}>No birthdays this month.</p>
-            ) : (
-              stats.upcomingBirthdays.map(({ profile, memberName }) => (
-                <div key={profile.id} className={styles.birthdayItem}>
-                  <div className={styles.birthdayIcon}>🎉</div>
-                  <div className={styles.birthdayInfo}>
-                    <span className={styles.birthdayName}>{memberName}</span>
-                    <span className={styles.birthdayDate}>
-                      {new Date(profile.dateOfBirth!).toLocaleDateString("en-US", { month: "short", day: "numeric" })}
-                    </span>
+        {/* Birthdays & Prayer Requests */}
+        <Column lg={8} md={8} sm={4}>
+          <Tile className={styles.listCard}>
+            <div className={styles.cardHead}>
+              <h3>This Month's Birthdays</h3>
+              <span>{stats.upcomingBirthdays.length} found</span>
+            </div>
+            <div className={styles.cardBody}>
+              {stats.upcomingBirthdays.length === 0 ? (
+                <p className={styles.emptyText}>No birthdays this month.</p>
+              ) : (
+                stats.upcomingBirthdays.map(({ profile, memberName }) => (
+                  <div key={profile.id} className={styles.listItem}>
+                    <div className={styles.avatarMini}>🎉</div>
+                    <div className={styles.listInfo}>
+                      <span className={styles.listTitle}>{memberName}</span>
+                      <span className={styles.listMeta}>
+                        {new Date(profile.dateOfBirth!).toLocaleDateString("en-US", { month: "short", day: "numeric" })}
+                      </span>
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
+          </Tile>
+        </Column>
+
+        <Column lg={8} md={8} sm={4}>
+          <Tile className={styles.listCard}>
+            <div className={styles.cardHead}>
+              <h3>Recent Prayer Requests</h3>
+              <Link to="/prayer" className={styles.viewAllBtn}>View all</Link>
+            </div>
+            <div className={styles.cardBody}>
+              {stats.recentPrayers.length === 0 ? (
+                <p className={styles.emptyText}>No pending requests.</p>
+              ) : (
+                stats.recentPrayers.map((p) => (
+                  <div key={p.id} className={styles.prayerListItem}>
+                    <div className={styles.prayerHeader}>
+                      <span className={styles.listTitle}>{p.name}</span>
+                      <span className={styles.listMeta}>
+                        {new Date(p.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric" })}
+                      </span>
+                    </div>
+                    <p className={styles.prayerExcerpt}>{p.request.substring(0, 60)}{p.request.length > 60 ? "..." : ""}</p>
+                  </div>
+                ))
+              )}
+            </div>
+          </Tile>
+        </Column>
+
+        {/* Action Links */}
+        <Column lg={16} md={8} sm={4}>
+          <div className={styles.actionGrid}>
+            {[
+              { label: "Manage Members", to: "/members", desc: "View and edit member details", icon: <UserMultiple /> },
+              { label: "Schedule Program", to: "/programs", desc: "Plan church events", icon: <Calendar /> },
+              { label: "Track Attendance", to: "/attendance", desc: "Mark member presence", icon: <Trophy /> },
+              { label: "View Prayers", to: "/prayer", desc: "Review prayer requests", icon: <Chat /> },
+            ].map(({ label, to, desc, icon }) => (
+              <ClickableTile key={label} href={to} className={styles.actionTile} renderIcon={ArrowRight}>
+                <div className={styles.actionContent}>
+                  <div className={styles.actionIcon}>{icon}</div>
+                  <div className={styles.actionText}>
+                    <span className={styles.actionLabel}>{label}</span>
+                    <p className={styles.actionDesc}>{desc}</p>
                   </div>
                 </div>
-              ))
-            )}
+              </ClickableTile>
+            ))}
           </div>
-        </div>
-
-        {/* here is the Recent Prayers Widget */}
-        <div className={styles.card}>
-          <div className={styles.cardHead}>
-            <h3>Recent Prayer Requests</h3>
-            <Link to="/prayer" className={styles.viewAllBtn}>View all</Link>
-          </div>
-          <div className={styles.cardBody}>
-            {stats.recentPrayers.length === 0 ? (
-              <p className={styles.emptyText}>No pending prayer requests.</p>
-            ) : (
-              stats.recentPrayers.map((p) => (
-                <div key={p.id} className={styles.prayerItem}>
-                  <div className={styles.prayerHeader}>
-                    <span className={styles.prayerName}>{p.name}</span>
-                    <span className={styles.prayerDate}>
-                      {new Date(p.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric" })}
-                    </span>
-                  </div>
-                  <p className={styles.prayerText}>{p.request.substring(0, 60)}{p.request.length > 60 ? "..." : ""}</p>
-                </div>
-              ))
-            )}
-          </div>
-        </div>
-      </div>
-
-      {/* here are the  Action Links  */}
-      <div className={styles.actionCards}>
-        {[
-          { label: "Manage Members", to: "/members", color: "#d8f3dc", stroke: "#2d6a4f" },
-          { label: "Schedule Program", to: "/programs", color: "#dbeafe", stroke: "#1e40af" },
-          { label: "Track Attendance", to: "/attendance", color: "#fef9ee", stroke: "#b5883a" },
-          { label: "View Prayers", to: "/prayer", color: "#fdf0ef", stroke: "#c0392b" },
-        ].map(({ label, to, color, stroke }) => (
-          <Link key={label} to={to} className={styles.actionCard}>
-            <div className={styles.quickIcon} style={{ background: color }}>
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={stroke} strokeWidth="2" strokeLinecap="round">
-                <circle cx="12" cy="12" r="8" />
-                <path d="M12 8v8M8 12h8" />
-              </svg>
-            </div>
-            <div className={styles.actionInfo}>
-              <span className={styles.quickLabel}>{label}</span>
-            </div>
-            <span className={styles.actionArrow}>→</span>
-          </Link>
-        ))}
-      </div>
+        </Column>
+      </Grid>
     </div>
   );
 };
