@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@carbon/charts-react": "^1.27.3",
     "@carbon/react": "^1.104.1",
     "@carbon/styles": "^1.103.0",
     "axios": "^1.13.6",

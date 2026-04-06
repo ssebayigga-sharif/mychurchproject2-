@@ -2,13 +2,13 @@ export type BaptismStatus = "Baptized" | "Not baptized" | "In preparation";
 
 export type UserRole = "Admin" | "Leader" | "Member";
 
-export type LeaderPosition = 
-  | "Elder" 
-  | "Deacon" 
-  | "Deaconess" 
-  | "Department Head" 
-  | "Pastor" 
-  | "Clerk" 
+export type LeaderPosition =
+  | "Elder"
+  | "Deacon"
+  | "Deaconess"
+  | "Department Head"
+  | "Pastor"
+  | "Clerk"
   | "Treasurer";
 
 //when creating member
@@ -82,7 +82,6 @@ export type AttendanceRecord = {
   markedAt: string;
 };
 
-
 //dashboard stats types
 
 export type DashboardStats = {
@@ -92,10 +91,16 @@ export type DashboardStats = {
   visitorsCount: number;
   totalPrograms: number;
   upcomingPrograms: number;
+  completedPrograms: number;
   recentPrograms: Program[];
   departmentBreakdown: { department: string; count: number }[];
   recentPrayers: PrayerRequest[];
   upcomingBirthdays: { profile: MemberProfile; memberName: string }[];
+  totalPrayers: number;
+  answeredPrayers: number;
+  pendingPrayers: number;
+  totalAttendance: number;
+  averageAttendance: number;
 };
 
 //member profile information
@@ -178,8 +183,13 @@ export type PrayerRequest = CreatePrayerRequestInput & {
   id: string;
 };
 
-
-export type AnnouncementCategory = "General" | "Event" | "Finance" | "Youth" | "Health" | "Urgent";
+export type AnnouncementCategory =
+  | "General"
+  | "Event"
+  | "Finance"
+  | "Youth"
+  | "Health"
+  | "Urgent";
 
 export type AnnouncementPriority = "Low" | "Normal" | "High";
 
@@ -196,11 +206,11 @@ export type CreateAnnouncementInput = {
   createdAt: string;
   status: AnnouncementStatus;
   readBy: string[];
-}
+};
 
 export type Announcement = CreateAnnouncementInput & {
   id: string;
-}
+};
 
 export type BroadcastChannel = "Email" | "SMS" | "Both";
 
@@ -215,12 +225,11 @@ export type CreateBroadcastInput = {
   sentBy: string;
   recipientCount: number;
   status: BroadcastStatus;
-
-}
+};
 
 export type Broadcast = CreateBroadcastInput & {
   id: string;
-}
+};
 
 //internal messsages
 
@@ -231,7 +240,7 @@ export type MessageThread = {
   createdAt: string;
   lastMessageAt: string;
   unreadCount: number;
-}
+};
 
 export type InternalMessage = {
   id: string;
@@ -240,8 +249,7 @@ export type InternalMessage = {
   body: string;
   sentAt: string;
   readBy: string[];
-
-}
+};
 
 export type CreateMessageInput = {
   threadId: string;
