@@ -12,7 +12,7 @@ const Footer = () => {
         <Column lg={4} md={4} sm={4} className={styles.footerCol}>
           <div className={styles.brandSection}>
             <div className={styles.brandRow}>
-              <div className={styles.brandIcon}>K</div>
+              <div className={styles.brandIcon}>SDA</div>
               <div>
                 <h4 className={styles.brandName}>
                   Kabulengwa English SDA Church
@@ -57,7 +57,7 @@ const Footer = () => {
           </nav>
         </Column>
 
-        <Column lg={4} md={8} sm={4} className={styles.footerCol}>
+        {/* <Column lg={4} md={8} sm={4} className={styles.footerCol}>
           <h5 className={styles.colHeading}>Service Times</h5>
           <div className={styles.serviceList}>
             <div className={styles.service}>
@@ -77,7 +77,7 @@ const Footer = () => {
               <span className={styles.time}>Kampala, Uganda</span>
             </div>
           </div>
-        </Column>
+        </Column> */}
       </Grid>
 
       <div className={styles.footerBottom}>

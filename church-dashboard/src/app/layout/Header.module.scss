@@ -4,8 +4,8 @@
 :global {
   .cds--header {
     background: linear-gradient(90deg, var(--cds-layer-01) 0%, var(--cds-layer-02) 100%) !important;
-    border-bottom: 1px solid rgba(26, 92, 184, 0.1) !important;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06) !important;
+    border-bottom: 2px solid rgba(26, 92, 184, 0.2) !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12) !important;
     height: auto !important;
     padding: 8px 12px !important;
 
@@ -59,7 +59,44 @@
 .headerRight {
   display: flex;
   align-items: center;
+  justify-content: flex-end;
   gap: var(--cds-spacing-03);
+}
+
+.navLinks {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  flex-direction: row-reverse;
+  margin-right: 16px;
+}
+
+.navLink {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid transparent;
+  color: var(--cds-text-primary);
+  font-size: 0.95rem;
+  font-weight: 600;
+  padding: 0.55rem 0.95rem;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+}
+
+.navLink:hover,
+.navLink:focus-visible {
+  background: rgba(26, 92, 184, 0.14);
+  color: var(--cds-interactive-01);
+  outline: none;
+  border-color: rgba(26, 92, 184, 0.25);
+}
+
+.activeNavLink {
+  background: var(--cds-interactive-01);
+  color: var(--cds-text-inverse);
+  border-color: transparent;
+  box-shadow: 0 8px 24px rgba(26, 92, 184, 0.14);
 }
 
 .signInBtn {

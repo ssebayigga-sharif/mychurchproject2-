@@ -4,8 +4,29 @@ $breakpoint: 768px;
 
 .layout {
   display: flex;
+  flex-direction: column;
   min-height: 100vh;
-  gap: 0;
+  width: 100%;
+
+  @media (max-width: #{$breakpoint - 1px}) {
+    min-height: 100vh;
+  }
+}
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  width: 100%;
+  flex-shrink: 0;
+}
+
+.body {
+  display: flex;
+  align-items: flex-start;
+  gap: 25px;
+  width: 100%;
+  margin-top: 25px;
 }
 
 .main {
@@ -14,13 +35,6 @@ $breakpoint: 768px;
   flex-direction: column;
   min-width: 0;
   width: 100%;
-}
-
-.header {
-  position: sticky;
-  top: 0;
-  z-index: 50;
-  flex-shrink: 0;
 }
 
 .content {

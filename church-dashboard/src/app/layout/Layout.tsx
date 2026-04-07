@@ -10,8 +10,6 @@ const Layout = () => {
 
   return (
     <div className={styles.layout}>
-      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
-
       {/* Overlay — closes sidebar when tapping outside on mobile */}
       {sidebarOpen && (
         <div
@@ -21,14 +19,19 @@ const Layout = () => {
         />
       )}
 
-      <div className={styles.main}>
-        <div className={styles.header}>
-          <Header onMenuClick={() => setSidebarOpen((prev) => !prev)} />
-        </div>
-        <div className={styles.content}>
-          <Outlet />
-        </div>
-        <Footer />
+      <div className={styles.header}>
+        <Header onMenuClick={() => setSidebarOpen((prev) => !prev)} />
+      </div>
+
+      <div className={styles.body}>
+        <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+
+        <main className={styles.main}>
+          <div className={styles.content}>
+            <Outlet />
+          </div>
+          <Footer />
+        </main>
       </div>
     </div>
   );

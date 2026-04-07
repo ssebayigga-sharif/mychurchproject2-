@@ -7,6 +7,7 @@ import {
   Checkmark,
   Chat,
   Trophy,
+  Settings as SettingsIcon,
 } from "@carbon/icons-react";
 
 export type NavItem = {
@@ -14,6 +15,10 @@ export type NavItem = {
   label: string;
   icon: React.ReactNode;
   allowedRoles?: UserRole[];
+  children?: {
+    to: string;
+    label: string;
+  }[];
 };
 
 export const NAV_ITEMS: NavItem[] = [
@@ -53,6 +58,11 @@ export const NAV_ITEMS: NavItem[] = [
     label: "Leaders",
     allowedRoles: ["Admin", "Leader"],
     icon: <Trophy size={20} />,
+  },
+  {
+    to: "/settings",
+    label: "Settings",
+    icon: <SettingsIcon size={20} />,
   },
 ];
 

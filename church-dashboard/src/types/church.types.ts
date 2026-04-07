@@ -271,3 +271,29 @@ export type Leader = {
 };
 
 export type CreateLeaderInput = Omit<Leader, "id">;
+
+export type User = {
+  id: string;
+  email: string;
+  name: string;
+  role: UserRole;
+  phone?: string;
+  address?: string;
+};
+
+export type userProfileUpdates = Pick<User, "name" | "phone" | "address">;
+
+export type authStatus =
+  | { status: "idle" }
+  | { status: "loading" }
+  | { status: "authenticated"; user: User }
+  | { status: "unauthenticated" };
+
+export type authError = {
+  code:
+    | "Invalid-Credentials"
+    | "network-error"
+    | "session-corrupted"
+    | "unknown";
+  message: string;
+};
