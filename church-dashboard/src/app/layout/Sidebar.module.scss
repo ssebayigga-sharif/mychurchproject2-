@@ -1,152 +1,166 @@
-$primary:       #2d6a4f;
-$primary-light: #d8f3dc;
-$primary-dark:  #1b4332;
-$sidebar-width: 240px;
-$header-height: 56px;
-$breakpoint:    768px;
-$transition:    250ms ease;
+@use "../../styles/variables" as *;
 
-.sidebar {
-  width: $sidebar-width;
-  background: $primary-dark;
-  display: flex;
-  flex-direction: column;
-  padding: 0;
+// Override Carbon SideNav with professional styling
+:global {
+  .cds--side-nav {
+    background: linear-gradient(180deg, var(--cds-layer-02) 0%, var(--cds-layer-01) 100%) !important;
+    border-right: 1px solid rgba(26, 92, 184, 0.1) !important;
+    padding: 0 !important;
 
-  // ── Desktop: fixed left column ──────────────────────────────────────────
-  @media (min-width: $breakpoint) {
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 100vh;
-    z-index: 100;
+    @media (min-width: 672px) {
+      width: 260px !important;
+    }
   }
 
-  // ── Mobile: off-screen by default, slides in when .open ─────────────────
-  @media (max-width: #{$breakpoint - 1px}) {
+  .cds--side-nav__item-text {
+    color: var(--cds-text-primary) !important;
+    font-weight: 500 !important;
+  }
+
+  .cds--side-nav__link {
+    color: var(--cds-text-secondary) !important;
+    border-left: 3px solid transparent !important;
+    transition: all 0.3s ease !important;
+
+    &:hover {
+      background: rgba(26, 92, 184, 0.08) !important;
+      color: var(--cds-interactive-01) !important;
+      border-left-color: var(--cds-interactive-01) !important;
+    }
+
+    &.cds--side-nav__link--current {
+      background: rgba(26, 92, 184, 0.12) !important;
+      color: var(--cds-interactive-01) !important;
+      border-left-color: var(--cds-interactive-01) !important;
+      font-weight: 600 !important;
+    }
+  }
+
+  .cds--side-nav__icon {
+    fill: currentColor !important;
+  }
+}
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background: linear-gradient(180deg, var(--cds-layer-02) 0%, var(--cds-layer-01) 100%);
+  border-right: 1px solid rgba(26, 92, 184, 0.1);
+  padding: 0;
+  position: sticky;
+  top: 0;
+  overflow-y: auto;
+  width: 260px;
+  flex-shrink: 0;
+
+  @media (max-width: 671px) {
     position: fixed;
     top: 0;
     left: 0;
+    width: 100%;
+    max-width: 260px;
     height: 100vh;
-    width: 50vw;
-    min-width: 220px;
-    max-width: 340px;
-    z-index: 100;
+    z-index: 99;
     transform: translateX(-100%);
-    transition: transform $transition, box-shadow $transition;
+    transition: transform 0.3s cubic-bezier(0.2, 0, 0, 1);
 
     &.open {
       transform: translateX(0);
-      box-shadow: 8px 0 32px rgba(0, 0, 0, 0.5);
+      box-shadow: 4px 0 16px rgba(0, 0, 0, 0.2);
     }
   }
 }
 
-// ─── Brand ────────────────────────────────────────────────────────────────────
-
 .brand {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 18px 16px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  gap: var(--cds-spacing-04);
+  padding: var(--cds-spacing-05) var(--cds-spacing-05);
+  border-bottom: 1px solid rgba(26, 92, 184, 0.1);
+  background: linear-gradient(90deg, rgba(26, 92, 184, 0.04) 0%, transparent 100%);
 }
 
 .brandIcon {
-  width: 34px;
-  height: 34px;
-  border-radius: 8px;
-  background: $primary-light;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--cds-spacing-02);
+  background: linear-gradient(135deg, var(--cds-interactive-01) 0%, var(--cds-interactive-02) 100%);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 15px;
+  font-size: 18px;
   font-weight: 700;
-  color: $primary-dark;
+  color: var(--cds-text-inverse);
+  box-shadow: 0 4px 12px rgba(0, 67, 206, 0.15);
   flex-shrink: 0;
 }
 
-.brandName {
-  font-size: 13px;
-  font-weight: 700;
-  color: #ffffff;
-  line-height: 1.2;
-}
-
-.brandSub {
-  font-size: 10px;
-  color: rgba(255, 255, 255, 0.45);
-  margin-top: 1px;
-}
-
-// ─── Nav ──────────────────────────────────────────────────────────────────────
-
-.nav {
-  flex: 1;
-  padding: 12px 10px;
+.brandText {
   display: flex;
   flex-direction: column;
   gap: 2px;
 }
 
-.navLabel {
-  font-size: 10px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: rgba(255, 255, 255, 0.3);
-  padding: 0 8px;
-  margin-bottom: 6px;
+.brandName {
+  font-size: var(--cds-body-short-01-font-size);
+  font-weight: 700;
+  color: var(--cds-text-primary);
+  margin: 0;
+  line-height: 1.2;
+}
+
+.brandSub {
+  font-size: var(--cds-label-01-font-size);
+  color: var(--cds-text-secondary);
+  margin: 0;
+  font-weight: 500;
 }
 
 .navLink {
-  display: flex;
+  display: flex !important;
   align-items: center;
-  gap: 10px;
-  padding: 9px 10px;
-  border-left: 3px solid transparent;
-  border-radius: 0 8px 8px 0;
-  font-size: 13px;
-  font-weight: 500;
-  color: rgba(255, 255, 255, 0.65);
-  text-decoration: none;
-  transition: all 200ms ease;
+  gap: var(--cds-spacing-03) !important;
+  padding: var(--cds-spacing-04) var(--cds-spacing-05) !important;
+  color: var(--cds-text-secondary) !important;
+  border-left: 3px solid transparent !important;
+  transition: all 0.3s ease !important;
 
   &:hover {
-    background: rgba(255, 255, 255, 0.05);
-    color: #ffffff;
-  }
-
-  &.active {
-    background: linear-gradient(90deg, rgba(216, 243, 220, 0.12) 0%, transparent 100%);
-    color: #ffffff;
-    border-left-color: $primary-light;
-
-    .navIcon { 
-      opacity: 1; 
-      color: $primary-light; 
-    }
+    background: rgba(26, 92, 184, 0.08) !important;
+    color: var(--cds-interactive-01) !important;
+    border-left-color: var(--cds-interactive-01) !important;
+    padding-left: calc(var(--cds-spacing-05) + var(--cds-spacing-02)) !important;
   }
 }
 
 .navIcon {
+  width: 20px;
+  height: 20px;
   display: flex;
   align-items: center;
-  opacity: 0.7;
+  justify-content: center;
   flex-shrink: 0;
-  transition: color 200ms ease;
-
-  svg { width: 16px; height: 16px; }
 }
 
-// ─── Footer ───────────────────────────────────────────────────────────────────
-
 .sidebarFooter {
-  padding: 14px 16px;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding: var(--cds-spacing-05) var(--cds-spacing-05);
+  border-top: 1px solid rgba(26, 92, 184, 0.1);
+  background: linear-gradient(90deg, rgba(26, 92, 184, 0.02) 0%, transparent 100%);
+  margin-top: auto;
 }
 
 .footerText {
-  font-size: 11px;
-  color: rgba(255, 255, 255, 0.3);
+  font-size: var(--cds-label-01-font-size);
+  color: var(--cds-text-secondary);
+  margin: 0;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.footerVersion {
+  font-size: var(--cds-label-01-font-size);
+  color: var(--cds-text-secondary);
+  margin: var(--cds-spacing-02) 0 0 0;
+  opacity: 0.7;
 }

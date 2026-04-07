@@ -1,10 +1,11 @@
-$sidebar-width: 240px;
+$sidebar-width: 260px;
 $header-height: 56px;
-$breakpoint:    768px;
+$breakpoint: 768px;
 
 .layout {
   display: flex;
   min-height: 100vh;
+  gap: 0;
 }
 
 .main {
@@ -12,17 +13,22 @@ $breakpoint:    768px;
   display: flex;
   flex-direction: column;
   min-width: 0;
+  width: 100%;
+}
 
-  // On desktop, push content right of the sidebar
-  @media (min-width: $breakpoint) {
-    margin-left: $sidebar-width;
-  }
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  flex-shrink: 0;
 }
 
 .content {
   flex: 1;
   padding: 0;
   background: #f8faf9;
+  overflow-y: auto;
+  width: 100%;
 }
 
 // Overlay — only shown on mobile when sidebar is open

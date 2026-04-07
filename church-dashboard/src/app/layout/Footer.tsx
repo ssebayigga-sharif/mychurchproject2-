@@ -1,4 +1,5 @@
-import { NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { Grid, Column } from "@carbon/react";
 import styles from "./Footer.module.scss";
 import { NAV_ITEMS } from "../Navigation";
 
@@ -7,49 +8,85 @@ const Footer = () => {
 
   return (
     <footer className={styles.footer}>
-      <div className={styles.top}>
-        {/* Brand & verse */}
-        <div className={styles.brandCol}>
-          <div className={styles.brandRow}>
-            <div className={styles.brandIcon}>K</div>
-            <div>
-              <p className={styles.brandName}>Kabulengwa English SDA Church</p>
-              <p className={styles.brandSub}>Seventh-day Adventist Church</p>
+      <Grid fullWidth className={styles.footerGrid}>
+        <Column lg={4} md={4} sm={4} className={styles.footerCol}>
+          <div className={styles.brandSection}>
+            <div className={styles.brandRow}>
+              <div className={styles.brandIcon}>K</div>
+              <div>
+                <h4 className={styles.brandName}>
+                  Kabulengwa English SDA Church
+                </h4>
+                <p className={styles.brandSub}>Seventh-day Adventist</p>
+              </div>
+            </div>
+            <p className={styles.verse}>
+              "Be strong and courageous. Do not be afraid; do not be
+              discouraged, for the Lord your God will be with you wherever you
+              go." -Joshua 1:9
+            </p>
+          </div>
+        </Column>
+
+        <Column lg={2} md={4} sm={4} className={styles.footerCol}>
+          <h5 className={styles.colHeading}>Navigation</h5>
+          <nav className={styles.linkGroup}>
+            {NAV_ITEMS.slice(0, 4).map(({ to, label }) => (
+              <Link key={to} to={to} className={styles.footerLink}>
+                {label}
+              </Link>
+            ))}
+          </nav>
+        </Column>
+
+        <Column lg={2} md={4} sm={4} className={styles.footerCol}>
+          <h5 className={styles.colHeading}>Resources</h5>
+          <nav className={styles.linkGroup}>
+            <a href="#" className={styles.footerLink}>
+              About Us
+            </a>
+            <a href="#" className={styles.footerLink}>
+              Contact
+            </a>
+            <a href="#" className={styles.footerLink}>
+              Privacy
+            </a>
+            <a href="#" className={styles.footerLink}>
+              Terms
+            </a>
+          </nav>
+        </Column>
+
+        <Column lg={4} md={8} sm={4} className={styles.footerCol}>
+          <h5 className={styles.colHeading}>Service Times</h5>
+          <div className={styles.serviceList}>
+            <div className={styles.service}>
+              <span className={styles.label}>Sabbath Service</span>
+              <span className={styles.time}>9:00 AM</span>
+            </div>
+            <div className={styles.service}>
+              <span className={styles.label}>Lunch Sabbath</span>
+              <span className={styles.time}>1:30 PM</span>
+            </div>
+            <div className={styles.service}>
+              <span className={styles.label}>Hymn Choices</span>
+              <span className={styles.time}>4:00 PM</span>
+            </div>
+            <div className={styles.service}>
+              <span className={styles.label}>Location</span>
+              <span className={styles.time}>Kampala, Uganda</span>
             </div>
           </div>
-          <p className={styles.verse}>
-            "Be strong and courageous. Do not be afraid; do not be discouraged,
-            for the Lord your God will be with you wherever you go." -Joshua 1:9
-          </p>
-        </div>
+        </Column>
+      </Grid>
 
-        {/* Navigation */}
-        <div className={styles.col}>
-          <h4 className={styles.colHeading}>Navigation</h4>
-          {NAV_ITEMS.map(({ to, label }) => (
-            <NavLink key={to} to={to} className={styles.link}>
-              {label}
-            </NavLink>
-          ))}
-        </div>
-
-        {/* Contact */}
-        <div className={styles.col}>
-          <h4 className={styles.colHeading}>Contact</h4>
-          <p className={styles.info}>Uganda-Kampala-Kabulengwa</p>
-          <p className={styles.info}>Sabbath Service: 9:00 AM</p>
-          <p className={styles.info}>Lunch Sabbath: 1:30 PM</p>
-          <p className={styles.info}>Hymn Choices: 4:00 PM</p>
-        </div>
-      </div>
-
-      <div className={styles.bottom}>
+      <div className={styles.footerBottom}>
         <p className={styles.copyright}>
           © {year} Kabulengwa English SDA Church. All rights reserved.
         </p>
-        <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
-          <span className={styles.sdaBadge}>Seventh-day Adventist Church</span>
-          <span className={styles.sdaBadge}>v1.0.0</span>
+        <div className={styles.footerBadges}>
+          <span className={styles.badge}>Seventh-day Adventist Church</span>
+          <span className={styles.badge}>v1.0.0</span>
         </div>
       </div>
     </footer>

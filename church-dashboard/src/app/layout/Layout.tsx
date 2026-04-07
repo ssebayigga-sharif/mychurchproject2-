@@ -22,7 +22,9 @@ const Layout = () => {
       )}
 
       <div className={styles.main}>
-        <Header onMenuClick={() => setSidebarOpen((prev) => !prev)} />
+        <div className={styles.header}>
+          <Header onMenuClick={() => setSidebarOpen((prev) => !prev)} />
+        </div>
         <div className={styles.content}>
           <Outlet />
         </div>

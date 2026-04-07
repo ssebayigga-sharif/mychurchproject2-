@@ -1,21 +1,27 @@
 import { useState, useEffect } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import {
+  Header,
+  HeaderContainer,
+  HeaderName,
+  HeaderGlobalBar,
+  HeaderGlobalAction,
+  HeaderMenuButton,
+  SkipToContent,
+  Button,
+  Layer,
+} from "@carbon/react";
+import { UserAvatar, Logout, Settings, Add } from "@carbon/icons-react";
 import styles from "./Header.module.scss";
-import { NAV_ITEMS } from "../Navigation";
 import { useAuth } from "../../context/AuthContext";
-
-// component props;
 
 type HeaderProps = {
   onMenuClick: () => void;
 };
 
-
-
-const Header = ({ onMenuClick }: HeaderProps) => {
+const AppHeader = ({}: HeaderProps) => {
   const navigate = useNavigate();
   const { user, logout } = useAuth();
-  const [showQuickAdd, setShowQuickAdd] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
 
   const handleSignOut = () => {
@@ -23,124 +29,117 @@ const Header = ({ onMenuClick }: HeaderProps) => {
     navigate("/login");
   };
 
-  // Close menus when clicking anywhere else
   useEffect(() => {
-    const handleClick = () => {
-      setShowQuickAdd(false);
-      setShowProfile(false);
-    };
+    const handleClick = () => setShowProfile(false);
     document.addEventListener("click", handleClick);
     return () => document.removeEventListener("click", handleClick);
   }, []);
 
-  return (
-    <header className={styles.header}>
-      {/* Hamburger — mobile only */}
-      <button
-        className={styles.menuBtn}
-        onClick={onMenuClick}
-        aria-label="Toggle navigation menu"
-      >
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-          <line x1="3" y1="6" x2="21" y2="6" />
-          <line x1="3" y1="12" x2="21" y2="12" />
-          <line x1="3" y1="18" x2="21" y2="18" />
-        </svg>
-      </button>
-
-      {/* Brand */}
-      <div className={styles.brand}>
-        <div className={styles.brandIcon}>K</div>
-        <span className={styles.brandName}>Kabulengwa English SDA Church</span>
-      </div>
-
-      <div className={styles.divider} />
-
-      {/* Desktop nav — hidden on mobile */}
-      <nav className={styles.nav}>
-        {NAV_ITEMS.map(({ to, label }) => (
-          <NavLink
-            key={to}
-            to={to}
-            end={to === "/"}
-            className={({ isActive }) => `${styles.navLink} ${isActive ? styles.active : ""}`}
-          >
-            {label}
-          </NavLink>
-        ))}
-      </nav>
-
-      {/* Right side Actions */}
-      <div className={styles.right} onClick={(e) => e.stopPropagation()}>
-        
-        {!user ? (
-          <button className={styles.btnQuickAdd} onClick={() => navigate("/login")}>
-            Sign In
-          </button>
-        ) : (
+  if (!user) {
+    return (
+      <HeaderContainer
+        render={({ isSideNavExpanded, onClickSideNavExpand }) => (
           <>
-            {/* Quick Add Menu */}
-            <div className={styles.dropdownContainer}>
-              <button 
-                className={styles.btnQuickAdd} 
-                onClick={() => { setShowQuickAdd(!showQuickAdd); setShowProfile(false); }}
+            <SkipToContent />
+            <Header aria-label="Church Dashboard">
+              <HeaderMenuButton
+                aria-label="Open menu"
+                onClick={onClickSideNavExpand}
+                isActive={isSideNavExpanded}
+              />
+              <HeaderName
+                prefix=""
+                className={styles.headerBrand}
+                onClick={() => navigate("/")}
               >
-                <span>+ Create</span>
-              </button>
-              
-              {showQuickAdd && (
-                <div className={styles.dropdownMenu}>
-                  <button className={styles.dropdownItem} onClick={() => { navigate("/members"); setShowQuickAdd(false); }}>
-                    <span className={styles.icon}>👤</span> Add Member
-                  </button>
-                  <button className={styles.dropdownItem} onClick={() => { navigate("/programs"); setShowQuickAdd(false); }}>
-                    <span className={styles.icon}>📅</span> Schedule Program
-                  </button>
-                  <button className={styles.dropdownItem} onClick={() => { navigate("/prayer"); setShowQuickAdd(false); }}>
-                    <span className={styles.icon}>🙏</span> Log Prayer Request
-                  </button>
-                </div>
-              )}
-            </div>
-
-            {/* Profile Menu */}
-            <div className={styles.dropdownContainer}>
-              <div 
-                className={styles.avatar} 
-                onClick={() => { setShowProfile(!showProfile); setShowQuickAdd(false); }}
-              >
-                KM
-              </div>
-              
-              {showProfile && (
-                <div className={`${styles.dropdownMenu} ${styles.dropdownProfile}`}>
-                  <div className={styles.profileHeader}>
-                    <div className={styles.profileName}>{user?.name || "Kabulengwa Admin"}</div>
-                    <div className={styles.profileEmail}>{user?.email || "admin@kabulengwasda.org"}</div>
-                  </div>
-                  <div className={styles.menuDivider} />
-                  
-                  <button className={styles.dropdownItem} onClick={() => { setShowProfile(false); }}>
-                    <span className={styles.icon}>⚙️</span> Settings
-                  </button>
-                  <button className={styles.dropdownItem} onClick={() => { setShowProfile(false); }}>
-                    <span className={styles.icon}>🌙</span> Dark Mode 
-                    <span className={styles.badgeSoon}>Soon</span>
-                  </button>
-                  
-                  <div className={styles.menuDivider} />
-                  
-                  <button className={`${styles.dropdownItem} ${styles.dangerText}`} onClick={handleSignOut}>
-                    <span className={styles.icon}>🚪</span> Sign Out
-                  </button>
-                </div>
-              )}
-            </div>
+                Kabulengwa English SDA Church
+              </HeaderName>
+              <HeaderGlobalBar className={styles.headerRight}>
+                <Button
+                  kind="ghost"
+                  size="lg"
+                  onClick={() => navigate("/login")}
+                  className={styles.signInBtn}
+                >
+                  Sign In
+                </Button>
+              </HeaderGlobalBar>
+            </Header>
           </>
         )}
-      </div>
-    </header>
+      />
+    );
+  }
+
+  return (
+    <HeaderContainer
+      render={({ isSideNavExpanded, onClickSideNavExpand }) => (
+        <>
+          <SkipToContent />
+          <Header aria-label="Church Dashboard">
+            <HeaderMenuButton
+              aria-label="Open menu"
+              onClick={onClickSideNavExpand}
+              isActive={isSideNavExpanded}
+            />
+            <HeaderName
+              prefix=""
+              className={styles.headerBrand}
+              onClick={() => navigate("/")}
+            >
+              Kabulengwa English SDA Church
+            </HeaderName>
+            <HeaderGlobalBar className={styles.headerRight}>
+              <HeaderGlobalAction
+                aria-label="Quick Add"
+                onClick={() => navigate("/members")}
+              >
+                <Add size={20} />
+              </HeaderGlobalAction>
+              <div className={styles.profileContainer}>
+                <HeaderGlobalAction
+                  aria-label="User Profile"
+                  onClick={() => {
+                    setShowProfile(!showProfile);
+                  }}
+                >
+                  <UserAvatar size={20} />
+                </HeaderGlobalAction>
+                {showProfile && (
+                  <Layer className={styles.profileMenu}>
+                    <div className={styles.profileHeader}>
+                      <div className={styles.profileName}>
+                        {user?.name || "Admin"}
+                      </div>
+                      <div className={styles.profileEmail}>
+                        {user?.email || "admin@example.com"}
+                      </div>
+                    </div>
+                    <div className={styles.menuDivider} />
+                    <button
+                      className={styles.menuItem}
+                      onClick={() => {
+                        setShowProfile(false);
+                      }}
+                    >
+                      <Settings size={16} /> Settings
+                    </button>
+                    <div className={styles.menuDivider} />
+                    <button
+                      className={`${styles.menuItem} ${styles.dangerItem}`}
+                      onClick={handleSignOut}
+                    >
+                      <Logout size={16} /> Sign Out
+                    </button>
+                  </Layer>
+                )}
+              </div>
+            </HeaderGlobalBar>
+          </Header>
+        </>
+      )}
+    />
   );
 };
 
-export default Header;
+export default AppHeader;
