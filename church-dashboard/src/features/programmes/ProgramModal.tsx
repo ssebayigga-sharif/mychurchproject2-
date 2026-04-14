@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
+import { Close } from "@carbon/icons-react";
 import styles from "./ProgramModal.module.scss";
+import { Button } from "@carbon/react";
 import type {
   Program,
   ProgramStatus,
@@ -38,7 +40,6 @@ export const ProgramModal = ({
       setForm(DEFAULT_FORM);
     }
   }, [program, visible]);
-  if (!visible) return null;
 
   const changeProgramHander = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
@@ -58,85 +59,124 @@ export const ProgramModal = ({
   const isEditing = Boolean(program);
 
   return (
-    <div className={styles.modalBackdrop} onClick={onClose}>
-      <div 
-        className={styles.modalCard} 
-        role="dialog" 
-        aria-modal="true"
-        onClick={(e) => e.stopPropagation()}
+    <>
+      {/* Semi-transparent backdrop */}
+      <div
+        className={`${styles.backdrop} ${visible ? styles.open : ""}`}
+        onClick={onClose}
+      />
+
+      {/* Slide-in panel */}
+      <aside
+        className={`${styles.panel} ${visible ? styles.open : ""}`}
+        aria-label={isEditing ? "Edit Program" : "Schedule New Program"}
       >
+        {/* Panel header */}
         <div className={styles.header}>
-          <h3>{isEditing ? "Edit Program" : "Schedule New Program"}</h3>
-          <p>{isEditing ? "Update details for this scheduled event." : "Add a new program to the church calendar."}</p>
+          <div>
+            <h2 className={styles.title}>
+              {isEditing ? "Edit Program" : "Schedule New Program"}
+            </h2>
+            <p className={styles.subtitle}>
+              {isEditing
+                ? "Update details for this scheduled event."
+                : "Add a new program to the church calendar."}
+            </p>
+          </div>
+          <button
+            className={styles.closeBtn}
+            onClick={onClose}
+            aria-label="Close panel"
+            type="button"
+          >
+            <Close size={20} />
+          </button>
         </div>
 
-        <form onSubmit={submitProgramHandler} className={styles.form}>
-          <div className={styles.inputGroup}>
-            <label>Program Title</label>
-            <input
-              name="title"
-              placeholder="e.g. Divine Service"
-              value={form.title}
-              onChange={changeProgramHander}
-              required
-            />
-          </div>
-          
-          <div className={styles.inputGroup}>
-            <label>Event Date</label>
-            <input
-              type="date"
-              name="date"
-              value={form.date}
-              onChange={changeProgramHander}
-              required
-            />
-          </div>
-          
-          <div className={styles.inputGroup}>
-            <label>Lead Speaker / Presenter</label>
-            <input
-              name="speaker"
-              placeholder="e.g. Pr. John Doe"
-              value={form.speaker}
-              onChange={changeProgramHander}
-              required
-            />
-          </div>
-          
-          <div className={styles.inputGroup}>
-            <label>Program Theme / Topic</label>
-            <input
-              name="theme"
-              placeholder="e.g. The Second Coming"
-              value={form.theme}
-              onChange={changeProgramHander}
-              required
-            />
-          </div>
+        {/* Scrollable body */}
+        <div className={styles.body}>
+          <form id="program-form" onSubmit={submitProgramHandler} className={styles.form}>
+            <div className={styles.inputGroup}>
+              <label htmlFor="prog-title">Program Title</label>
+              <input
+                id="prog-title"
+                name="title"
+                placeholder="e.g. Divine Service"
+                value={form.title}
+                onChange={changeProgramHander}
+                required
+              />
+            </div>
 
-          <div className={styles.inputGroup}>
-            <label>Event Status</label>
-            <select
-              name="status"
-              value={form.status}
-              onChange={changeProgramHander}
-            >
-              <option value={"Upcoming" satisfies ProgramStatus}>Upcoming</option>
-              <option value={"Completed" satisfies ProgramStatus}>Completed</option>
-            </select>
-          </div>
+            <div className={styles.inputGroup}>
+              <label htmlFor="prog-date">Event Date</label>
+              <input
+                id="prog-date"
+                type="date"
+                name="date"
+                value={form.date}
+                onChange={changeProgramHander}
+                required
+              />
+            </div>
 
-          <div className={styles.modalActions}>
-            <button type="button" className={styles.btnCancel} onClick={onClose}>
-              Cancel
-            </button>
-            <button type="submit" className={styles.btnSave}>
-              {isEditing ? "Save Changes" : "Create Program"}
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
+            <div className={styles.inputGroup}>
+              <label htmlFor="prog-speaker">Lead Speaker / Presenter</label>
+              <input
+                id="prog-speaker"
+                name="speaker"
+                placeholder="e.g. Pr. John Doe"
+                value={form.speaker}
+                onChange={changeProgramHander}
+                required
+              />
+            </div>
+
+            <div className={styles.inputGroup}>
+              <label htmlFor="prog-theme">Program Theme / Topic</label>
+              <input
+                id="prog-theme"
+                name="theme"
+                placeholder="e.g. The Second Coming"
+                value={form.theme}
+                onChange={changeProgramHander}
+                required
+              />
+            </div>
+
+            <div className={styles.inputGroup}>
+              <label htmlFor="prog-status">Event Status</label>
+              <select
+                id="prog-status"
+                name="status"
+                value={form.status}
+                onChange={changeProgramHander}
+              >
+                <option value={"Upcoming" satisfies ProgramStatus}>
+                  Upcoming
+                </option>
+                <option value={"Completed" satisfies ProgramStatus}>
+                  Completed
+                </option>
+              </select>
+            </div>
+          </form>
+        </div>
+
+        {/* Footer with actions */}
+        <div className={styles.footer}>
+          <Button kind="secondary" onClick={onClose}>
+            Cancel
+          </Button>
+          <Button
+            kind="primary"
+            type="submit"
+            form="program-form"
+          >
+            {isEditing ? "Save Changes" : "Create Program"}
+          </Button>
+        </div>
+      </aside>
+    </>
   );
 };

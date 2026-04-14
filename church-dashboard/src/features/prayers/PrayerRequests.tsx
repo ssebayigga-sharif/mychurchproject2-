@@ -10,7 +10,7 @@ import {
   Switch,
   Tile,
 } from "@carbon/react";
-import { Add, Close } from "@carbon/icons-react";
+import { Add } from "@carbon/icons-react";
 import { useCallback, useEffect, useState } from "react";
 import type {
   PrayerRequest,
@@ -192,13 +192,7 @@ export const PrayerRequests = () => {
         </div>
       )}
 
-      {isPanelOpen && (
-        <div
-          className={styles.backdrop}
-          onClick={() => setIsPanelOpen(false)}
-          aria-hidden="true"
-        />
-      )}
+
 
       <Grid fullWidth>
         <Column lg={16} md={8} sm={4}>
@@ -326,31 +320,12 @@ export const PrayerRequests = () => {
         </Column>
       </Grid>
 
-      {/* Drawer — sibling to Grid, not inside it */}
-      <div
-        className={`${styles.drawer} ${isPanelOpen ? styles.drawerOpen : ""}`}
-        role="complementary"
-        aria-label="Submit Prayer Request"
-      >
-        <div className={styles.drawerHeader}>
-          <h3 className={styles.drawerTitle}>New Prayer Request</h3>
-          <Button
-            kind="ghost"
-            renderIcon={Close}
-            iconDescription="Close panel"
-            hasIconOnly
-            onClick={() => setIsPanelOpen(false)}
-          />
-        </div>
-        <div className={styles.drawerBody}>
-          {isPanelOpen && (
-            <PrayerModal
-              onClose={() => setIsPanelOpen(false)}
-              onSave={addHandler}
-            />
-          )}
-        </div>
-      </div>
+      {/* Prayer Request slide-in panel (self-contained) */}
+      <PrayerModal
+        visible={isPanelOpen}
+        onClose={() => setIsPanelOpen(false)}
+        onSave={addHandler}
+      />
     </div>
   );
 };

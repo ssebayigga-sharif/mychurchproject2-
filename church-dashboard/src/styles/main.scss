@@ -1,0 +1,14 @@
+@use "@carbon/react/scss/themes" as *;
+@use "@carbon/react/scss/theme" as theme;
+
+.my-card {
+    background: theme.$background;
+    color: theme.$text-primary;
+    border: 1px solid theme.$border-subtle-01;
+}
+
+@include theme.theme($g100) {
+    .my-card {
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.6);
+    }
+}

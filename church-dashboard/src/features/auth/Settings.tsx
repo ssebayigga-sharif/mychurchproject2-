@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { useAuth } from "../../context/AuthContext";
 import styles from "./Settings.module.scss";
+import { useTheme } from "../../context/ThemeContext";
 
 const Settings = () => {
+  const { isTheme, setIsTheme } = useTheme();
   const { user } = useAuth();
   const [settings, setSettings] = useState({
     notifications: {
@@ -15,7 +17,6 @@ const Settings = () => {
       dataSharing: false,
     },
     appearance: {
-      theme: "light",
       language: "en",
     },
   });
@@ -49,6 +50,7 @@ const Settings = () => {
       },
     }));
   };
+
 
   return (
     <div className={styles.settingsContainer}>
@@ -191,15 +193,15 @@ const Settings = () => {
               </div>
               <select
                 id="theme"
-                value={settings.appearance.theme}
-                onChange={(e) =>
-                  handleAppearanceChange("theme", e.target.value)
-                }
+                value={isTheme === "white" ? "light" : "dark"}
+                onChange={(e) => {
+                  const val = e.target.value;
+                  setIsTheme(val === "light" ? "white" : "g100");
+                }}
                 className={styles.select}
               >
                 <option value="light">Light</option>
                 <option value="dark">Dark</option>
-                <option value="auto">Auto</option>
               </select>
             </div>
 

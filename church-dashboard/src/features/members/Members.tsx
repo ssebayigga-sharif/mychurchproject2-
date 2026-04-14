@@ -1,12 +1,10 @@
 import { useCallback, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import {
   Button,
   ContentSwitcher,
   DataTable,
   Loading,
-  OverflowMenu,
-  OverflowMenuItem,
   Switch,
   Table,
   TableBody,
@@ -15,11 +13,8 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-  TableToolbar,
-  TableToolbarContent,
-  TableToolbarSearch,
-  Tag,
   ToastNotification,
+  Tag,
 } from "@carbon/react";
 import { Add } from "@carbon/icons-react";
 
@@ -60,6 +55,7 @@ const getInitials = (name: string) => {
 
 export const Members = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const [members, setMembers] = useState<Member[]>([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [editingMember, setEditingMember] = useState<Member | undefined>();
@@ -143,6 +139,17 @@ export const Members = () => {
     const isVisitor = m.memberType === "Visitor";
     if (activeTab === 1 && isVisitor) return false; // Members only
     if (activeTab === 2 && !isVisitor) return false; // Visitors only
+    
+    // Search query from URL (the Header search bar)
+    const q = (searchParams.get("q") ?? "").toLowerCase();
+    if (q) {
+      const fullName = `${m.firstName} ${m.lastName}`.toLowerCase();
+      const department = (m.department ?? "").toLowerCase();
+      if (!fullName.includes(q) && !department.includes(q)) {
+        return false;
+      }
+    }
+    
     return true;
   });
 
@@ -213,18 +220,8 @@ export const Members = () => {
           getHeaderProps,
           getRowProps,
           getTableProps,
-          getToolbarProps,
-          onInputChange,
         }) => (
           <TableContainer className={styles.tableContainer}>
-            <TableToolbar {...getToolbarProps()}>
-              <TableToolbarContent>
-                <TableToolbarSearch
-                  placeholder="Search by name or department..."
-                  onChange={onInputChange}
-                />
-              </TableToolbarContent>
-            </TableToolbar>
             <Table {...getTableProps()}>
               <TableHead>
                 <TableRow>
@@ -237,7 +234,9 @@ export const Members = () => {
               </TableHead>
               <TableBody>
                 {rows.map((row) => {
-                  const member = filteredMembers.find((m) => m.id === row.id)!;
+                  const member = filteredMembers.find((m) => m.id === row.id);
+                  if (!member) return null;
+                  
                   const fullName = `${member.firstName} ${member.lastName}`;
                   return (
                     <TableRow {...getRowProps({ row })}>
@@ -276,23 +275,33 @@ export const Members = () => {
                         </Tag>
                       </TableCell>
                       <TableCell>
-                        <OverflowMenu flipped size="sm">
-                          <OverflowMenuItem
-                            itemText="View Profile"
+                        <div className={styles.actionRow}>
+                          <Button 
+                            kind="tertiary" 
+                            size="sm" 
+                            className={styles.viewBtn}
                             onClick={() => navigate(`/members/${member.id}/profile`)}
-                          />
-                          <OverflowMenuItem
-                            itemText="Edit Details"
+                          >
+                            View
+                          </Button>
+                          <Button 
+                            kind="primary" 
+                            size="sm" 
+                            className={styles.editBtn}
                             onClick={() => handleEdit(member)}
-                          />
-                          <OverflowMenuItem
-                            itemText="Delete Member"
-                            hasDivider
-                            isDelete
+                          >
+                            Edit
+                          </Button>
+                          <Button 
+                            kind="danger" 
+                            size="sm" 
+                            className={styles.deleteBtn}
                             onClick={() => handleDelete(member)}
                             disabled={deletingId === member.id}
-                          />
-                        </OverflowMenu>
+                          >
+                            {deletingId === member.id ? "..." : "Delete"}
+                          </Button>
+                        </div>
                       </TableCell>
                     </TableRow>
                   );

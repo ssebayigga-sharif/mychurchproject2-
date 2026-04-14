@@ -1,12 +1,8 @@
 import { useEffect, useState } from "react";
-import {
-  Modal,
-  TextInput,
-  Select,
-  SelectItem,
-  FormGroup,
-  Stack,
-} from "@carbon/react";
+import { Close } from "@carbon/icons-react";
+import { Button } from "@carbon/react";
+import styles from "./MemberModal.module.scss";
+
 import type {
   Member,
   CreateMemberInput,
@@ -74,107 +70,145 @@ export const MemberModal = ({
     setForm((prev) => ({ ...prev, [name]: value }));
   };
 
-  const submitHandler = () => {
+  const submitHandler = (e: React.FormEvent) => {
+    e.preventDefault();
     onSave(form, member?.id);
   };
 
   const isEditing = Boolean(member);
 
   return (
-    <Modal
-      open={visible}
-      modalHeading={isEditing ? "Edit Member" : "Add Member"}
-      primaryButtonText={isEditing ? "Save changes" : "Add member"}
-      secondaryButtonText="Cancel"
-      onRequestClose={onClose}
-      onRequestSubmit={submitHandler}
-      size="md"
-    >
-      <Stack gap={7}>
-        <FormGroup legendText="Personal Information">
-          <div style={{ display: "flex", gap: "1rem" }}>
-            <TextInput
-              id="firstName"
-              name="firstName"
-              labelText="First name"
-              placeholder="e.g. John"
-              value={form.firstName}
-              onChange={changeHandler}
-              required
-            />
-            <TextInput
-              id="lastName"
-              name="lastName"
-              labelText="Last name"
-              placeholder="e.g. Doe"
-              value={form.lastName}
-              onChange={changeHandler}
-              required
-            />
+    <>
+      {/* Semi-transparent backdrop */}
+      <div
+        className={`${styles.backdrop} ${visible ? styles.open : ""}`}
+        onClick={onClose}
+      />
+
+      {/* Slide-in panel */}
+      <aside
+        className={`${styles.panel} ${visible ? styles.open : ""}`}
+        aria-label={isEditing ? "Edit Member" : "Add Member"}
+      >
+        {/* Panel header */}
+        <div className={styles.header}>
+          <div>
+            <h2 className={styles.title}>
+              {isEditing ? "Edit Member" : "Add Member"}
+            </h2>
+            <p className={styles.subtitle}>
+              {isEditing
+                ? "Update details for this church member."
+                : "Register a new member or visitor."}
+            </p>
           </div>
-        </FormGroup>
-
-        <FormGroup legendText="Contact Details">
-          <TextInput
-            id="phone"
-            name="phone"
-            labelText="Phone number"
-            placeholder="e.g. +256..."
-            value={form.phone}
-            onChange={changeHandler}
-            required
-          />
-          <TextInput
-            id="email"
-            name="email"
-            labelText="Email address (optional)"
-            type="email"
-            placeholder="e.g. name@example.com"
-            value={form.email ?? ""}
-            onChange={changeHandler}
-            style={{ marginTop: "1rem" }}
-          />
-        </FormGroup>
-
-        <FormGroup legendText="Church Registry">
-          <div style={{ display: "flex", gap: "1rem", marginBottom: "1rem" }}>
-            <Select
-              id="memberType"
-              name="memberType"
-              labelText="Registry Type"
-              value={form.memberType}
-              onChange={changeHandler}
-            >
-              <SelectItem value="Member" text="Official Member" />
-              <SelectItem value="Visitor" text="Visitor / Guest" />
-            </Select>
-
-            <Select
-              id="department"
-              name="department"
-              labelText="Department"
-              value={form.department}
-              onChange={changeHandler}
-            >
-              {DEPARTMENTS.map((dept) => (
-                <SelectItem key={dept} value={dept} text={dept} />
-              ))}
-            </Select>
-          </div>
-
-          <Select
-            id="baptismStatus"
-            name="baptismStatus"
-            labelText="Baptism Status"
-            value={form.baptismStatus}
-            onChange={changeHandler}
+          <button
+            className={styles.closeBtn}
+            onClick={onClose}
+            aria-label="Close panel"
+            type="button"
           >
-            {BAPTISM_STATUSES.map((status) => (
-              <SelectItem key={status} value={status} text={status} />
-            ))}
-          </Select>
-        </FormGroup>
-      </Stack>
-    </Modal>
+            <Close size={20} />
+          </button>
+        </div>
+
+        {/* Scrollable body */}
+        <div className={styles.body}>
+          <form id="member-form" onSubmit={submitHandler} className={styles.form}>
+            <div className={styles.inputGroup}>
+              <label>Personal Information</label>
+              <div className={styles.row}>
+                <input
+                  name="firstName"
+                  placeholder="First name (e.g. John)"
+                  value={form.firstName}
+                  onChange={changeHandler}
+                  required
+                />
+                <input
+                  name="lastName"
+                  placeholder="Last name (e.g. Doe)"
+                  value={form.lastName}
+                  onChange={changeHandler}
+                  required
+                />
+              </div>
+            </div>
+
+            <div className={styles.inputGroup}>
+              <label>Contact Details</label>
+              <input
+                name="phone"
+                placeholder="Phone number (e.g. +256...)"
+                value={form.phone}
+                onChange={changeHandler}
+                required
+                style={{ marginBottom: "1rem" }}
+              />
+              <input
+                name="email"
+                type="email"
+                placeholder="Email address (optional)"
+                value={form.email ?? ""}
+                onChange={changeHandler}
+              />
+            </div>
+
+            <div className={styles.inputGroup}>
+              <label>Church Registry</label>
+              <div className={styles.row}>
+                <select
+                  name="memberType"
+                  value={form.memberType}
+                  onChange={changeHandler}
+                >
+                  <option value="Member">Official Member</option>
+                  <option value="Visitor">Visitor / Guest</option>
+                </select>
+
+                <select
+                  name="department"
+                  value={form.department}
+                  onChange={changeHandler}
+                >
+                  {DEPARTMENTS.map((dept) => (
+                    <option key={dept} value={dept}>
+                      {dept}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              
+              <select
+                name="baptismStatus"
+                value={form.baptismStatus}
+                onChange={changeHandler}
+                style={{ marginTop: "1rem" }}
+              >
+                {BAPTISM_STATUSES.map((status) => (
+                  <option key={status} value={status}>
+                    {status}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </form>
+        </div>
+
+        {/* Footer with actions */}
+        <div className={styles.footer}>
+          <Button kind="secondary" onClick={onClose}>
+            Cancel
+          </Button>
+          <Button 
+            kind="primary" 
+            type="submit" 
+            form="member-form"
+          >
+            {isEditing ? "Save changes" : "Add member"}
+          </Button>
+        </div>
+      </aside>
+    </>
   );
 };

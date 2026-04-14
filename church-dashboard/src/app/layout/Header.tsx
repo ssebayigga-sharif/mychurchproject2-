@@ -8,7 +8,7 @@ import {
   HeaderGlobalAction,
   HeaderMenuButton,
   Button,
-  Layer,
+  Layer
 } from "@carbon/react";
 import { UserAvatar, Logout, Settings } from "@carbon/icons-react";
 import styles from "./Header.module.scss";
@@ -19,6 +19,7 @@ type HeaderProps = {
 };
 
 const navItems = [
+  { label: "Dashboard", path: "/" },
   { label: "Members", path: "/members" },
   { label: "Programs", path: "/programs" },
   { label: "Prayer Requests", path: "/prayer" },
@@ -93,13 +94,13 @@ const AppHeader = ({ onMenuClick }: HeaderProps) => {
               onClick={onMenuClick}
               isActive={isSideNavExpanded}
             />
-            {/* <HeaderName
+            <HeaderName
               prefix=""
               className={styles.headerBrand}
               onClick={() => navigate("/")}
             >
               Kabulengwa English SDA Church
-            </HeaderName> */}
+            </HeaderName>
             <HeaderGlobalBar className={styles.headerRight}>
               <div className={styles.navLinks}>
                 {navItems.map((item) => (
@@ -116,12 +117,7 @@ const AppHeader = ({ onMenuClick }: HeaderProps) => {
                   </NavLink>
                 ))}
               </div>
-              {/* <HeaderGlobalAction
-                aria-label="Quick Add"
-                onClick={() => navigate("/members")}
-              >
-                <Add size={20} />
-              </HeaderGlobalAction> */}
+
               <div
                 className={styles.profileContainer}
                 onClick={(e) => e.stopPropagation()}

@@ -297,3 +297,12 @@ export type authError = {
     | "unknown";
   message: string;
 };
+
+export type CarbonTheme = "white" | "g10" | "g90" | "g100";
+
+export interface ThemeContextValue {
+  isTheme: CarbonTheme;
+  isDark: boolean;
+  toggleTheme: () => void;
+  setIsTheme: (theme: CarbonTheme) => void;
+}

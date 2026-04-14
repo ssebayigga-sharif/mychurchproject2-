@@ -5,7 +5,7 @@ const BASE_URL = "https://my-church-9abc5-default-rtdb.firebaseio.com/users";
 
 const emailTokey = (email: string) => email.replace(/\./g, ",");
 
-export const getUserByEmail = async (email: string): Promise<User> => {
+export const getUserByEmail = async (email: string): Promise<User | null> => {
   const key = emailTokey(email);
   try {
     const response = await axios.get(`${BASE_URL}/${key}.json`);

@@ -1,23 +1,17 @@
 import { useState } from "react";
+import { Button } from "@carbon/react";
+import { Close } from "@carbon/icons-react";
 import type {
   CreatePrayerRequestInput,
   PrayerCategory,
 } from "../../types/church.types";
+import styles from "./PrayerModal.module.scss";
 
 type PrayerModalProps = {
+  visible: boolean;
   onClose: () => void;
   onSave: (data: CreatePrayerRequestInput) => void;
 };
-import {
-  Button,
-  Checkbox,
-  Dropdown,
-  Form,
-  FormGroup,
-  Stack,
-  TextArea,
-  TextInput,
-} from "@carbon/react";
 
 const CATEGORIES: PrayerCategory[] = [
   "Health",
@@ -27,7 +21,7 @@ const CATEGORIES: PrayerCategory[] = [
   "Bereavement",
   "Thanks Giving",
   "Other",
-] ;
+];
 
 const DEFAULT_FORM = {
   name: "",
@@ -36,9 +30,8 @@ const DEFAULT_FORM = {
   isPrivate: false,
 };
 
-export const PrayerModal = ({ onClose, onSave }: PrayerModalProps) => {
+export const PrayerModal = ({ visible, onClose, onSave }: PrayerModalProps) => {
   const [form, setForm] = useState(DEFAULT_FORM);
-  //if (!visible) return null;
 
   const changeHandler = (
     e: React.ChangeEvent<
@@ -48,15 +41,11 @@ export const PrayerModal = ({ onClose, onSave }: PrayerModalProps) => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
   };
-  //check box handled from here
-  const checkboxHandler = (
-    _e: React.ChangeEvent<HTMLInputElement>,
-    { checked }: { checked: boolean },
-  ) => {
-    setForm((prev) => ({ ...prev, isPrivate: checked }));
+
+  const checkboxHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setForm((prev) => ({ ...prev, isPrivate: e.target.checked }));
   };
 
-  //form submiting is handled from here;
   const saveForm = () => {
     onSave({
       name: form.name,
@@ -75,68 +64,113 @@ export const PrayerModal = ({ onClose, onSave }: PrayerModalProps) => {
     e.preventDefault();
     saveForm();
   };
+
+  const canSubmit = form.name.trim() !== "" && form.request.trim() !== "";
+
   return (
-    <Form onSubmit={formSubmitHandler} style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
-      <Stack gap={6} style={{ flex: 1, paddingBottom: '32px' }}>
-        <TextInput
-          id="name"
-          name="name"
-          labelText="Full Name"
-          value={form.name}
-          onChange={changeHandler}
-          required
-        />
+    <>
+      {/* Semi-transparent backdrop */}
+      <div
+        className={`${styles.backdrop} ${visible ? styles.open : ""}`}
+        onClick={onClose}
+      />
 
-        <Dropdown
-          id="category"
-          titleText="Prayer Request Category"
-          label="Select a category"
-          items={CATEGORIES}
-          itemToString={(item) => item ?? ""}
-          selectedItem={form.category}
-          onChange={({ selectedItem }) =>
-            setForm((prev) => ({
-              ...prev,
-              category: selectedItem ?? "Health",
-            }))
-          }
-        />
+      {/* Slide-in panel */}
+      <aside
+        className={`${styles.panel} ${visible ? styles.open : ""}`}
+        aria-label="New Prayer Request"
+      >
+        {/* Panel header */}
+        <div className={styles.header}>
+          <div>
+            <h2 className={styles.title}>New Prayer Request</h2>
+            <p className={styles.subtitle}>Submit a request for prayer support.</p>
+          </div>
+          <button
+            className={styles.closeBtn}
+            onClick={onClose}
+            aria-label="Close panel"
+            type="button"
+          >
+            <Close size={20} />
+          </button>
+        </div>
 
-        <TextArea
-          id="request"
-          name="request"
-          labelText="Your Prayer Request"
-          value={form.request}
-          onChange={changeHandler}
-          required
-          placeholder="What would you like to be prayed for"
-          maxLength={500}
-          rows={7}
-        />
+        {/* Scrollable body */}
+        <div className={styles.body}>
+          <form id="prayer-form" onSubmit={formSubmitHandler} className={styles.form}>
+            <div className={styles.inputGroup}>
+              <label htmlFor="prayer-name">Full Name</label>
+              <input
+                id="prayer-name"
+                name="name"
+                placeholder="e.g. Jane Doe"
+                value={form.name}
+                onChange={changeHandler}
+                required
+              />
+            </div>
 
-        <FormGroup legendText="Privacy">
-          <Checkbox
-            id="isPrivate"
-            labelText="Keep this request Private to church Leaders"
-            checked={form.isPrivate}
-            onChange={checkboxHandler}
-          />
-        </FormGroup>
-      </Stack>
-      
-      <div style={{ display: 'flex', gap: '1rem', marginTop: 'auto', paddingTop: '1rem', borderTop: '1px solid var(--cds-border-subtle)' }}>
-        <Button kind="secondary" onClick={onClose} style={{ flex: 1 }}>
-          Cancel
-        </Button>
-        <Button
-          kind="primary"
-          type="submit"
-          disabled={!form.name || !form.request}
-          style={{ flex: 1 }}
-        >
-          Submit Request
-        </Button>
-      </div>
-    </Form>
+            <div className={styles.inputGroup}>
+              <label htmlFor="prayer-category">Prayer Request Category</label>
+              <select
+                id="prayer-category"
+                name="category"
+                value={form.category}
+                onChange={changeHandler}
+              >
+                {CATEGORIES.map((cat) => (
+                  <option key={cat} value={cat}>
+                    {cat}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div className={styles.inputGroup}>
+              <label htmlFor="prayer-request">Your Prayer Request</label>
+              <textarea
+                id="prayer-request"
+                name="request"
+                placeholder="What would you like to be prayed for"
+                value={form.request}
+                onChange={changeHandler}
+                required
+                maxLength={500}
+                rows={5}
+              />
+            </div>
+
+            <div className={`${styles.inputGroup} ${styles.checkboxGroup}`}>
+              <input
+                type="checkbox"
+                id="prayer-isPrivate"
+                name="isPrivate"
+                checked={form.isPrivate}
+                onChange={checkboxHandler}
+              />
+              <label htmlFor="prayer-isPrivate">
+                Keep this request Private to church Leaders
+              </label>
+            </div>
+          </form>
+        </div>
+
+        {/* Footer with actions */}
+        <div className={styles.footer}>
+          <Button kind="secondary" onClick={onClose}>
+            Cancel
+          </Button>
+          <Button
+            kind="primary"
+            type="submit"
+            form="prayer-form"
+            disabled={!canSubmit}
+          >
+            Submit Request
+          </Button>
+        </div>
+      </aside>
+    </>
   );
 };
