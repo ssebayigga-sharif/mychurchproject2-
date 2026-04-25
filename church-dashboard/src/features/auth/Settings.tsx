@@ -51,7 +51,6 @@ const Settings = () => {
     }));
   };
 
-
   return (
     <div className={styles.settingsContainer}>
       <div className={styles.settingsHeader}>
