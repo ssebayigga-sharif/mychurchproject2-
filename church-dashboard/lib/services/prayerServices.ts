@@ -3,9 +3,11 @@ import type {
   CreatePrayerRequestInput,
   PrayerRequest,
 } from "../types/church.types";
+import { cachedRequest, invalidateCache } from "./requestCache";
 
 const BASE_URL = "https://my-church-9abc5-default-rtdb.firebaseio.com/prayers";
 const THREE_DAYS_MS = 3 * 24 * 60 * 60 * 1000;
+const CACHE_KEY = "prayers";
 
 const filterPrayers = (data: PrayerRequest[]) => {
   const now = Date.now();
@@ -22,23 +24,27 @@ const filterPrayers = (data: PrayerRequest[]) => {
 };
 
 export const getPrayerRequest = async (): Promise<PrayerRequest[]> => {
-  const res = await axios.get<Record<string, Omit<PrayerRequest, "id">> | null>(`${BASE_URL}.json`);
-  const data = res.data;
-  if (!data) return [];
-  const serverPrayers = Object.entries(data).map(([id, value]) => ({ id, ...value }));
-  return filterPrayers(serverPrayers);
+  return cachedRequest(CACHE_KEY, async () => {
+    const res = await axios.get<Record<string, Omit<PrayerRequest, "id">> | null>(`${BASE_URL}.json`);
+    const data = res.data;
+    if (!data) return [];
+    const serverPrayers = Object.entries(data).map(([id, value]) => ({ id, ...value }));
+    return filterPrayers(serverPrayers);
+  });
 };
 
 export const addPrayerRequest = async (
   prayerInput: CreatePrayerRequestInput,
 ): Promise<void> => {
   await axios.post(`${BASE_URL}.json`, prayerInput);
+  invalidateCache(CACHE_KEY);
 };
 
 export const completePrayerRequest = async (id: string): Promise<void> => {
   const completedAt = new Date().toISOString();
   const update = { status: "Completed" as const, completedAt };
   await axios.patch(`${BASE_URL}/${id}.json`, update);
+  invalidateCache(CACHE_KEY);
 };
 
 export const incrementPrayerCount = async (
@@ -47,9 +53,11 @@ export const incrementPrayerCount = async (
 ): Promise<void> => {
   const update = { prayerCount: currentCount + 1 };
   await axios.patch(`${BASE_URL}/${id}.json`, update);
+  invalidateCache(CACHE_KEY);
 };
 
 export const deletePrayerRequest = async (id: string): Promise<void> => {
   await axios.delete(`${BASE_URL}/${id}.json`);
+  invalidateCache(CACHE_KEY);
 };
 

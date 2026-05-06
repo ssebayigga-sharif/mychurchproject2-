@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useCallback } from "react";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   SideNav,
@@ -79,6 +80,7 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
                 {children.map((child) => (
                   <SideNavMenuItem
                     key={child.to}
+                    as={Link}
                     href={child.to}
                     isActive={isActiveRoute(child.to)}
                     onClick={handleNavClick}
@@ -90,6 +92,7 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
             ) : (
               <SideNavLink
                 key={to}
+                as={Link}
                 href={to}
                 isActive={isActiveRoute(to)}
                 isSideNavExpanded={isOpen} //  Carbon needs this for label visibility
@@ -106,6 +109,7 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
 
           {/*  Profile Ã¢â‚¬â€ no wrapping div, Carbon SideNavItems expects direct children */}
           <SideNavLink
+            as={Link}
             href="/dashboard/profile"
             isActive={isActiveRoute("/dashboard/profile")}
             isSideNavExpanded={isOpen}

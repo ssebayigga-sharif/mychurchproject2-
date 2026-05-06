@@ -1,8 +1,10 @@
 import axios from "axios";
 import type { Announcement, CreateAnnouncementInput } from "../types/church.types";
+import { cachedRequest, invalidateCache } from "./requestCache";
 
 const BASE_URL = "https://my-church-9abc5-default-rtdb.firebaseio.com/announcements";
 const THREE_DAYS_MS = 3 * 24 * 60 * 60 * 1000;
+const CACHE_KEY = "announcements";
 
 const filterAnnouncements = (data: Announcement[]) => {
     const now = new Date();
@@ -22,21 +24,24 @@ const filterAnnouncements = (data: Announcement[]) => {
 };
 
 export const getAnnouncements = async (): Promise<Announcement[]> => {
-    const res = await axios.get<Record<string, Omit<Announcement, "id">> | null>(`${BASE_URL}.json`);
-    const data = res.data;
-    if (!data) return [];
-    
-    const serverItems = Object.entries(data).map(([id, value]) => ({ 
-        id, 
-        ...value,
-        readBy: value.readBy || [] 
-    }));
-    
-    return filterAnnouncements(serverItems);
+    return cachedRequest(CACHE_KEY, async () => {
+        const res = await axios.get<Record<string, Omit<Announcement, "id">> | null>(`${BASE_URL}.json`);
+        const data = res.data;
+        if (!data) return [];
+
+        const serverItems = Object.entries(data).map(([id, value]) => ({
+            id,
+            ...value,
+            readBy: value.readBy || []
+        }));
+
+        return filterAnnouncements(serverItems);
+    });
 }
 
 export const addAnnouncement = async (input: CreateAnnouncementInput): Promise<void> => {
     await axios.post(`${BASE_URL}.json`, input);
+    invalidateCache(CACHE_KEY);
 }
 
 export const markAnnouncementRead = async (id: string, currentReadBy: string[], memberName: string):
@@ -45,13 +50,16 @@ export const markAnnouncementRead = async (id: string, currentReadBy: string[], 
     
     const update = { readBy: [...currentReadBy, memberName] };
     await axios.patch(`${BASE_URL}/${id}.json`, update);
+    invalidateCache(CACHE_KEY);
 }
 
 export const archiveAnnouncement = async (id: string): Promise<void> => {
     const update = { status: "archived" as const };
     await axios.patch(`${BASE_URL}/${id}.json`, update);
+    invalidateCache(CACHE_KEY);
 }
 
 export const deleteAnnouncement = async (id: string): Promise<void> => {
     await axios.delete(`${BASE_URL}/${id}.json`);
-}
+    invalidateCache(CACHE_KEY);
+}

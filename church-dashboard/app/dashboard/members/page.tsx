@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { Suspense, useCallback, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import {
   Button,
@@ -55,7 +55,7 @@ const getInitials = (name: string) => {
   return (words[0][0] + (words[1]?.[0] || "")).toUpperCase();
 };
 
-export default function MembersPage() {
+function MembersPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [members, setMembers] = useState<Member[]>([]);
@@ -332,5 +332,13 @@ export default function MembersPage() {
         member={editingMember}
       />
     </div>
+  );
+}
+
+export default function MembersPage() {
+  return (
+    <Suspense fallback={<Loading withOverlay title="Loading Members..." />}>
+      <MembersPageContent />
+    </Suspense>
   );
 }
