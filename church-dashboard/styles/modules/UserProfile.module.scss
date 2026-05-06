@@ -1,0 +1,125 @@
+@use "../styles/variables" as *;
+
+.profileContainer {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: var(--cds-spacing-07);
+  background: var(--cds-layer-01);
+  border-radius: var(--cds-spacing-03);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+.profileHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--cds-spacing-07);
+  border-bottom: 1px solid var(--cds-border-subtle);
+  padding-bottom: var(--cds-spacing-05);
+
+  h1 {
+    margin: 0;
+    color: var(--cds-text-primary);
+    font-size: var(--cds-heading-04-font-size);
+    font-weight: 600;
+  }
+}
+
+.editButton {
+  background: var(--cds-interactive-01);
+  color: var(--cds-text-inverse);
+  border: none;
+  padding: var(--cds-spacing-03) var(--cds-spacing-05);
+  border-radius: var(--cds-spacing-02);
+  cursor: pointer;
+  font-size: var(--cds-body-short-01-font-size);
+  font-weight: 600;
+  transition: background 0.2s ease;
+
+  &:hover {
+    background: var(--cds-interactive-01-hover);
+  }
+}
+
+.profileContent {
+  display: flex;
+  flex-direction: column;
+  gap: var(--cds-spacing-05);
+}
+
+.profileForm {
+  display: flex;
+  flex-direction: column;
+  gap: var(--cds-spacing-05);
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--cds-spacing-02);
+
+  label {
+    font-size: var(--cds-label-01-font-size);
+    font-weight: 600;
+    color: var(--cds-text-primary);
+  }
+
+  input {
+    padding: var(--cds-spacing-04);
+    border: 1px solid var(--cds-border-subtle);
+    border-radius: var(--cds-spacing-02);
+    font-size: var(--cds-body-short-01-font-size);
+    background: var(--cds-layer-01);
+    color: var(--cds-text-primary);
+    transition: border-color 0.2s ease;
+
+    &:focus {
+      outline: none;
+      border-color: var(--cds-interactive-01);
+      box-shadow: 0 0 0 2px rgba(26, 92, 184, 0.2);
+    }
+
+    &:disabled {
+      background: var(--cds-layer-02);
+      cursor: not-allowed;
+    }
+  }
+}
+
+.buttonGroup {
+  display: flex;
+  gap: var(--cds-spacing-03);
+  margin-top: var(--cds-spacing-05);
+}
+
+.saveButton {
+  background: var(--cds-interactive-01);
+  color: var(--cds-text-inverse);
+  border: none;
+  padding: var(--cds-spacing-04) var(--cds-spacing-05);
+  border-radius: var(--cds-spacing-02);
+  cursor: pointer;
+  font-size: var(--cds-body-short-01-font-size);
+  font-weight: 600;
+  transition: background 0.2s ease;
+
+  &:hover {
+    background: var(--cds-interactive-01-hover);
+  }
+}
+
+.cancelButton {
+  background: var(--cds-button-secondary);
+  color: var(--cds-text-primary);
+  border: 1px solid var(--cds-border-subtle);
+  padding: var(--cds-spacing-04) var(--cds-spacing-05);
+  border-radius: var(--cds-spacing-02);
+  cursor: pointer;
+  font-size: var(--cds-body-short-01-font-size);
+  font-weight: 600;
+  transition: background 0.2s ease;
+
+  &:hover {
+    background: var(--cds-button-secondary-hover);
+  }
+}

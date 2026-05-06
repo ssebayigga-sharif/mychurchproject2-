@@ -1,0 +1,85 @@
+@use "../styles/variables" as *;
+
+.page {
+  padding: 1.5rem 1rem;
+  background-color: var(--cds-background);
+  min-height: 100vh;
+
+  @media (min-width: 1056px) {
+    padding: 2rem 3rem;
+  }
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+  align-items: flex-start;
+
+  @media (min-width: 672px) {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 3rem;
+  }
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--cds-text-primary);
+  margin-bottom: 0.25rem;
+  letter-spacing: -0.02em;
+}
+
+.subtitle {
+  font-size: 0.875rem;
+  color: var(--cds-text-secondary);
+}
+
+.tableWrapper {
+  background: var(--cds-layer-01);
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  border: 1px solid var(--cds-border-subtle);
+  margin-top: 1rem;
+
+  :global(.cds--data-table-container) {
+    padding: 0;
+  }
+
+  :global(.cds--data-table-header) {
+    padding: 1.5rem 1rem;
+    background: var(--cds-layer-02);
+  }
+
+  :global(.cds--data-table-header__title) {
+    font-size: 1.25rem;
+    font-weight: 600;
+  }
+
+  :global(.cds--data-table thead) {
+    background-color: var(--cds-layer-02);
+  }
+
+  :global(.cds--data-table th) {
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+  }
+}
+
+.actionsCell {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.modalText {
+  font-size: 0.875rem;
+  color: var(--cds-text-secondary);
+  line-height: 1.5;
+  margin-bottom: 0.5rem;
+}

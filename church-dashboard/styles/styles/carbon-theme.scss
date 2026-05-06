@@ -1,0 +1,279 @@
+// Carbon Design System Theme - CSS Variables
+// Professional blue theme for Church Dashboard
+
+:root {
+  // Layer colors - background surfaces
+  --cds-layer-01: #ffffff;
+  --cds-layer-02: #f4f4f4;
+  --cds-layer-03: #ebebeb;
+  --cds-layer-hover-01: #f3f3f3;
+  --cds-layer-hover-02: #e8e8e8;
+  --cds-layer-hover-03: #dfe0df;
+  --cds-layer-active-01: #e8e8e8;
+  --cds-layer-active-02: #dfe0df;
+  --cds-layer-active-03: #d1d5da;
+  --cds-layer-selected-01: #f0f0f0;
+  --cds-layer-selected-02: #e6e6e6;
+  --cds-layer-selected-03: #dfe0df;
+
+  // Interactive colors - primary actions
+  --cds-interactive-01: #0043ce;
+  --cds-interactive-02: #005eb8;
+  --cds-interactive-03: #0f62fe;
+  --cds-interactive-01-hover: #0035a1;
+  --cds-interactive-01-active: #2e5090;
+  --cds-interactive-01-inverse: #0f62fe;
+
+  // Text colors
+  --cds-text-primary: #161616;
+  --cds-text-secondary: #525252;
+  --cds-text-tertiary: #8d8d8d;
+  --cds-text-placeholder: #a8a8a8;
+  --cds-text-helper: #6f6f6f;
+  --cds-text-inverse: #ffffff;
+  --cds-text-inverse-hover: #f4f4f4;
+  --cds-text-error: #da373f;
+
+  // Support colors
+  --cds-support-error: #da373f;
+  --cds-support-success: #24a148;
+  --cds-support-warning: #f1c21b;
+  --cds-support-info: #0043ce;
+  --cds-support-caution: #ae5a11;
+
+  // Support colors - subtle backgrounds
+  --cds-support-error-bg: #fee5e7;
+  --cds-support-success-bg: #e3f2e1;
+  --cds-support-warning-bg: #fef5e6;
+  --cds-support-info-bg: #e0daff;
+
+  // Border colors
+  --cds-border-subtle: #e0e0e0;
+  --cds-border-strong: #8d8d8d;
+  --cds-border-inverse: #f4f4f4;
+  --cds-border-interactive: #0043ce;
+
+  // Spacing scale (in px)
+  --cds-spacing-01: 4px;
+  --cds-spacing-02: 8px;
+  --cds-spacing-03: 12px;
+  --cds-spacing-04: 16px;
+  --cds-spacing-05: 20px;
+  --cds-spacing-06: 24px;
+  --cds-spacing-07: 32px;
+  --cds-spacing-08: 40px;
+  --cds-spacing-09: 48px;
+  --cds-spacing-10: 56px;
+  --cds-spacing-11: 64px;
+  --cds-spacing-12: 80px;
+  --cds-spacing-13: 96px;
+
+  // Font sizes
+  --cds-heading-01-font-size: 32px;
+  --cds-heading-02-font-size: 28px;
+  --cds-heading-03-font-size: 24px;
+  --cds-heading-04-font-size: 20px;
+  --cds-heading-05-font-size: 18px;
+  --cds-heading-06-font-size: 16px;
+  --cds-heading-07-font-size: 14px;
+
+  --cds-productive-heading-01-font-size: 28px;
+  --cds-productive-heading-02-font-size: 20px;
+
+  --cds-body-short-01-font-size: 14px;
+  --cds-body-short-02-font-size: 12px;
+
+  --cds-body-long-01-font-size: 14px;
+  --cds-body-long-02-font-size: 12px;
+
+  --cds-label-01-font-size: 12px;
+  --cds-label-02-font-size: 11px;
+
+  --cds-code-01-font-size: 12px;
+  --cds-code-02-font-size: 13px;
+
+  // Icon colors
+  --cds-icon-primary: #161616;
+  --cds-icon-secondary: #525252;
+  --cds-icon-tertiary: #8d8d8d;
+  --cds-icon-interactive: #0043ce;
+  --cds-icon-inverse: #ffffff;
+  --cds-icon-disabled: #c6c6c6;
+
+  // Component-specific theming
+  --cds-background: #ffffff;
+  --cds-background-inverse: #161616;
+  --cds-background-ui: #f4f4f4;
+
+  // Focus/Outline
+  --cds-focus: #0043ce;
+  --cds-focus-inset: #ffffff;
+
+  // Overlay
+  --cds-overlay: rgba(0, 0, 0, 0.65);
+}
+
+// ── Dark theme: g90 ────────────────────────────────────────────
+body[data-carbon-theme="g90"] {
+  // Layer colors - dark surfaces
+  --cds-layer-01: #262626;
+  --cds-layer-02: #393939;
+  --cds-layer-03: #525252;
+  --cds-layer-hover-01: #353535;
+  --cds-layer-hover-02: #474747;
+  --cds-layer-hover-03: #636363;
+  --cds-layer-active-01: #525252;
+  --cds-layer-active-02: #6f6f6f;
+  --cds-layer-active-03: #8d8d8d;
+  --cds-layer-selected-01: #393939;
+  --cds-layer-selected-02: #525252;
+  --cds-layer-selected-03: #6f6f6f;
+
+  // Interactive colors
+  --cds-interactive-01: #0f62fe;
+  --cds-interactive-02: #6ea6ff;
+  --cds-interactive-03: #ffffff;
+  --cds-interactive-01-hover: #0353e9;
+  --cds-interactive-01-active: #002d9c;
+  --cds-interactive-01-inverse: #0f62fe;
+
+  // Text colors
+  --cds-text-primary: #f4f4f4;
+  --cds-text-secondary: #c6c6c6;
+  --cds-text-tertiary: #a8a8a8;
+  --cds-text-placeholder: #6f6f6f;
+  --cds-text-helper: #8d8d8d;
+  --cds-text-inverse: #161616;
+  --cds-text-inverse-hover: #262626;
+  --cds-text-error: #ff8389;
+
+  // Support colors
+  --cds-support-error: #ff8389;
+  --cds-support-success: #42be65;
+  --cds-support-warning: #f1c21b;
+  --cds-support-info: #4589ff;
+  --cds-support-caution: #f1c21b;
+
+  // Support colors - subtle backgrounds
+  --cds-support-error-bg: #3a1d1e;
+  --cds-support-success-bg: #1c3829;
+  --cds-support-warning-bg: #3a3018;
+  --cds-support-info-bg: #1e2a3e;
+
+  // Border colors
+  --cds-border-subtle: #525252;
+  --cds-border-strong: #8d8d8d;
+  --cds-border-inverse: #f4f4f4;
+  --cds-border-interactive: #4589ff;
+
+  // Icon colors
+  --cds-icon-primary: #f4f4f4;
+  --cds-icon-secondary: #c6c6c6;
+  --cds-icon-tertiary: #a8a8a8;
+  --cds-icon-interactive: #4589ff;
+  --cds-icon-inverse: #161616;
+  --cds-icon-disabled: #525252;
+
+  // Component-specific theming
+  --cds-background: #262626;
+  --cds-background-inverse: #f4f4f4;
+  --cds-background-ui: #393939;
+
+  // Focus/Outline
+  --cds-focus: #ffffff;
+  --cds-focus-inset: #161616;
+
+  // Overlay
+  --cds-overlay: rgba(0, 0, 0, 0.7);
+}
+
+// ── Dark theme: g100 ───────────────────────────────────────────
+body[data-carbon-theme="g100"] {
+  // Layer colors - darkest surfaces
+  --cds-layer-01: #161616;
+  --cds-layer-02: #262626;
+  --cds-layer-03: #393939;
+  --cds-layer-hover-01: #2a2a2a;
+  --cds-layer-hover-02: #353535;
+  --cds-layer-hover-03: #474747;
+  --cds-layer-active-01: #393939;
+  --cds-layer-active-02: #525252;
+  --cds-layer-active-03: #6f6f6f;
+  --cds-layer-selected-01: #262626;
+  --cds-layer-selected-02: #393939;
+  --cds-layer-selected-03: #525252;
+
+  // Interactive colors
+  --cds-interactive-01: #0f62fe;
+  --cds-interactive-02: #6ea6ff;
+  --cds-interactive-03: #ffffff;
+  --cds-interactive-01-hover: #0353e9;
+  --cds-interactive-01-active: #002d9c;
+  --cds-interactive-01-inverse: #0f62fe;
+
+  // Text colors
+  --cds-text-primary: #f4f4f4;
+  --cds-text-secondary: #c6c6c6;
+  --cds-text-tertiary: #a8a8a8;
+  --cds-text-placeholder: #6f6f6f;
+  --cds-text-helper: #8d8d8d;
+  --cds-text-inverse: #161616;
+  --cds-text-inverse-hover: #262626;
+  --cds-text-error: #ff8389;
+
+  // Support colors
+  --cds-support-error: #ff8389;
+  --cds-support-success: #42be65;
+  --cds-support-warning: #f1c21b;
+  --cds-support-info: #4589ff;
+  --cds-support-caution: #f1c21b;
+
+  // Support colors - subtle backgrounds
+  --cds-support-error-bg: #2d1516;
+  --cds-support-success-bg: #152e20;
+  --cds-support-warning-bg: #2e2510;
+  --cds-support-info-bg: #152338;
+
+  // Border colors
+  --cds-border-subtle: #393939;
+  --cds-border-strong: #6f6f6f;
+  --cds-border-inverse: #f4f4f4;
+  --cds-border-interactive: #4589ff;
+
+  // Icon colors
+  --cds-icon-primary: #f4f4f4;
+  --cds-icon-secondary: #c6c6c6;
+  --cds-icon-tertiary: #a8a8a8;
+  --cds-icon-interactive: #4589ff;
+  --cds-icon-inverse: #161616;
+  --cds-icon-disabled: #393939;
+
+  // Component-specific theming
+  --cds-background: #161616;
+  --cds-background-inverse: #f4f4f4;
+  --cds-background-ui: #262626;
+
+  // Focus/Outline
+  --cds-focus: #ffffff;
+  --cds-focus-inset: #161616;
+
+  // Overlay
+  --cds-overlay: rgba(0, 0, 0, 0.75);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--cds-layer-01);
+  color: var(--cds-text-primary);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}

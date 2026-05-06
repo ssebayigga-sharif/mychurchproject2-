@@ -1,0 +1,164 @@
+// Only layout and custom pieces Carbon has no component for.
+// Colors use Carbon tokens so dark mode works automatically.
+@use "@carbon/colors";
+
+.selector {
+  background: colors.$blue-10;
+}
+
+.page {
+  padding: 2rem;
+  min-height: 100vh;
+  background: var(--cds-background);
+  position: relative;
+  transition: padding-right 0.3s cubic-bezier(0.20, 0, 0.38, 0.9);
+  overflow-x: hidden;
+}
+
+.pageWithDrawerOpen {
+  @media (min-width: 672px) {
+    padding-right: calc(2rem + 420px);
+  }
+}
+
+
+
+// Header
+.pageHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.heading {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--cds-text-primary);
+}
+
+.subheading {
+  font-size: 0.75rem;
+  color: var(--cds-text-helper);
+  margin-top: 2px;
+  font-style: italic;
+}
+
+.switcherWrapper {
+  margin-bottom: 0.5rem;
+  width: 100%;
+  max-width: 400px;
+}
+
+.switchLabel {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+.switchBadge {
+  margin: 0;
+}
+
+// Empty state
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 1.5rem;
+  text-align: center;
+}
+
+.emptyIcon {
+  color: var(--cds-icon-disabled);
+  margin-bottom: 1.25rem;
+}
+
+.emptyTitle {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--cds-text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.emptyText {
+  font-size: 0.875rem;
+  color: var(--cds-text-helper);
+  max-width: 320px;
+  line-height: 1.5;
+}
+
+// InlineNotification bar (fixed top)
+.notificationBar {
+  position: fixed;
+  top: 1.5rem;
+  right: 1.5rem;
+  z-index: 9999;
+}
+
+// Mobile backdrop
+.backdrop {
+  display: none;
+
+  @media (max-width: 671px) {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 100;
+  }
+}
+
+// Slide-in drawer
+.drawer {
+  position: fixed;
+  top: 48px; // Avoid covering global Carbon header (48px)
+  right: 0;
+  height: calc(100vh - 48px);
+  width: 420px;
+  background: var(--cds-layer);
+  border-left: 1px solid var(--cds-border-subtle);
+  box-shadow: -4px 0 24px rgba(0, 0, 0, 0.12);
+  transform: translateX(100%);
+  transition: transform 0.3s ease;
+  z-index: 101;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+
+  @media (max-width: 671px) {
+    width: 100%;
+  }
+
+  &.drawerOpen {
+    transform: translateX(0);
+  }
+}
+
+.drawerHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid var(--cds-border-subtle);
+  flex-shrink: 0;
+}
+
+.drawerTitle {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--cds-text-primary);
+  margin: 0;
+}
+
+.drawerBody {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+}

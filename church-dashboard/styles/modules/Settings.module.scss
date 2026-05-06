@@ -1,0 +1,195 @@
+@use "../styles/variables" as *;
+
+.settingsContainer {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: var(--cds-spacing-07);
+  background: var(--cds-layer-01);
+  border-radius: var(--cds-spacing-03);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+.settingsHeader {
+  margin-bottom: var(--cds-spacing-07);
+  border-bottom: 1px solid var(--cds-border-subtle);
+  padding-bottom: var(--cds-spacing-05);
+
+  h1 {
+    margin: 0 0 var(--cds-spacing-02) 0;
+    color: var(--cds-text-primary);
+    font-size: var(--cds-heading-04-font-size);
+    font-weight: 600;
+  }
+
+  p {
+    margin: 0;
+    color: var(--cds-text-secondary);
+    font-size: var(--cds-body-short-01-font-size);
+  }
+}
+
+.settingsContent {
+  display: flex;
+  flex-direction: column;
+  gap: var(--cds-spacing-07);
+}
+
+.settingsSection {
+  h2 {
+    margin: 0 0 var(--cds-spacing-05) 0;
+    color: var(--cds-text-primary);
+    font-size: var(--cds-heading-03-font-size);
+    font-weight: 600;
+  }
+}
+
+.accountInfo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--cds-spacing-04);
+  padding: var(--cds-spacing-05);
+  background: var(--cds-layer-02);
+  border-radius: var(--cds-spacing-02);
+}
+
+.infoItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  label {
+    font-weight: 600;
+    color: var(--cds-text-primary);
+    font-size: var(--cds-label-01-font-size);
+  }
+
+  span {
+    color: var(--cds-text-secondary);
+    font-size: var(--cds-body-short-01-font-size);
+  }
+}
+
+.settingGroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--cds-spacing-05);
+}
+
+.settingItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: var(--cds-spacing-05);
+  background: var(--cds-layer-02);
+  border-radius: var(--cds-spacing-02);
+  border: 1px solid var(--cds-border-subtle);
+}
+
+.settingInfo {
+  flex: 1;
+  margin-right: var(--cds-spacing-05);
+
+  label {
+    display: block;
+    font-weight: 600;
+    color: var(--cds-text-primary);
+    font-size: var(--cds-body-short-01-font-size);
+    margin-bottom: var(--cds-spacing-01);
+  }
+
+  p {
+    margin: 0;
+    color: var(--cds-text-secondary);
+    font-size: var(--cds-label-01-font-size);
+    line-height: 1.4;
+  }
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 24px;
+
+  input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+
+    &:checked + .slider {
+      background-color: var(--cds-interactive-01);
+
+      &:before {
+        transform: translateX(26px);
+      }
+    }
+
+    &:focus + .slider {
+      box-shadow: 0 0 1px var(--cds-interactive-01);
+    }
+  }
+
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--cds-border-subtle);
+    transition: 0.4s;
+    border-radius: 24px;
+
+    &:before {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: 0.4s;
+      border-radius: 50%;
+    }
+  }
+}
+
+.select {
+  padding: var(--cds-spacing-03) var(--cds-spacing-04);
+  border: 1px solid var(--cds-border-subtle);
+  border-radius: var(--cds-spacing-02);
+  background: var(--cds-layer-01);
+  color: var(--cds-text-primary);
+  font-size: var(--cds-body-short-01-font-size);
+  cursor: pointer;
+  min-width: 120px;
+
+  &:focus {
+    outline: none;
+    border-color: var(--cds-interactive-01);
+    box-shadow: 0 0 0 2px rgba(26, 92, 184, 0.2);
+  }
+}
+
+.saveSection {
+  display: flex;
+  justify-content: center;
+  padding-top: var(--cds-spacing-05);
+  border-top: 1px solid var(--cds-border-subtle);
+}
+
+.saveButton {
+  background: var(--cds-interactive-01);
+  color: var(--cds-text-inverse);
+  border: none;
+  padding: var(--cds-spacing-04) var(--cds-spacing-06);
+  border-radius: var(--cds-spacing-02);
+  cursor: pointer;
+  font-size: var(--cds-body-short-01-font-size);
+  font-weight: 600;
+  transition: background 0.2s ease;
+
+  &:hover {
+    background: var(--cds-interactive-01-hover);
+  }
+}

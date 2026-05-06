@@ -1,0 +1,107 @@
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  min-height: 100%;
+  margin: 0;
+}
+
+body {
+  background: var(--cds-background);
+  color: var(--cds-text-primary);
+  font-family: "IBM Plex Sans", Arial, sans-serif;
+}
+
+a {
+  color: inherit;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+.cds--header {
+  background: linear-gradient(90deg, var(--cds-layer-01) 0%, var(--cds-layer-02) 100%) !important;
+  border-bottom: 2px solid rgba(26, 92, 184, 0.2) !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12) !important;
+  height: auto !important;
+  padding: 8px 12px !important;
+}
+
+@media (min-width: 1056px) {
+  .cds--header {
+    padding: 10px 16px !important;
+  }
+}
+
+.cds--header__name {
+  color: var(--cds-text-primary) !important;
+  font-size: 16px !important;
+  font-weight: 700 !important;
+}
+
+.cds--header__name:hover {
+  background: transparent !important;
+}
+
+.cds--header__global-bar {
+  padding: 0 !important;
+}
+
+.cds--header__menu-trigger,
+.cds--header__action {
+  color: var(--cds-text-primary) !important;
+}
+
+.cds--header__action {
+  fill: var(--cds-text-primary) !important;
+}
+
+.cds--header__menu-trigger:hover,
+.cds--header__action:hover {
+  background: rgba(26, 92, 184, 0.08) !important;
+}
+
+.cds--side-nav {
+  background: linear-gradient(180deg, var(--cds-layer-02) 0%, var(--cds-layer-01) 100%) !important;
+  border-right: 1px solid rgba(26, 92, 184, 0.1) !important;
+  padding: 0 !important;
+}
+
+@media (min-width: 672px) {
+  .cds--side-nav {
+    width: 260px !important;
+  }
+}
+
+.cds--side-nav__item-text {
+  color: var(--cds-text-primary) !important;
+  font-weight: 500 !important;
+}
+
+.cds--side-nav__link {
+  border-left: 3px solid transparent !important;
+  color: var(--cds-text-secondary) !important;
+  transition: all 0.3s ease !important;
+}
+
+.cds--side-nav__link:hover,
+.cds--side-nav__link.cds--side-nav__link--current {
+  background: rgba(26, 92, 184, 0.08) !important;
+  border-left-color: var(--cds-interactive-01) !important;
+  color: var(--cds-interactive-01) !important;
+}
+
+.cds--side-nav__link.cds--side-nav__link--current {
+  background: rgba(26, 92, 184, 0.12) !important;
+  font-weight: 600 !important;
+}
+
+.cds--side-nav__icon {
+  fill: currentColor !important;
+}
